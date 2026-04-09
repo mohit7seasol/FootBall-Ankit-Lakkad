@@ -1,0 +1,55 @@
+/* 
+  Localizable.strings
+  Football
+
+  Created by Ronik Hirpara on 25/02/25.
+  
+*/
+"Language" = "Sprog";
+"Done" = "Færdig";
+"App language changed." = "Appens sprog er ændret.";
+"Feedback" = "Feedback";
+"Valuable insights to enhance our app" = "Værdifuld indsigt til at forbedre vores app";
+"Share App" = "Del app";
+"Easily share the app with anyone." = "Del appen let med hvem som helst.";
+"Rate App" = "Bedøm app";
+"Give your feedback and rate the app." = "Giv din feedback og bedøm appen.";
+"Privacy Policy" = "Privatlivspolitik";
+"Read our Privacy Policy for more details." = "Læs vores privatlivspolitik for flere oplysninger.";
+"Do you like our App?" = "Kan du lide vores app?";
+"Help us improve the app by answering this quick poll" = "Hjælp os med at forbedre appen ved at svare på denne hurtige afstemning";
+"No ❌" = "Nej ❌";
+"Yes 👍" = "Ja 👍";
+"Football" = "Fodbold";
+"Football is a game of goals and teamwork." = "Fodbold er et spil med mål og teamwork.";
+"Football Series" = "Fodboldserie";
+"Exciting football series, match after match." = "Spændende fodboldserie, kamp efter kamp.";
+"Football News" = "Fodboldnyheder";
+"Stay updated with the latest football news." = "Følg med i de seneste fodboldnyheder.";
+"All" = "Alle";
+"Domestic" = "Nationalt";
+"International" = "Internationalt";
+"Club Football" = "Klubfodbold";
+"No Data Available" = "Ingen data tilgængelig";
+"News" = "Nyheder";
+"Language" = "Sprog";
+"Settings" = "Indstillinger";
+"More Details" = "Flere detaljer";
+"Football Match Streaming Live" = "Fodboldkamp live streaming";
+"Get real-time updates and stats from the live match" = "Få live opdateringer og statistik fra kampen";
+"Your Complete Guide to the Football Series" = "Din komplette guide til fodboldserien";
+"All the Latest Football Series News in One Place" = "Alle de seneste nyheder om fodboldserien ét sted";
+"View All" = "Se alle";
+"Watch Now" = "Se nu";
+"Football Series & News" = "Fodboldserier og Nyheder";
+"Stay informed on football series, team updates, and match results. Get the latest highlights and breaking news." = "Følg med i fodboldserier, holdopdateringer og kampresultater. Få de nyeste højdepunkter og breaking news.";
+"Next" = "Næste";
+"Get Full Details On Every Match" = "Få alle detaljer om hver kamp";
+"Follow every football match with complete stats and player updates. Stay on top of every goal, assist, and key play." = "Følg hver kamp med komplette statistikker og spilleropdateringer. Gå ikke glip af mål, assists eller nøglesituationer.";
+"Ultimate Hub For Football" = "Det ultimative sted for fodbold";
+"Stay updated with football scores, live matches, team stats, and breaking news." = "Hold dig opdateret med resultater, livekampe, holdstatistikker og nyheder.";
+"Get Started" = "Kom i gang";
+"Live Matches" = "Livekampe";
+"Upcoming Matches" = "Kommende kampe";
+"Finished Matches" = "Afsluttede kampe";
+"No Data Found" = "Ingen data fundet";

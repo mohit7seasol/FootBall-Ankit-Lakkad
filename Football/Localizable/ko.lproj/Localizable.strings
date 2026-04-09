@@ -1,0 +1,55 @@
+/* 
+  Localizable.strings
+  Football
+
+  Created by Ronik Hirpara on 25/02/25.
+  
+*/
+"Language" = "언어";
+"Done" = "완료";
+"App language changed." = "앱 언어가 변경되었습니다.";
+"Feedback" = "피드백";
+"Valuable insights to enhance our app" = "앱 개선을 위한 소중한 의견";
+"Share App" = "앱 공유";
+"Easily share the app with anyone." = "앱을 누구에게나 쉽게 공유하세요.";
+"Rate App" = "앱 평가하기";
+"Give your feedback and rate the app." = "피드백을 남기고 앱을 평가해주세요.";
+"Privacy Policy" = "개인정보 처리방침";
+"Read our Privacy Policy for more details." = "자세한 내용은 개인정보 처리방침을 읽어주세요.";
+"Do you like our App?" = "앱이 마음에 드시나요?";
+"Help us improve the app by answering this quick poll" = "간단한 설문에 참여하여 앱 개선에 도움을 주세요";
+"No ❌" = "아니요 ❌";
+"Yes 👍" = "예 👍";
+"Football" = "축구";
+"Football is a game of goals and teamwork." = "축구는 골과 팀워크의 스포츠입니다.";
+"Football Series" = "축구 시리즈";
+"Exciting football series, match after match." = "경기마다 흥미진진한 축구 시리즈.";
+"Football News" = "축구 뉴스";
+"Stay updated with the latest football news." = "최신 축구 뉴스를 확인하세요.";
+"All" = "전체";
+"Domestic" = "국내";
+"International" = "국제";
+"Club Football" = "클럽 축구";
+"No Data Available" = "데이터 없음";
+"News" = "뉴스";
+"Language" = "언어";
+"Settings" = "설정";
+"More Details" = "자세히 보기";
+"Football Match Streaming Live" = "축구 경기 라이브 스트리밍";
+"Get real-time updates and stats from the live match" = "라이브 경기에서 실시간 업데이트 및 통계를 확인하세요";
+"Your Complete Guide to the Football Series" = "축구 시리즈의 완벽 가이드";
+"All the Latest Football Series News in One Place" = "최신 축구 시리즈 소식을 한 곳에서";
+"View All" = "전체 보기";
+"Watch Now" = "지금 보기";
+"Football Series & News" = "축구 시리즈 & 뉴스";
+"Stay informed on football series, team updates, and match results. Get the latest highlights and breaking news." = "축구 시리즈, 팀 소식, 경기 결과를 확인하세요. 최신 하이라이트와 속보도 제공합니다.";
+"Next" = "다음";
+"Get Full Details On Every Match" = "모든 경기의 상세 정보 확인";
+"Follow every football match with complete stats and player updates. Stay on top of every goal, assist, and key play." = "모든 경기를 통계 및 선수 업데이트와 함께 확인하세요. 골, 도움, 주요 장면을 놓치지 마세요.";
+"Ultimate Hub For Football" = "축구의 모든 것";
+"Stay updated with football scores, live matches, team stats, and breaking news." = "축구 스코어, 라이브 경기, 팀 통계, 속보를 확인하세요.";
+"Get Started" = "시작하기";
+"Live Matches" = "라이브 경기";
+"Upcoming Matches" = "다가오는 경기";
+"Finished Matches" = "종료된 경기";
+"No Data Found" = "데이터가 없습니다";

@@ -1,0 +1,55 @@
+/* 
+  Localizable.strings
+  Football
+
+  Created by Ronik Hirpara on 25/02/25.
+  
+*/
+"Language" = "Lingua";
+"Done" = "Fatto";
+"App language changed." = "Lingua dell’app modificata.";
+"Feedback" = "Feedback";
+"Valuable insights to enhance our app" = "Suggerimenti preziosi per migliorare la nostra app";
+"Share App" = "Condividi app";
+"Easily share the app with anyone." = "Condividi facilmente l’app con chiunque.";
+"Rate App" = "Valuta l’app";
+"Give your feedback and rate the app." = "Lascia il tuo feedback e valuta l’app.";
+"Privacy Policy" = "Informativa sulla privacy";
+"Read our Privacy Policy for more details." = "Leggi la nostra informativa sulla privacy per maggiori dettagli.";
+"Do you like our App?" = "Ti piace la nostra app?";
+"Help us improve the app by answering this quick poll" = "Aiutaci a migliorare l’app rispondendo a questo breve sondaggio";
+"No ❌" = "No ❌";
+"Yes 👍" = "Sì 👍";
+"Football" = "Calcio";
+"Football is a game of goals and teamwork." = "Il calcio è un gioco di gol e lavoro di squadra.";
+"Football Series" = "Serie calcistica";
+"Exciting football series, match after match." = "Serie calcistica emozionante, partita dopo partita.";
+"Football News" = "Notizie di calcio";
+"Stay updated with the latest football news." = "Rimani aggiornato con le ultime notizie calcistiche.";
+"All" = "Tutto";
+"Domestic" = "Nazionale";
+"International" = "Internazionale";
+"Club Football" = "Calcio di club";
+"No Data Available" = "Nessun dato disponibile";
+"News" = "Notizie";
+"Language" = "Lingua";
+"Settings" = "Impostazioni";
+"More Details" = "Altri dettagli";
+"Football Match Streaming Live" = "Partita di calcio in diretta";
+"Get real-time updates and stats from the live match" = "Ricevi aggiornamenti e statistiche in tempo reale della partita";
+"Your Complete Guide to the Football Series" = "La tua guida completa alla serie calcistica";
+"All the Latest Football Series News in One Place" = "Tutte le ultime notizie sulla serie calcistica in un unico posto";
+"View All" = "Vedi tutto";
+"Watch Now" = "Guarda ora";
+"Football Series & News" = "Serie e Notizie di Calcio";
+"Stay informed on football series, team updates, and match results. Get the latest highlights and breaking news." = "Rimani informato su serie di calcio, aggiornamenti delle squadre e risultati. Ricevi gli ultimi highlights e notizie dell’ultima ora.";
+"Next" = "Avanti";
+"Get Full Details On Every Match" = "Ottieni tutti i dettagli di ogni partita";
+"Follow every football match with complete stats and player updates. Stay on top of every goal, assist, and key play." = "Segui ogni partita con statistiche complete e aggiornamenti sui giocatori. Non perdere nessun gol, assist o azione importante.";
+"Ultimate Hub For Football" = "Centro definitivo per il calcio";
+"Stay updated with football scores, live matches, team stats, and breaking news." = "Rimani aggiornato con punteggi, partite in diretta, statistiche e notizie dell’ultima ora.";
+"Get Started" = "Inizia";
+"Live Matches" = "Partite in diretta";
+"Upcoming Matches" = "Prossime partite";
+"Finished Matches" = "Partite concluse";
+"No Data Found" = "Nessun dato trovato";

@@ -1,0 +1,55 @@
+/* 
+  Localizable.strings
+  Football
+
+  Created by Ronik Hirpara on 25/02/25.
+  
+*/
+"Language" = "語言";
+"Done" = "完成";
+"App language changed." = "應用程式語言已變更。";
+"Feedback" = "意見回饋";
+"Valuable insights to enhance our app" = "寶貴的意見能幫助我們改善 App";
+"Share App" = "分享 App";
+"Easily share the app with anyone." = "與任何人輕鬆分享應用程式。";
+"Rate App" = "評價 App";
+"Give your feedback and rate the app." = "給予意見並為應用程式評分。";
+"Privacy Policy" = "隱私政策";
+"Read our Privacy Policy for more details." = "欲了解更多資訊，請參閱隱私政策。";
+"Do you like our App?" = "你喜歡我們的 App 嗎？";
+"Help us improve the app by answering this quick poll" = "回答這份快速問卷來幫助改進應用程式";
+"No ❌" = "否 ❌";
+"Yes 👍" = "是 👍";
+"Football" = "足球";
+"Football is a game of goals and teamwork." = "足球是進球與團隊合作的運動。";
+"Football Series" = "足球系列賽";
+"Exciting football series, match after match." = "激動人心的足球系列賽，場場精彩。";
+"Football News" = "足球新聞";
+"Stay updated with the latest football news." = "掌握最新足球消息。";
+"All" = "全部";
+"Domestic" = "國內";
+"International" = "國際";
+"Club Football" = "俱樂部足球";
+"No Data Available" = "無資料";
+"News" = "新聞";
+"Language" = "語言";
+"Settings" = "設定";
+"More Details" = "更多詳情";
+"Football Match Streaming Live" = "足球賽事直播";
+"Get real-time updates and stats from the live match" = "獲取直播賽事的即時更新和數據";
+"Your Complete Guide to the Football Series" = "足球系列賽完整指南";
+"All the Latest Football Series News in One Place" = "足球系列賽最新消息一網打盡";
+"View All" = "查看全部";
+"Watch Now" = "立即觀看";
+"Football Series & News" = "足球系列賽與新聞";
+"Stay informed on football series, team updates, and match results. Get the latest highlights and breaking news." = "掌握足球系列賽、球隊動態與比賽結果。即時獲取最新精華與突發消息。";
+"Next" = "下一步";
+"Get Full Details On Every Match" = "查看每場比賽完整資訊";
+"Follow every football match with complete stats and player updates. Stay on top of every goal, assist, and key play." = "以完整統計與球員更新追蹤每場比賽，不錯過任何進球、助攻與關鍵時刻。";
+"Ultimate Hub For Football" = "終極足球資訊中心";
+"Stay updated with football scores, live matches, team stats, and breaking news." = "即時掌握足球比分、直播、球隊數據與突發新聞。";
+"Get Started" = "開始使用";
+"Live Matches" = "直播比賽";
+"Upcoming Matches" = "即將進行的比賽";
+"Finished Matches" = "已結束的比賽";
+"No Data Found" = "無資料";

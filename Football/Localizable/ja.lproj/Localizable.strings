@@ -1,0 +1,55 @@
+/*
+ Localizable.strings
+ Football
+ 
+ Created by Ronik Hirpara on 25/02/25.
+ 
+ */
+ "Language" = "言語";
+ "Done" = "完了";
+ "App language changed." = "アプリの言語が変更されました。";
+ "Feedback" = "フィードバック";
+ "Valuable insights to enhance our app" = "アプリ改善のための貴重なご意見";
+ "Share App" = "アプリを共有";
+ "Easily share the app with anyone." = "誰とでも簡単にアプリを共有できます。";
+ "Rate App" = "アプリを評価";
+ "Give your feedback and rate the app." = "ご意見をお聞かせいただき、アプリを評価してください。";
+ "Privacy Policy" = "プライバシーポリシー";
+ "Read our Privacy Policy for more details." = "詳細はプライバシーポリシーをご覧ください。";
+ "Do you like our App?" = "アプリは気に入りましたか？";
+ "Help us improve the app by answering this quick poll" = "この短いアンケートに回答してアプリ改善にご協力ください";
+ "No ❌" = "いいえ ❌";
+ "Yes 👍" = "はい 👍";
+ "Football" = "サッカー";
+ "Football is a game of goals and teamwork." = "サッカーはゴールとチームワークのスポーツです。";
+ "Football Series" = "サッカーシリーズ";
+ "Exciting football series, match after match." = "試合ごとに盛り上がるサッカーシリーズ。";
+ "Football News" = "サッカーニュース";
+ "Stay updated with the latest football news." = "最新のサッカーニュースをチェック。";
+ "All" = "すべて";
+ "Domestic" = "国内";
+ "International" = "国際";
+ "Club Football" = "クラブサッカー";
+ "No Data Available" = "データなし";
+ "News" = "ニュース";
+ "Language" = "言語";
+ "Settings" = "設定";
+ "More Details" = "詳細";
+ "Football Match Streaming Live" = "サッカー試合をライブ配信";
+ "Get real-time updates and stats from the live match" = "ライブ試合のリアルタイム更新と統計情報を入手";
+ "Your Complete Guide to the Football Series" = "サッカーシリーズの完全ガイド";
+ "All the Latest Football Series News in One Place" = "サッカーシリーズの最新情報を一括表示";
+ "View All" = "すべて見る";
+ "Watch Now" = "今すぐ視聴";
+"Football Series & News" = "サッカーシリーズとニュース";
+"Stay informed on football series, team updates, and match results. Get the latest highlights and breaking news." = "サッカーシリーズ、チーム情報、試合結果をチェック。最新のハイライトと速報をお届けします。";
+"Next" = "次へ";
+"Get Full Details On Every Match" = "すべての試合の詳細をチェック";
+"Follow every football match with complete stats and player updates. Stay on top of every goal, assist, and key play." = "全試合の統計と選手情報を確認し、ゴールや重要なプレーを見逃さないでください。";
+"Ultimate Hub For Football" = "サッカー情報の総合ハブ";
+"Stay updated with football scores, live matches, team stats, and breaking news." = "スコア、ライブ試合、チーム統計、速報をチェックしましょう。";
+"Get Started" = "開始";
+"Live Matches" = "ライブ試合";
+"Upcoming Matches" = "今後の試合";
+"Finished Matches" = "終了した試合";
+"No Data Found" = "データがありません";

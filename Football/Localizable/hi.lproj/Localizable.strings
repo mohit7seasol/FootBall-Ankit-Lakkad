@@ -1,0 +1,55 @@
+/* 
+  Localizable.strings
+  Football
+
+  Created by Ronik Hirpara on 25/02/25.
+  
+*/
+"Language" = "भाषा";
+"Done" = "हो गया";
+"App language changed." = "ऐप की भाषा बदल दी गई है।";
+"Feedback" = "प्रतिक्रिया";
+"Valuable insights to enhance our app" = "ऐप को बेहतर बनाने के लिए आपके विचार महत्वपूर्ण हैं";
+"Share App" = "ऐप साझा करें";
+"Easily share the app with anyone." = "किसी के साथ भी आसानी से ऐप साझा करें।";
+"Rate App" = "ऐप को रेट करें";
+"Give your feedback and rate the app." = "अपनी प्रतिक्रिया दें और ऐप को रेट करें।";
+"Privacy Policy" = "गोपनीयता नीति";
+"Read our Privacy Policy for more details." = "अधिक जानकारी के लिए हमारी गोपनीयता नीति पढ़ें।";
+"Do you like our App?" = "क्या आपको हमारा ऐप पसंद है?";
+"Help us improve the app by answering this quick poll" = "इस छोटे सर्वे का जवाब देकर हमें ऐप को बेहतर बनाने में मदद करें";
+"No ❌" = "नहीं ❌";
+"Yes 👍" = "हाँ 👍";
+"Football" = "फ़ुटबॉल";
+"Football is a game of goals and teamwork." = "फ़ुटबॉल गोल और टीमवर्क का खेल है।";
+"Football Series" = "फ़ुटबॉल सीरीज़";
+"Exciting football series, match after match." = "रोमांचक फ़ुटबॉल सीरीज़, एक के बाद एक मैच।";
+"Football News" = "फ़ुटबॉल समाचार";
+"Stay updated with the latest football news." = "नवीनतम फ़ुटबॉल समाचार से अपडेट रहें।";
+"All" = "सभी";
+"Domestic" = "घरेलू";
+"International" = "अंतरराष्ट्रीय";
+"Club Football" = "क्लब फ़ुटबॉल";
+"No Data Available" = "कोई डेटा उपलब्ध नहीं";
+"News" = "समाचार";
+"Language" = "भाषा";
+"Settings" = "सेटिंग्स";
+"More Details" = "अधिक विवरण";
+"Football Match Streaming Live" = "फ़ुटबॉल मैच लाइव स्ट्रीमिंग";
+"Get real-time updates and stats from the live match" = "लाइव मैच से रियल-टाइम अपडेट और आँकड़े पाएं";
+"Your Complete Guide to the Football Series" = "फ़ुटबॉल सीरीज़ के लिए आपकी पूरी मार्गदर्शिका";
+"All the Latest Football Series News in One Place" = "फ़ुटबॉल सीरीज़ की सभी खबरें एक ही जगह पर";
+"View All" = "सभी देखें";
+"Watch Now" = "अभी देखें";
+"Football Series & News" = "फ़ुटबॉल सीरीज़ और समाचार";
+"Stay informed on football series, team updates, and match results. Get the latest highlights and breaking news." = "फ़ुटबॉल सीरीज़, टीम अपडेट और मैच परिणामों से जुड़े रहें। नवीनतम हाइलाइट्स और ब्रेकिंग न्यूज़ प्राप्त करें।";
+"Next" = "अगला";
+"Get Full Details On Every Match" = "प्रत्येक मैच का पूरा विवरण प्राप्त करें";
+"Follow every football match with complete stats and player updates. Stay on top of every goal, assist, and key play." = "प्रत्येक फ़ुटबॉल मैच के आँकड़े और खिलाड़ी अपडेट देखें। हर गोल, असिस्ट और महत्वपूर्ण पल की जानकारी पाएं।";
+"Ultimate Hub For Football" = "फ़ुटबॉल के लिए सर्वोत्तम हब";
+"Stay updated with football scores, live matches, team stats, and breaking news." = "फ़ुटबॉल स्कोर, लाइव मैच, टीम स्टैट्स और ब्रेकिंग न्यूज़ से अपडेट रहें।";
+"Get Started" = "शुरू करें";
+"Live Matches" = "लाइव मैच";
+"Upcoming Matches" = "आने वाले मैच";
+"Finished Matches" = "समाप्त मैच";
+"No Data Found" = "कोई डेटा नहीं मिला";

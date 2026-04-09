@@ -1,0 +1,55 @@
+/* 
+  Localizable.strings
+  Football
+
+  Created by Ronik Hirpara on 25/02/25.
+  
+*/
+"Language" = "Idioma";
+"Done" = "Concluído";
+"App language changed." = "Idioma da aplicação alterado.";
+"Feedback" = "Feedback";
+"Valuable insights to enhance our app" = "Comentários valiosos para melhorar a nossa aplicação";
+"Share App" = "Partilhar App";
+"Easily share the app with anyone." = "Partilhe a app facilmente com qualquer pessoa.";
+"Rate App" = "Avaliar App";
+"Give your feedback and rate the app." = "Dê o seu feedback e avalie a app.";
+"Privacy Policy" = "Política de Privacidade";
+"Read our Privacy Policy for more details." = "Leia a nossa Política de Privacidade para mais detalhes.";
+"Do you like our App?" = "Gosta da nossa aplicação?";
+"Help us improve the app by answering this quick poll" = "Ajude-nos a melhorar a aplicação respondendo a este questionário rápido";
+"No ❌" = "Não ❌";
+"Yes 👍" = "Sim 👍";
+"Football" = "Futebol";
+"Football is a game of goals and teamwork." = "O futebol é um jogo de golos e trabalho de equipa.";
+"Football Series" = "Série de Futebol";
+"Exciting football series, match after match." = "Série emocionante de futebol, jogo após jogo.";
+"Football News" = "Notícias de Futebol";
+"Stay updated with the latest football news." = "Fique atualizado com as últimas notícias do futebol.";
+"All" = "Tudo";
+"Domestic" = "Doméstico";
+"International" = "Internacional";
+"Club Football" = "Futebol de clubes";
+"No Data Available" = "Sem dados disponíveis";
+"News" = "Notícias";
+"Language" = "Idioma";
+"Settings" = "Definições";
+"More Details" = "Mais detalhes";
+"Football Match Streaming Live" = "Transmissão ao vivo do jogo de futebol";
+"Get real-time updates and stats from the live match" = "Obtenha atualizações e estatísticas em tempo real do jogo ao vivo";
+"Your Complete Guide to the Football Series" = "O seu guia completo para a série de futebol";
+"All the Latest Football Series News in One Place" = "Todas as notícias da série de futebol num só lugar";
+"View All" = "Ver tudo";
+"Watch Now" = "Assistir agora";
+"Football Series & News" = "Séries e Notícias de Futebol";
+"Stay informed on football series, team updates, and match results. Get the latest highlights and breaking news." = "Mantenha-se informado sobre séries de futebol, atualizações das equipas e resultados dos jogos. Receba os últimos destaques e notícias de última hora.";
+"Next" = "Seguinte";
+"Get Full Details On Every Match" = "Obtenha detalhes completos de cada jogo";
+"Follow every football match with complete stats and player updates. Stay on top of every goal, assist, and key play." = "Siga cada jogo com estatísticas completas e atualizações dos jogadores. Não perca nenhum golo, assistência ou jogada decisiva.";
+"Ultimate Hub For Football" = "Centro definitivo para o futebol";
+"Stay updated with football scores, live matches, team stats, and breaking news." = "Mantenha-se atualizado com resultados, jogos ao vivo, estatísticas e notícias.";
+"Get Started" = "Começar";
+"Live Matches" = "Jogos em direto";
+"Upcoming Matches" = "Próximos jogos";
+"Finished Matches" = "Jogos terminados";
+"No Data Found" = "Nenhum dado encontrado";

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LinesUpCell" customModule="Football" customModuleProvider="target">
+            <connections>
+                <outlet property="mainView" destination="iN0-l3-epB" id="jne-q5-Ji2"/>
+                <outlet property="nameView" destination="N9G-WS-GMp" id="aJu-gu-5Wx"/>
+                <outlet property="playerImgLbl" destination="oSw-UL-sY1" id="TPk-gm-1Qy"/>
+                <outlet property="playerNameLbl" destination="8sd-Lq-OT9" id="lBS-hr-OJc"/>
+                <outlet property="shirtNoLbl" destination="979-0L-OkR" id="hf1-sI-yFW"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="221" height="187"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hoe-wZ-EBV">
+                    <rect key="frame" x="0.0" y="0.0" width="221" height="187"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JiO-8V-Rxf">
+                            <rect key="frame" x="90.666666666666671" y="0.0" width="40.000000000000014" height="34"/>
+                            <subviews>
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="joursey_ic" translatesAutoresizingMaskIntoConstraints="NO" id="oSw-UL-sY1">
+                                    <rect key="frame" x="0.0" y="0.0" width="40" height="34"/>
+                                </imageView>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="979-0L-OkR">
+                                    <rect key="frame" x="0.0" y="13.333333333333336" width="40" height="15.666666666666664"/>
+                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
+                                    <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstItem="979-0L-OkR" firstAttribute="leading" secondItem="JiO-8V-Rxf" secondAttribute="leading" id="Hln-fo-tu9"/>
+                                <constraint firstAttribute="height" constant="34" id="NbN-fO-QGX"/>
+                                <constraint firstAttribute="trailing" secondItem="oSw-UL-sY1" secondAttribute="trailing" id="ODQ-rP-TpJ"/>
+                                <constraint firstAttribute="bottom" secondItem="oSw-UL-sY1" secondAttribute="bottom" id="UkQ-Ym-OcP"/>
+                                <constraint firstAttribute="width" constant="40" id="ZjW-0r-8yq"/>
+                                <constraint firstAttribute="bottom" secondItem="979-0L-OkR" secondAttribute="bottom" constant="5" id="c1T-eK-owm"/>
+                                <constraint firstItem="oSw-UL-sY1" firstAttribute="top" secondItem="JiO-8V-Rxf" secondAttribute="top" id="nfn-cf-D7b"/>
+                                <constraint firstItem="oSw-UL-sY1" firstAttribute="leading" secondItem="JiO-8V-Rxf" secondAttribute="leading" id="wRh-Eg-DaV"/>
+                                <constraint firstAttribute="trailing" secondItem="979-0L-OkR" secondAttribute="trailing" id="xJn-Rf-scW"/>
+                            </constraints>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="N9G-WS-GMp">
+                            <rect key="frame" x="0.0" y="34" width="221" height="20"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8sd-Lq-OT9" customClass="MarqueeLabel" customModule="MarqueeLabel">
+                                    <rect key="frame" x="2" y="0.0" width="217" height="20"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.60358205782312924" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstItem="8sd-Lq-OT9" firstAttribute="top" secondItem="N9G-WS-GMp" secondAttribute="top" id="4Rm-EA-JZH"/>
+                                <constraint firstAttribute="trailing" secondItem="8sd-Lq-OT9" secondAttribute="trailing" constant="2" id="6JI-dY-HzD"/>
+                                <constraint firstAttribute="height" constant="20" id="9p6-2z-Wbq"/>
+                                <constraint firstAttribute="bottom" secondItem="8sd-Lq-OT9" secondAttribute="bottom" id="O5o-eJ-Bw4"/>
+                                <constraint firstItem="8sd-Lq-OT9" firstAttribute="leading" secondItem="N9G-WS-GMp" secondAttribute="leading" constant="2" id="Wr8-G8-RGv"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="N9G-WS-GMp" firstAttribute="top" secondItem="JiO-8V-Rxf" secondAttribute="bottom" id="6AK-g6-UFR"/>
+                        <constraint firstItem="JiO-8V-Rxf" firstAttribute="top" secondItem="hoe-wZ-EBV" secondAttribute="top" id="GFN-HY-zRl"/>
+                        <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="N9G-WS-GMp" secondAttribute="bottom" id="M15-bO-txR"/>
+                        <constraint firstAttribute="trailing" secondItem="N9G-WS-GMp" secondAttribute="trailing" id="UbC-Ed-r9J"/>
+                        <constraint firstItem="N9G-WS-GMp" firstAttribute="leading" secondItem="hoe-wZ-EBV" secondAttribute="leading" id="dcw-Eh-OA6"/>
+                        <constraint firstItem="JiO-8V-Rxf" firstAttribute="centerX" secondItem="hoe-wZ-EBV" secondAttribute="centerX" id="yxK-63-nfC"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="hoe-wZ-EBV" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="Abv-2y-R29"/>
+                <constraint firstItem="hoe-wZ-EBV" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="LWd-N7-CvS"/>
+                <constraint firstItem="hoe-wZ-EBV" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="YEE-c9-AG2"/>
+                <constraint firstAttribute="bottom" secondItem="hoe-wZ-EBV" secondAttribute="bottom" id="dxh-qr-Sg4"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="-125.95419847328243" y="-283.45070422535213"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="joursey_ic" width="159" height="136"/>
+    </resources>
+</document>

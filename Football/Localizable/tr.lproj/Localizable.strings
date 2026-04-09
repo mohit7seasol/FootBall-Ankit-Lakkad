@@ -1,0 +1,55 @@
+/* 
+  Localizable.strings
+  Football
+
+  Created by Ronik Hirpara on 25/02/25.
+  
+*/
+"Language" = "Dil";
+"Done" = "Tamam";
+"App language changed." = "Uygulama dili değiştirildi.";
+"Feedback" = "Geri Bildirim";
+"Valuable insights to enhance our app" = "Uygulamamızı geliştirmek için değerli görüşler";
+"Share App" = "Uygulamayı Paylaş";
+"Easily share the app with anyone." = "Uygulamayı herkesle kolayca paylaşın.";
+"Rate App" = "Uygulamayı Değerlendir";
+"Give your feedback and rate the app." = "Görüşlerinizi paylaşın ve uygulamayı değerlendirin.";
+"Privacy Policy" = "Gizlilik Politikası";
+"Read our Privacy Policy for more details." = "Daha fazla bilgi için Gizlilik Politikamızı okuyun.";
+"Do you like our App?" = "Uygulamamızı beğendiniz mi?";
+"Help us improve the app by answering this quick poll" = "Bu kısa ankete cevap vererek uygulamayı geliştirmemize yardımcı olun";
+"No ❌" = "Hayır ❌";
+"Yes 👍" = "Evet 👍";
+"Football" = "Futbol";
+"Football is a game of goals and teamwork." = "Futbol, goller ve takım çalışması oyunudur.";
+"Football Series" = "Futbol Serisi";
+"Exciting football series, match after match." = "Maç maç heyecan verici futbol serisi.";
+"Football News" = "Futbol Haberleri";
+"Stay updated with the latest football news." = "En son futbol haberleriyle güncel kalın.";
+"All" = "Tümü";
+"Domestic" = "Yurt içi";
+"International" = "Uluslararası";
+"Club Football" = "Kulüp Futbolu";
+"No Data Available" = "Veri Yok";
+"News" = "Haberler";
+"Language" = "Dil";
+"Settings" = "Ayarlar";
+"More Details" = "Daha Fazla Bilgi";
+"Football Match Streaming Live" = "Futbol Maçı Canlı Yayın";
+"Get real-time updates and stats from the live match" = "Canlı maçtan gerçek zamanlı güncellemeler ve istatistikler alın";
+"Your Complete Guide to the Football Series" = "Futbol Serisine Tam Rehberiniz";
+"All the Latest Football Series News in One Place" = "Tüm güncel futbol serisi haberleri tek bir yerde";
+"View All" = "Tümünü Gör";
+"Watch Now" = "Şimdi İzle";
+"Football Series & News" = "Futbol Serisi ve Haberleri";
+"Stay informed on football series, team updates, and match results. Get the latest highlights and breaking news." = "Futbol serileri, takım güncellemeleri ve maç sonuçları hakkında bilgi sahibi olun. En son özetler ve flaş haberleri alın.";
+"Next" = "İleri";
+"Get Full Details On Every Match" = "Her maçın tüm detaylarına ulaşın";
+"Follow every football match with complete stats and player updates. Stay on top of every goal, assist, and key play." = "Her maçı tam istatistikler ve oyuncu güncellemeleriyle takip edin. Her gol, asist ve kritik anı kaçırmayın.";
+"Ultimate Hub For Football" = "Futbolun En İyi Merkezi";
+"Stay updated with football scores, live matches, team stats, and breaking news." = "Futbol skorları, canlı maçlar, takım istatistikleri ve flaş haberlerle güncel kalın.";
+"Get Started" = "Başlayın";
+"Live Matches" = "Canlı Maçlar";
+"Upcoming Matches" = "Yaklaşan Maçlar";
+"Finished Matches" = "Tamamlanan Maçlar";
+"No Data Found" = "Veri bulunamadı";

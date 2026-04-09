@@ -1,0 +1,55 @@
+/* 
+  Localizable.strings
+  Football
+
+  Created by Ronik Hirpara on 25/02/25.
+  
+*/
+"Language" = "Язык";
+"Done" = "Готово";
+"App language changed." = "Язык приложения изменён.";
+"Feedback" = "Отзыв";
+"Valuable insights to enhance our app" = "Ценные отзывы для улучшения нашего приложения";
+"Share App" = "Поделиться приложением";
+"Easily share the app with anyone." = "Легко поделитесь приложением с кем угодно.";
+"Rate App" = "Оценить приложение";
+"Give your feedback and rate the app." = "Оставьте отзыв и оцените приложение.";
+"Privacy Policy" = "Политика конфиденциальности";
+"Read our Privacy Policy for more details." = "Подробнее — в нашей политике конфиденциальности.";
+"Do you like our App?" = "Вам нравится наше приложение?";
+"Help us improve the app by answering this quick poll" = "Помогите нам улучшить приложение, ответив на этот короткий опрос";
+"No ❌" = "Нет ❌";
+"Yes 👍" = "Да 👍";
+"Football" = "Футбол";
+"Football is a game of goals and teamwork." = "Футбол — это игра голов и командной работы.";
+"Football Series" = "Футбольная серия";
+"Exciting football series, match after match." = "Захватывающая футбольная серия, матч за матчем.";
+"Football News" = "Футбольные новости";
+"Stay updated with the latest football news." = "Будьте в курсе последних новостей футбола.";
+"All" = "Все";
+"Domestic" = "Клубный";
+"International" = "Международный";
+"Club Football" = "Клубный футбол";
+"No Data Available" = "Данные отсутствуют";
+"News" = "Новости";
+"Language" = "Язык";
+"Settings" = "Настройки";
+"More Details" = "Подробнее";
+"Football Match Streaming Live" = "Прямая трансляция футбольного матча";
+"Get real-time updates and stats from the live match" = "Получайте обновления и статистику в реальном времени во время матча";
+"Your Complete Guide to the Football Series" = "Ваш полный гид по футбольной серии";
+"All the Latest Football Series News in One Place" = "Все последние футбольные новости — в одном месте";
+"View All" = "Показать все";
+"Watch Now" = "Смотреть сейчас";
+"Football Series & News" = "Футбольные серии и новости";
+"Stay informed on football series, team updates, and match results. Get the latest highlights and breaking news." = "Будьте в курсе футбольных серий, обновлений команд и результатов матчей. Получайте лучшие моменты и срочные новости.";
+"Next" = "Далее";
+"Get Full Details On Every Match" = "Все подробности о каждом матче";
+"Follow every football match with complete stats and player updates. Stay on top of every goal, assist, and key play." = "Следите за каждым матчем с полной статистикой и обновлениями игроков. Не пропустите ни один гол, передачу и решающий момент.";
+"Ultimate Hub For Football" = "Главный центр футбола";
+"Stay updated with football scores, live matches, team stats, and breaking news." = "Будьте в курсе счетов, трансляций, статистики команд и срочных новостей.";
+"Get Started" = "Начать";
+"Live Matches" = "Прямые матчи";
+"Upcoming Matches" = "Предстоящие матчи";
+"Finished Matches" = "Завершённые матчи";
+"No Data Found" = "Данные не найдены";
