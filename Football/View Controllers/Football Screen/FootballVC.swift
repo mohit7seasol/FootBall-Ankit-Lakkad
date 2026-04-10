@@ -82,6 +82,7 @@ class FootballVC: UIViewController, UIGestureRecognizerDelegate {
         // By default select live view
         pagerVc?.moveToPage(index: 0, animated: false)
         updateButtonStates(selected: 0)
+        updateMatchTypeVisibility() // Check if today is selected
     }
     
     private func updateButtonStates(selected index: Int) {
@@ -127,6 +128,31 @@ class FootballVC: UIViewController, UIGestureRecognizerDelegate {
         }
     }
     
+    private func updateMatchTypeVisibility() {
+        // Check if selected date is today
+        if calendar.isDateInToday(selectedDate) {
+            // Show all buttons when today is selected
+            liveView.isHidden = false
+            upcomingView.isHidden = false
+            completedView.isHidden = false
+        } else {
+            // Hide Live button when not today, only show Upcoming and Completed
+            liveView.isHidden = true
+            upcomingView.isHidden = false
+            completedView.isHidden = false
+            
+            // If Live was selected, switch to Upcoming
+            if let pager = pagerVc, pager.currentPageIndex == 0 {
+                pagerVc?.moveToPage(index: 1, animated: true)
+                updateButtonStates(selected: 1)
+            }
+        }
+        
+        UIView.animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
+        }
+    }
+    
     private func setupCalendar() {
         generateDatesForRange()
         if let todayIndex = dates.firstIndex(where: { calendar.isDate($0, inSameDayAs: Date()) }) {
@@ -140,6 +166,7 @@ class FootballVC: UIViewController, UIGestureRecognizerDelegate {
         DispatchQueue.main.async {
             self.dateCollectionView.reloadData()
             self.scrollToSelectedDate(animated: false)
+            self.updateMatchTypeVisibility()
         }
     }
     
@@ -329,6 +356,7 @@ extension FootballVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
             dateCollectionView.reloadData()
             scrollToSelectedDate(animated: true)
             updateDateForAllVCs(selectedDate)
+            updateMatchTypeVisibility() // Update visibility based on selected date
         }
     }
     
@@ -359,3 +387,4 @@ extension FootballVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
         }
     }
 }
+

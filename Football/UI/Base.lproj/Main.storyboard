@@ -224,9 +224,9 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="completedCollection" destination="wdB-U0-92e" id="5Q1-r9-Yns"/>
-                        <outlet property="noDataView" destination="8Ko-Ez-IXC" id="YoC-DX-cqM"/>
-                        <outlet property="viewForNative" destination="V4t-LB-OPo" id="iXr-c5-INt"/>
+                        <outlet property="completedCollection" destination="wdB-U0-92e" id="wfx-4Q-2jm"/>
+                        <outlet property="noDataView" destination="8Ko-Ez-IXC" id="9lS-Uq-L6W"/>
+                        <outlet property="viewForNative" destination="V4t-LB-OPo" id="eQf-is-8XW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IRi-Hf-6kc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import ProgressHUD
 
 class UpcomingVC: UIViewController {
     
@@ -21,7 +22,6 @@ class UpcomingVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
-        showLoader()
         fetchUpcomingMatches()
         showAd()
     }
@@ -38,13 +38,16 @@ class UpcomingVC: UIViewController {
     }
     
     private func fetchUpcomingMatches() {
+        ProgressHUD.show()
+        
         FootballAPIService.shared.fetchMatches(for: selectedDate) { [weak self] matches in
             guard let self = self else { return }
             self.upcomingMatches = matches.filter { !$0.isStarted && !$0.isInProgress && !$0.isFinished }
                 .sorted { $0.timestamp < $1.timestamp }
             
             DispatchQueue.main.async {
-                removeLoader()
+                ProgressHUD.dismiss()
+                
                 if self.upcomingMatches.isEmpty {
                     self.upcomingCollection.isHidden = true
                     self.noDataView.isHidden = false
@@ -59,10 +62,10 @@ class UpcomingVC: UIViewController {
     
     func updateDate(_ date: Date) {
         selectedDate = date
-        showLoader()
         fetchUpcomingMatches()
     }
 }
+
 // MARK: - UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
 extension UpcomingVC: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
@@ -149,5 +152,4 @@ extension UpcomingVC {
             }
         }
     }
-
 }

@@ -7,6 +7,7 @@
 
 import UIKit
 import SDWebImage
+import ProgressHUD
 
 class LiveVC: UIViewController {
     
@@ -22,18 +23,12 @@ class LiveVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
-        showLoader()
         fetchLiveMatches()
         showAd()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        removeLoader()
     }
     
     private func setupCollectionView() {
@@ -48,13 +43,15 @@ class LiveVC: UIViewController {
     }
     
     private func fetchLiveMatches() {
+        ProgressHUD.show()
         FootballAPIService.shared.fetchMatches(for: selectedDate) { [weak self] matches in
             guard let self = self else { return }
             self.liveMatches = matches.filter { $0.isInProgress }
                 .sorted { $0.timestamp < $1.timestamp }
             
             DispatchQueue.main.async {
-                removeLoader()
+                ProgressHUD.dismiss()
+                
                 if self.liveMatches.isEmpty {
                     self.liveCollection.isHidden = true
                     self.noDataView.isHidden = false
@@ -69,7 +66,6 @@ class LiveVC: UIViewController {
     
     func updateDate(_ date: Date) {
         selectedDate = date
-        showLoader()
         fetchLiveMatches()
     }
 }
@@ -158,5 +154,4 @@ extension LiveVC {
             }
         }
     }
-
 }

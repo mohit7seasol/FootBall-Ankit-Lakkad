@@ -14,8 +14,19 @@ class DatePickerCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        setupUI()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        // Update corner radius when layout changes
+        dateButton.layer.cornerRadius = dateButton.frame.width / 2
+    }
+    
+    private func setupUI() {
         dateButton.titleLabel?.font = UIFont.systemFont(ofSize: UIDevice.current.userInterfaceIdiom == .pad ? 20 : 16, weight: .medium)
         dayNameLabel.font = UIFont.systemFont(ofSize: UIDevice.current.userInterfaceIdiom == .pad ? 14 : 12, weight: .medium)
+        dateButton.layer.masksToBounds = true
     }
     
     func configure(isSelected: Bool, dayName: String, date: String) {
@@ -24,7 +35,8 @@ class DatePickerCell: UICollectionViewCell {
         
         if isSelected {
             dateButton.backgroundColor = .white
-            dateButton.setTitleColor(UIColor(named: "#173E75"), for: .normal)
+            // Fix: Use UIColor(hex:) instead of UIColor(named:)
+            dateButton.setTitleColor(UIColor(#colorLiteral(red: 0.09019607843, green: 0.2431372549, blue: 0.4588235294, alpha: 1)), for: .normal)
             dateButton.layer.cornerRadius = dateButton.frame.width / 2
             dateButton.layer.borderWidth = 0
             dayNameLabel.textColor = .white
