@@ -48,7 +48,7 @@ class CategoryPVC: UIPageViewController {
         arrVc.append(vc2)
         
         index += 1
-        let vc3 = InternationalVC.instantiate(fromAppStoryboard: .Main)
+        let vc3 = CompletedVC.instantiate(fromAppStoryboard: .Main)
         vc3.index = index
         arrVc.append(vc3)
         
