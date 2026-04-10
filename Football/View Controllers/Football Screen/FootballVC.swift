@@ -9,14 +9,16 @@ import UIKit
 
 class FootballVC: UIViewController, UIGestureRecognizerDelegate {
 
-    @IBOutlet weak var allView: View!
-    @IBOutlet weak var allLbl: UILabel!
-    @IBOutlet weak var domesticView: View!
-    @IBOutlet weak var domesticLbl: UILabel!
-    @IBOutlet weak var internationalView: View!
-    @IBOutlet weak var internationalLbl: UILabel!
+    @IBOutlet weak var liveView: View!
+    @IBOutlet weak var liveLbl: UILabel!
+    @IBOutlet weak var upcomingView: View!
+    @IBOutlet weak var upcomingLbl: UILabel!
+    @IBOutlet weak var completedView: View!
+    @IBOutlet weak var completedLbl: UILabel!
     @IBOutlet weak var nativeAdView: View!
     @IBOutlet weak var footballLbl: UILabel!
+    @IBOutlet weak var dateCollectionView: UICollectionView!
+    
     
     private weak var pagerVc: CategoryPVC?
     var matchNameArr = ["Live Matches", "Upcoming Matches", "Finished Matches"]
@@ -33,9 +35,9 @@ class FootballVC: UIViewController, UIGestureRecognizerDelegate {
         super.viewWillAppear(animated)
         
         self.footballLbl.text = "Football".localized()
-        self.allLbl.text = "All".localized()
-        self.domesticLbl.text = "Domestic".localized()
-        self.internationalLbl.text = "International".localized()
+        self.liveLbl.text = "Live".localized()
+        self.upcomingLbl.text = "Upcoming".localized()
+        self.completedLbl.text = "Completed".localized()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -115,54 +117,54 @@ class FootballVC: UIViewController, UIGestureRecognizerDelegate {
         //matchCat = "All"
         pagerVc?.moveToPage(index: 0, animated: true)
         
-        self.allView.backgroundColor = .white
-        self.allLbl.textColor = UIColor(red: 0.09, green: 0.24, blue: 0.46, alpha: 1.00)
+        self.liveView.backgroundColor = .white
+        self.liveLbl.textColor = UIColor(red: 0.09, green: 0.24, blue: 0.46, alpha: 1.00)
         
-        self.domesticLbl.textColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
-        self.domesticView.backgroundColor = .clear
-        self.domesticView.borderWidth = 1
-        self.domesticView.borderColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
+        self.upcomingLbl.textColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
+        self.upcomingView.backgroundColor = .clear
+        self.upcomingView.borderWidth = 1
+        self.upcomingView.borderColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
         
-        self.internationalLbl.textColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
-        self.internationalView.backgroundColor = .clear
-        self.internationalView.borderWidth = 1
-        self.internationalView.borderColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
+        self.completedLbl.textColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
+        self.completedView.backgroundColor = .clear
+        self.completedView.borderWidth = 1
+        self.completedView.borderColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
     }
     
     @IBAction func clickOnDomestic(_ sender: Any) {
         //matchCat = "Domestic"
         pagerVc?.moveToPage(index: 1, animated: true)
         
-        self.allView.backgroundColor = .clear
-        self.allLbl.textColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
-        self.allView.borderWidth = 1
-        self.allView.borderColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
+        self.liveView.backgroundColor = .clear
+        self.liveLbl.textColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
+        self.liveView.borderWidth = 1
+        self.liveView.borderColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
         
-        self.domesticLbl.textColor = UIColor(red: 0.09, green: 0.24, blue: 0.46, alpha: 1.00)
-        self.domesticView.backgroundColor = .white
+        self.upcomingLbl.textColor = UIColor(red: 0.09, green: 0.24, blue: 0.46, alpha: 1.00)
+        self.upcomingView.backgroundColor = .white
          
-        self.internationalLbl.textColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
-        self.internationalView.backgroundColor = .clear
-        self.internationalView.borderWidth = 1
-        self.internationalView.borderColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
+        self.completedLbl.textColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
+        self.completedView.backgroundColor = .clear
+        self.completedView.borderWidth = 1
+        self.completedView.borderColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
     }
     
     @IBAction func clickOnInternational(_ sender: Any) {
         //matchCat = "International"
         pagerVc?.moveToPage(index: 2, animated: true)
         
-        self.allView.backgroundColor = .clear
-        self.allLbl.textColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
-        self.allView.borderWidth = 1
-        self.allView.borderColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
+        self.liveView.backgroundColor = .clear
+        self.liveLbl.textColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
+        self.liveView.borderWidth = 1
+        self.liveView.borderColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
         
-        self.domesticLbl.textColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
-        self.domesticView.backgroundColor = .clear
-        self.domesticView.borderWidth = 1
-        self.domesticView.borderColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
+        self.upcomingLbl.textColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
+        self.upcomingView.backgroundColor = .clear
+        self.upcomingView.borderWidth = 1
+        self.upcomingView.borderColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
         
-        self.internationalLbl.textColor = UIColor(red: 0.09, green: 0.24, blue: 0.46, alpha: 1.00)
-        self.internationalView.backgroundColor = .white
+        self.completedLbl.textColor = UIColor(red: 0.09, green: 0.24, blue: 0.46, alpha: 1.00)
+        self.completedView.backgroundColor = .white
     }
     
 }
@@ -174,52 +176,52 @@ extension FootballVC: CategoryDelegate {
             //matchCat = "All"
             pagerVc?.moveToPage(index: 0, animated: true)
             
-            self.allView.backgroundColor = .white
-            self.allLbl.textColor = UIColor(red: 0.09, green: 0.24, blue: 0.46, alpha: 1.00)
+            self.liveView.backgroundColor = .white
+            self.liveLbl.textColor = UIColor(red: 0.09, green: 0.24, blue: 0.46, alpha: 1.00)
             
-            self.domesticLbl.textColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
-            self.domesticView.backgroundColor = .clear
-            self.domesticView.borderWidth = 1
-            self.domesticView.borderColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
+            self.upcomingLbl.textColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
+            self.upcomingView.backgroundColor = .clear
+            self.upcomingView.borderWidth = 1
+            self.upcomingView.borderColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
             
-            self.internationalLbl.textColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
-            self.internationalView.backgroundColor = .clear
-            self.internationalView.borderWidth = 1
-            self.internationalView.borderColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
+            self.completedLbl.textColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
+            self.completedView.backgroundColor = .clear
+            self.completedView.borderWidth = 1
+            self.completedView.borderColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
             
         } else if currentItem == 1 {
             //matchCat = "Domestic"
             pagerVc?.moveToPage(index: 1, animated: true)
             
-            self.allView.backgroundColor = .clear
-            self.allLbl.textColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
-            self.allView.borderWidth = 1
-            self.allView.borderColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
+            self.liveView.backgroundColor = .clear
+            self.liveLbl.textColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
+            self.liveView.borderWidth = 1
+            self.liveView.borderColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
             
-            self.domesticLbl.textColor = UIColor(red: 0.09, green: 0.24, blue: 0.46, alpha: 1.00)
-            self.domesticView.backgroundColor = .white
+            self.upcomingLbl.textColor = UIColor(red: 0.09, green: 0.24, blue: 0.46, alpha: 1.00)
+            self.upcomingView.backgroundColor = .white
              
-            self.internationalLbl.textColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
-            self.internationalView.backgroundColor = .clear
-            self.internationalView.borderWidth = 1
-            self.internationalView.borderColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
+            self.completedLbl.textColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
+            self.completedView.backgroundColor = .clear
+            self.completedView.borderWidth = 1
+            self.completedView.borderColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
             
         } else if currentItem == 2 {
             //matchCat = "International"
             pagerVc?.moveToPage(index: 2, animated: true)
             
-            self.allView.backgroundColor = .clear
-            self.allLbl.textColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
-            self.allView.borderWidth = 1
-            self.allView.borderColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
+            self.liveView.backgroundColor = .clear
+            self.liveLbl.textColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
+            self.liveView.borderWidth = 1
+            self.liveView.borderColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
             
-            self.domesticLbl.textColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
-            self.domesticView.backgroundColor = .clear
-            self.domesticView.borderWidth = 1
-            self.domesticView.borderColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
+            self.upcomingLbl.textColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
+            self.upcomingView.backgroundColor = .clear
+            self.upcomingView.borderWidth = 1
+            self.upcomingView.borderColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
             
-            self.internationalLbl.textColor = UIColor(red: 0.09, green: 0.24, blue: 0.46, alpha: 1.00)
-            self.internationalView.backgroundColor = .white
+            self.completedLbl.textColor = UIColor(red: 0.09, green: 0.24, blue: 0.46, alpha: 1.00)
+            self.completedView.backgroundColor = .white
         }
     }
 }
