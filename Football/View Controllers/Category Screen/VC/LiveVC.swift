@@ -23,12 +23,7 @@ class LiveVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
-        fetchLiveMatches()
         showAd()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
     }
     
     private func setupCollectionView() {
@@ -42,33 +37,29 @@ class LiveVC: UIViewController {
         }
     }
     
-    private func fetchLiveMatches() {
-        ProgressHUD.show()
-        FootballAPIService.shared.fetchMatches(for: selectedDate) { [weak self] matches in
-            guard let self = self else { return }
-            self.liveMatches = matches.filter { $0.isInProgress }
+    func updateMatches(_ allMatches: [Match], selectedDate: Date) {
+        self.selectedDate = selectedDate
+        
+        if Calendar.current.isDateInToday(selectedDate) {
+            self.liveMatches = allMatches.filter { $0.isInProgress }
                 .sorted { $0.timestamp < $1.timestamp }
-            
-            DispatchQueue.main.async {
-                ProgressHUD.dismiss()
-                
-                if self.liveMatches.isEmpty {
-                    self.liveCollection.isHidden = true
-                    self.noDataView.isHidden = false
-                } else {
-                    self.liveCollection.isHidden = false
-                    self.noDataView.isHidden = true
-                    self.liveCollection.reloadData()
-                }
+        } else {
+            self.liveMatches = []
+        }
+        
+        DispatchQueue.main.async {
+            if self.liveMatches.isEmpty {
+                self.liveCollection?.isHidden = true
+                self.noDataView?.isHidden = false
+            } else {
+                self.liveCollection?.isHidden = false
+                self.noDataView?.isHidden = true
+                self.liveCollection?.reloadData()
             }
         }
     }
-    
-    func updateDate(_ date: Date) {
-        selectedDate = date
-        fetchLiveMatches()
-    }
 }
+
 
 extension LiveVC: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     

@@ -22,7 +22,6 @@ class CompletedVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
-        fetchCompletedMatches()
         showAd()
     }
     
@@ -37,35 +36,24 @@ class CompletedVC: UIViewController {
         }
     }
     
-    private func fetchCompletedMatches() {
-        ProgressHUD.show()
+    func updateMatches(_ allMatches: [Match], selectedDate: Date) {
+        self.selectedDate = selectedDate
+        self.completedMatches = allMatches.filter { $0.isFinished }
+            .sorted { $0.timestamp > $1.timestamp }
         
-        FootballAPIService.shared.fetchMatches(for: selectedDate) { [weak self] matches in
-            guard let self = self else { return }
-            self.completedMatches = matches.filter { $0.isFinished }
-                .sorted { $0.timestamp > $1.timestamp }
-            
-            DispatchQueue.main.async {
-                ProgressHUD.dismiss()
-                
-                if self.completedMatches.isEmpty {
-                    self.completedCollection.isHidden = true
-                    self.noDataView.isHidden = false
-                } else {
-                    self.completedCollection.isHidden = false
-                    self.noDataView.isHidden = true
-                    self.completedCollection.reloadData()
-                }
+        DispatchQueue.main.async {
+            if self.completedMatches.isEmpty {
+                self.completedCollection?.isHidden = true
+                self.noDataView?.isHidden = false
+            } else {
+                self.completedCollection?.isHidden = false
+                self.noDataView?.isHidden = true
+                self.completedCollection?.reloadData()
             }
         }
     }
-    
-    func updateDate(_ date: Date) {
-        selectedDate = date
-        fetchCompletedMatches()
-    }
 }
-
+// MARK: - UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
 extension CompletedVC: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -73,7 +61,9 @@ extension CompletedVC: UICollectionViewDataSource, UICollectionViewDelegate, UIC
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MatchListCell", for: indexPath) as! MatchListCell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MatchListCell", for: indexPath) as? MatchListCell else {
+            return UICollectionViewCell()
+        }
         let match = completedMatches[indexPath.item]
         cell.configureForCompleted(match: match)
         return cell

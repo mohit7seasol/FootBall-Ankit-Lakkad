@@ -25,12 +25,10 @@ struct Match {
     let status: String
     let timestamp: Int
     let tournamentId: String
-    
     let isStarted: Bool
     let isInProgress: Bool
     let isFinished: Bool
     
-    // Computed property for formatted date
     var formattedDateTime: String {
         let date = Date(timeIntervalSince1970: TimeInterval(timestamp))
         let formatter = DateFormatter()

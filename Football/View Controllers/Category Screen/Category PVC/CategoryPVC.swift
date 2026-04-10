@@ -16,17 +16,12 @@ class CategoryPVC: UIPageViewController {
     var tabDelegate: CategoryDelegate?
     var arrVc = [UIViewController]()
     var currentPageIndex = 0
+    weak var parentVC: FootballVC?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         self.generateArrVc()
         self.setupPager()
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        removeLoader()
     }
     
     private func setupPager() {
@@ -51,17 +46,13 @@ class CategoryPVC: UIPageViewController {
         let vc3 = CompletedVC.instantiate(fromAppStoryboard: .Main)
         vc3.index = index
         arrVc.append(vc3)
-        
     }
     
     private func contentViewController(at index: Int) -> UIViewController? {
         if index < 0 || index >= arrVc.count {
             return nil
         }
-        if index < arrVc.count {
-            return arrVc[index]
-        }
-        return nil
+        return arrVc[index]
     }
     
     func moveToPage(index: Int, animated: Bool) {
@@ -79,5 +70,4 @@ class CategoryPVC: UIPageViewController {
             tabDelegate?.didPickItem(currentItem: currentPageIndex)
         }
     }
-
 }

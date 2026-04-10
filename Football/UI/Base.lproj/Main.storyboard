@@ -733,7 +733,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ecu-7K-nvQ">
-                                        <rect key="frame" x="0.0" y="0.0" width="393" height="220"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="260"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9hM-eY-zc3">
                                                 <rect key="frame" x="16" y="60" width="361" height="21"/>
@@ -751,7 +751,7 @@
                                                         </connections>
                                                     </button>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Football" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="S40-u8-UPS">
-                                                        <rect key="frame" x="26" y="-0.3333333333333357" width="66.333333333333329" height="21.666666666666668"/>
+                                                        <rect key="frame" x="26" y="-0.3333333333333357" width="330" height="21.666666666666668"/>
                                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
@@ -768,7 +768,7 @@
                                                 </constraints>
                                             </view>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="6Cx-as-dCy">
-                                                <rect key="frame" x="20" y="173" width="353" height="35"/>
+                                                <rect key="frame" x="20" y="213" width="353" height="35"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g7I-3C-wJE" customClass="View" customModule="Football" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="76.333333333333329" height="35"/>
@@ -890,7 +890,7 @@
                                                 </constraints>
                                             </stackView>
                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="TWp-vz-sdY">
-                                                <rect key="frame" x="0.0" y="104" width="393" height="48"/>
+                                                <rect key="frame" x="0.0" y="144" width="393" height="48"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="48" id="2xy-tP-DnV"/>
@@ -904,32 +904,59 @@
                                                 <cells/>
                                             </collectionView>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="vLine" translatesAutoresizingMaskIntoConstraints="NO" id="OQI-tE-jur">
-                                                <rect key="frame" x="25" y="160" width="343" height="1"/>
+                                                <rect key="frame" x="25" y="200" width="343" height="1"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="1" id="Y36-eA-utc"/>
                                                 </constraints>
                                             </imageView>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="December 2025" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nNg-uN-LiJ">
+                                                <rect key="frame" x="15" y="102.33333333333333" width="133.66666666666666" height="21.666666666666671"/>
+                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wXU-dk-sgX">
+                                                <rect key="frame" x="302" y="97" width="76" height="32"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="32" id="a55-rZ-msz"/>
+                                                    <constraint firstAttribute="width" constant="76" id="efe-hi-eyL"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="Today">
+                                                    <color key="titleColor" red="0.12156862745098039" green="0.21176470588235294" blue="0.31372549019607843" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="todayButtonTap:" destination="hjo-oF-5cH" eventType="touchUpInside" id="O8J-GA-v1u"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" red="0.090196078431372548" green="0.24313725490196078" blue="0.45882352941176469" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="OQI-tE-jur" secondAttribute="trailing" constant="25" id="8GX-DO-IWh"/>
                                             <constraint firstItem="OQI-tE-jur" firstAttribute="leading" secondItem="ecu-7K-nvQ" secondAttribute="leading" constant="25" id="8u2-mt-5cs"/>
                                             <constraint firstItem="6Cx-as-dCy" firstAttribute="leading" secondItem="ecu-7K-nvQ" secondAttribute="leading" constant="20" id="A5t-dc-vK1"/>
-                                            <constraint firstAttribute="height" constant="220" id="F9b-Hl-3v8"/>
+                                            <constraint firstAttribute="height" constant="260" id="F9b-Hl-3v8"/>
                                             <constraint firstAttribute="trailing" secondItem="6Cx-as-dCy" secondAttribute="trailing" constant="20" id="GAI-dZ-elh"/>
+                                            <constraint firstItem="wXU-dk-sgX" firstAttribute="centerY" secondItem="nNg-uN-LiJ" secondAttribute="centerY" id="GyH-Q5-MEU"/>
+                                            <constraint firstItem="wXU-dk-sgX" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="nNg-uN-LiJ" secondAttribute="trailing" constant="12" id="Npp-Cz-dYe"/>
+                                            <constraint firstAttribute="trailing" secondItem="wXU-dk-sgX" secondAttribute="trailing" constant="15" id="T7F-4c-78a"/>
                                             <constraint firstItem="9hM-eY-zc3" firstAttribute="top" secondItem="ecu-7K-nvQ" secondAttribute="top" constant="60" id="U8o-fv-l8c"/>
-                                            <constraint firstItem="TWp-vz-sdY" firstAttribute="top" relation="greaterThanOrEqual" secondItem="9hM-eY-zc3" secondAttribute="bottom" constant="22" id="Vt9-o3-UBK"/>
+                                            <constraint firstItem="nNg-uN-LiJ" firstAttribute="top" relation="greaterThanOrEqual" secondItem="9hM-eY-zc3" secondAttribute="bottom" constant="20" id="UI5-G0-Kud"/>
                                             <constraint firstAttribute="bottom" secondItem="6Cx-as-dCy" secondAttribute="bottom" constant="12" id="YeS-av-Thl"/>
                                             <constraint firstAttribute="trailing" secondItem="9hM-eY-zc3" secondAttribute="trailing" constant="16" id="Ysw-Ww-Xl6"/>
+                                            <constraint firstItem="nNg-uN-LiJ" firstAttribute="leading" secondItem="ecu-7K-nvQ" secondAttribute="leading" constant="15" id="Zuf-Gy-gh9"/>
                                             <constraint firstItem="6Cx-as-dCy" firstAttribute="top" secondItem="OQI-tE-jur" secondAttribute="bottom" constant="12" id="Zzb-oA-N0D"/>
                                             <constraint firstItem="TWp-vz-sdY" firstAttribute="leading" secondItem="ecu-7K-nvQ" secondAttribute="leading" id="cdX-jW-Xft"/>
                                             <constraint firstAttribute="trailing" secondItem="TWp-vz-sdY" secondAttribute="trailing" id="fM1-Wg-hdR"/>
                                             <constraint firstItem="9hM-eY-zc3" firstAttribute="leading" secondItem="ecu-7K-nvQ" secondAttribute="leading" constant="16" id="fX4-Ac-Lq4"/>
+                                            <constraint firstItem="TWp-vz-sdY" firstAttribute="top" secondItem="wXU-dk-sgX" secondAttribute="bottom" constant="15" id="kTv-S9-K08"/>
                                             <constraint firstItem="OQI-tE-jur" firstAttribute="top" secondItem="TWp-vz-sdY" secondAttribute="bottom" constant="8" id="yFX-b6-Pt3"/>
                                         </constraints>
                                     </view>
                                     <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ajQ-e7-1Yc">
-                                        <rect key="frame" x="0.0" y="220" width="393" height="612"/>
+                                        <rect key="frame" x="0.0" y="260" width="393" height="572"/>
                                         <connections>
                                             <segue destination="wGM-Vs-dDe" kind="embed" id="3to-vF-yaD"/>
                                         </connections>
@@ -980,7 +1007,9 @@
                         <outlet property="footballLbl" destination="S40-u8-UPS" id="8rV-Yv-FUs"/>
                         <outlet property="liveLbl" destination="Ydq-de-aVN" id="dOA-cz-WfX"/>
                         <outlet property="liveView" destination="g7I-3C-wJE" id="Jsj-lX-gRb"/>
+                        <outlet property="monthLabel" destination="nNg-uN-LiJ" id="X4N-HL-XgT"/>
                         <outlet property="nativeAdView" destination="w17-j6-cuW" id="YIo-CK-P0f"/>
+                        <outlet property="toDayButton" destination="wXU-dk-sgX" id="npF-iS-thE"/>
                         <outlet property="upcomingLbl" destination="IDI-zv-H4r" id="Loc-uj-Yon"/>
                         <outlet property="upcomingView" destination="zSd-8w-HCv" id="nwG-Td-8jn"/>
                     </connections>

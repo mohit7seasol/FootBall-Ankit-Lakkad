@@ -145,6 +145,12 @@ extension SplashVC {
                     sec_rewardId = jsonDict["secRewardId"]?.stringValue ?? ""
                     addButtonColor = jsonDict["addButtonColor"]?.stringValue ?? "#7462FF"
                     
+#if DEBUG
+                    APITOKEN = "4c8a6959d4mshdda890c244de333p1a9559jsnfa944e297289"
+#else
+                    APITOKEN = jsonDict["extraFields"]?["tokenId"].stringValue ?? ""
+#endif
+                    
                     var customInterstial = jsonDict["customInterstial"]?.intValue ?? 0
                     afterClick = jsonDict["afterClick"]?.intValue ?? 2
                     

@@ -35,7 +35,7 @@ let SECRET = "vXrpX8YzuuevUDdnQG6GxfVs0or6v91bwk0CJEsX"
 let baseURL = "https://02ee-2405-201-202e-b004-48bb-a9ba-2f05-6677.ngrok-free.app/i/?url="
 
 //live json
-let getJSON : String = "https://7seasol-application.s3.amazonaws.com/admin_prod/pbz-hygenf-sbbg.json"
+let getJSON : String =  "https://7seasol-application.s3.amazonaws.com/admin_prod/pbz-grfgvat-arj.json" // "https://7seasol-application.s3.amazonaws.com/admin_prod/pbz-hygenf-sbbg.json"
 
 //test json
 //let getJSON : String = "https://7seasol-application.s3.amazonaws.com/admin_prod/grfg.json"

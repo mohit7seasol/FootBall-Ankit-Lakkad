@@ -22,7 +22,6 @@ class UpcomingVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
-        fetchUpcomingMatches()
         showAd()
     }
     
@@ -37,32 +36,21 @@ class UpcomingVC: UIViewController {
         }
     }
     
-    private func fetchUpcomingMatches() {
-        ProgressHUD.show()
+    func updateMatches(_ allMatches: [Match], selectedDate: Date) {
+        self.selectedDate = selectedDate
+        self.upcomingMatches = allMatches.filter { !$0.isStarted && !$0.isInProgress && !$0.isFinished }
+            .sorted { $0.timestamp < $1.timestamp }
         
-        FootballAPIService.shared.fetchMatches(for: selectedDate) { [weak self] matches in
-            guard let self = self else { return }
-            self.upcomingMatches = matches.filter { !$0.isStarted && !$0.isInProgress && !$0.isFinished }
-                .sorted { $0.timestamp < $1.timestamp }
-            
-            DispatchQueue.main.async {
-                ProgressHUD.dismiss()
-                
-                if self.upcomingMatches.isEmpty {
-                    self.upcomingCollection.isHidden = true
-                    self.noDataView.isHidden = false
-                } else {
-                    self.upcomingCollection.isHidden = false
-                    self.noDataView.isHidden = true
-                    self.upcomingCollection.reloadData()
-                }
+        DispatchQueue.main.async {
+            if self.upcomingMatches.isEmpty {
+                self.upcomingCollection?.isHidden = true
+                self.noDataView?.isHidden = false
+            } else {
+                self.upcomingCollection?.isHidden = false
+                self.noDataView?.isHidden = true
+                self.upcomingCollection?.reloadData()
             }
         }
-    }
-    
-    func updateDate(_ date: Date) {
-        selectedDate = date
-        fetchUpcomingMatches()
     }
 }
 

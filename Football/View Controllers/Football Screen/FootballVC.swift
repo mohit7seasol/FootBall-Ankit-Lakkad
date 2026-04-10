@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import ProgressHUD
 
 class FootballVC: UIViewController, UIGestureRecognizerDelegate {
 
@@ -19,6 +20,9 @@ class FootballVC: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet weak var footballLbl: UILabel!
     @IBOutlet weak var dateCollectionView: UICollectionView!
     
+    @IBOutlet weak var monthLabel: UILabel!
+    @IBOutlet weak var toDayButton: UIButton!
+    
     private weak var pagerVc: CategoryPVC?
     var matchNameArr = ["Live Matches", "Upcoming Matches", "Finished Matches"]
     var googleNativeAds = GoogleNativeAds()
@@ -30,13 +34,17 @@ class FootballVC: UIViewController, UIGestureRecognizerDelegate {
     private var selectedDate = Date()
     private var dates: [Date] = []
     
+    // Match Properties
+    var allMatches: [Match] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCalendar()
         setupDateCollectionView()
         setupInitialSelection()
+        updateMonthLabel()
         logAnalyticAction(title: "", status: AnalyticEvent.Match)
-//        self.showAd()
+        fetchMatchesForSelectedDate()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -60,6 +68,7 @@ class FootballVC: UIViewController, UIGestureRecognizerDelegate {
         if let pageViewController = destination as? CategoryPVC {
             pagerVc = pageViewController
             pagerVc?.tabDelegate = self
+            pagerVc?.parentVC = self
         }
     }
     
@@ -68,7 +77,6 @@ class FootballVC: UIViewController, UIGestureRecognizerDelegate {
         dateCollectionView.delegate = self
         dateCollectionView.dataSource = self
         
-        // Make collection view horizontal
         if let layout = dateCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.scrollDirection = .horizontal
             layout.minimumLineSpacing = 8
@@ -79,10 +87,9 @@ class FootballVC: UIViewController, UIGestureRecognizerDelegate {
     }
     
     private func setupInitialSelection() {
-        // By default select live view
         pagerVc?.moveToPage(index: 0, animated: false)
         updateButtonStates(selected: 0)
-        updateMatchTypeVisibility() // Check if today is selected
+        updateMatchTypeVisibility()
     }
     
     private func updateButtonStates(selected index: Int) {
@@ -91,7 +98,6 @@ class FootballVC: UIViewController, UIGestureRecognizerDelegate {
         let unselectedColor = UIColor.clear
         let unselectedTextColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
         
-        // Live button
         if index == 0 {
             liveView.backgroundColor = selectedColor
             liveLbl.textColor = selectedTextColor
@@ -103,7 +109,6 @@ class FootballVC: UIViewController, UIGestureRecognizerDelegate {
             liveView.borderColor = unselectedTextColor
         }
         
-        // Upcoming button
         if index == 1 {
             upcomingView.backgroundColor = selectedColor
             upcomingLbl.textColor = selectedTextColor
@@ -115,7 +120,6 @@ class FootballVC: UIViewController, UIGestureRecognizerDelegate {
             upcomingView.borderColor = unselectedTextColor
         }
         
-        // Completed button
         if index == 2 {
             completedView.backgroundColor = selectedColor
             completedLbl.textColor = selectedTextColor
@@ -129,19 +133,15 @@ class FootballVC: UIViewController, UIGestureRecognizerDelegate {
     }
     
     private func updateMatchTypeVisibility() {
-        // Check if selected date is today
         if calendar.isDateInToday(selectedDate) {
-            // Show all buttons when today is selected
             liveView.isHidden = false
             upcomingView.isHidden = false
             completedView.isHidden = false
         } else {
-            // Hide Live button when not today, only show Upcoming and Completed
             liveView.isHidden = true
             upcomingView.isHidden = false
             completedView.isHidden = false
             
-            // If Live was selected, switch to Upcoming
             if let pager = pagerVc, pager.currentPageIndex == 0 {
                 pagerVc?.moveToPage(index: 1, animated: true)
                 updateButtonStates(selected: 1)
@@ -153,8 +153,15 @@ class FootballVC: UIViewController, UIGestureRecognizerDelegate {
         }
     }
     
+    private func updateMonthLabel() {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMMM yyyy"
+        monthLabel.text = formatter.string(from: currentDate)
+    }
+    
     private func setupCalendar() {
         generateDatesForRange()
+        updateMonthLabel()
         if let todayIndex = dates.firstIndex(where: { calendar.isDate($0, inSameDayAs: Date()) }) {
             selectedDateIndex = todayIndex
             selectedDate = dates[todayIndex]
@@ -176,25 +183,10 @@ class FootballVC: UIViewController, UIGestureRecognizerDelegate {
         dateCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: animated)
     }
     
-    private func updateDateForAllVCs(_ date: Date) {
-        if let pager = pagerVc {
-            for vc in pager.arrVc {
-                if let liveVC = vc as? LiveVC {
-                    liveVC.updateDate(date)
-                } else if let upcomingVC = vc as? UpcomingVC {
-                    upcomingVC.updateDate(date)
-                } else if let completedVC = vc as? CompletedVC {
-                    completedVC.updateDate(date)
-                }
-            }
-        }
-    }
-    
     private func generateDatesForRange() {
         dates.removeAll()
         let today = Date()
         
-        // Generate 15 days (7 past, today, 7 future)
         for i in -7...7 {
             if let date = calendar.date(byAdding: .day, value: i, to: today) {
                 dates.append(date)
@@ -202,55 +194,52 @@ class FootballVC: UIViewController, UIGestureRecognizerDelegate {
         }
     }
     
-    func showAd() {
-        self.showSkeleton()
-        if isUserSubscribe() == false {
-            self.nativeAdView.showAnimatedSkeleton()
-            self.googleNativeAds.loadAds(vc: self) { nativeAdsTemp in
-                self.nativeAdView.isHidden = false
-                
-                DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
-                    self.hideSkeleton()
-                    self.googleNativeAds.showAdsView4(nativeAd: nativeAdsTemp, view: self.nativeAdView)
+    // MARK: - Match Fetching using FootballAPIService
+    private func fetchMatchesForSelectedDate() {
+        ProgressHUD.show()
+        
+        FootballAPIService.shared.fetchMatches(for: selectedDate) { [weak self] matches in
+            guard let self = self else {
+                ProgressHUD.dismiss()
+                return
+            }
+            
+            DispatchQueue.main.async {
+                ProgressHUD.dismiss()
+                self.allMatches = matches
+                self.distributeMatchesToChildVCs()
+            }
+        }
+    }
+    
+    private func distributeMatchesToChildVCs() {
+        if let pager = pagerVc {
+            for vc in pager.arrVc {
+                if let liveVC = vc as? LiveVC {
+                    liveVC.updateMatches(allMatches, selectedDate: selectedDate)
+                } else if let upcomingVC = vc as? UpcomingVC {
+                    upcomingVC.updateMatches(allMatches, selectedDate: selectedDate)
+                } else if let completedVC = vc as? CompletedVC {
+                    completedVC.updateMatches(allMatches, selectedDate: selectedDate)
                 }
             }
-            self.googleNativeAds.failAds(vc: self) { fail in
-                print(" Home...Native fail....")
-                self.nativeAdView.isHidden = true
-            }
-        } else {
-            self.hideSkeleton()
-            self.nativeAdView.isHidden = true
         }
     }
     
-    func showSkeleton() {
-        if let adView = Bundle.main.loadNibNamed("SkeletonCustomView4", owner: self, options: nil)?.first as? SkeletonCustomView4 {
-            self.nativeAdView.addSubview(adView)
-            adView.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                adView.topAnchor.constraint(equalTo: self.nativeAdView.topAnchor),
-                adView.leadingAnchor.constraint(equalTo: self.nativeAdView.leadingAnchor),
-                adView.trailingAnchor.constraint(equalTo: self.nativeAdView.trailingAnchor),
-                adView.bottomAnchor.constraint(equalTo: self.nativeAdView.bottomAnchor)
-            ])
-            adView.view1.showAnimatedGradientSkeleton()
-            adView.view2.showAnimatedGradientSkeleton()
-            adView.view3.showAnimatedGradientSkeleton()
-            adView.view4.showAnimatedGradientSkeleton()
-            adView.view5.showAnimatedGradientSkeleton()
-            adView.view6.showAnimatedGradientSkeleton()
-        }
+    private func updateDateForAllVCs(_ date: Date) {
+        selectedDate = date
+        fetchMatchesForSelectedDate()
     }
     
-    func hideSkeleton() {
-        for subview in self.nativeAdView.subviews {
-            if let adView = subview as? SkeletonCustomView4 {
-                adView.removeFromSuperview()
-            }
-        }
+    private func setToday() {
+        currentDate = Date()
+        selectedDate = Date()
+        setupCalendar()
+        fetchMatchesForSelectedDate()
+        updateMatchTypeVisibility()
     }
-
+    
+    // MARK: - Actions
     @IBAction func clickONBack(_ sender: Any) {
         self.navigationController?.popViewController(animated: true)
     }
@@ -269,64 +258,19 @@ class FootballVC: UIViewController, UIGestureRecognizerDelegate {
         pagerVc?.moveToPage(index: 2, animated: true)
         updateButtonStates(selected: 2)
     }
+    
+    @IBAction func todayButtonTap(_ sender: UIButton) {
+        setToday()
+    }
 }
 
 extension FootballVC: CategoryDelegate {
-    
     func didPickItem(currentItem: Int) {
-        if currentItem == 0 {
-            //matchCat = "All"
-            pagerVc?.moveToPage(index: 0, animated: true)
-            
-            self.liveView.backgroundColor = .white
-            self.liveLbl.textColor = UIColor(red: 0.09, green: 0.24, blue: 0.46, alpha: 1.00)
-            
-            self.upcomingLbl.textColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
-            self.upcomingView.backgroundColor = .clear
-            self.upcomingView.borderWidth = 1
-            self.upcomingView.borderColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
-            
-            self.completedLbl.textColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
-            self.completedView.backgroundColor = .clear
-            self.completedView.borderWidth = 1
-            self.completedView.borderColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
-            
-        } else if currentItem == 1 {
-            //matchCat = "Domestic"
-            pagerVc?.moveToPage(index: 1, animated: true)
-            
-            self.liveView.backgroundColor = .clear
-            self.liveLbl.textColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
-            self.liveView.borderWidth = 1
-            self.liveView.borderColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
-            
-            self.upcomingLbl.textColor = UIColor(red: 0.09, green: 0.24, blue: 0.46, alpha: 1.00)
-            self.upcomingView.backgroundColor = .white
-             
-            self.completedLbl.textColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
-            self.completedView.backgroundColor = .clear
-            self.completedView.borderWidth = 1
-            self.completedView.borderColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
-            
-        } else if currentItem == 2 {
-            //matchCat = "International"
-            pagerVc?.moveToPage(index: 2, animated: true)
-            
-            self.liveView.backgroundColor = .clear
-            self.liveLbl.textColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
-            self.liveView.borderWidth = 1
-            self.liveView.borderColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
-            
-            self.upcomingLbl.textColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
-            self.upcomingView.backgroundColor = .clear
-            self.upcomingView.borderWidth = 1
-            self.upcomingView.borderColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
-            
-            self.completedLbl.textColor = UIColor(red: 0.09, green: 0.24, blue: 0.46, alpha: 1.00)
-            self.completedView.backgroundColor = .white
-        }
+        pagerVc?.moveToPage(index: currentItem, animated: true)
+        updateButtonStates(selected: currentItem)
     }
 }
+
 // MARK: - UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout
 extension FootballVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
@@ -356,12 +300,11 @@ extension FootballVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
             dateCollectionView.reloadData()
             scrollToSelectedDate(animated: true)
             updateDateForAllVCs(selectedDate)
-            updateMatchTypeVisibility() // Update visibility based on selected date
+            updateMatchTypeVisibility()
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        // Set cell size: height 48, width 34 as requested
         return CGSize(width: 34, height: 48)
     }
     
@@ -374,7 +317,6 @@ extension FootballVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        // Add horizontal insets for better centering
         let totalCellWidth = 34 * CGFloat(dates.count)
         let totalSpacingWidth = 8 * CGFloat(dates.count - 1)
         let totalWidth = totalCellWidth + totalSpacingWidth
@@ -387,4 +329,3 @@ extension FootballVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
         }
     }
 }
-
