@@ -40,6 +40,9 @@ let getJSON : String = "https://7seasol-application.s3.amazonaws.com/admin_prod/
 //test json
 //let getJSON : String = "https://7seasol-application.s3.amazonaws.com/admin_prod/grfg.json"
 
+
+var APITOKEN = "1831bcfd61mshe49ae7779397e4fp16532cjsncaf029ae4ce0"
+
 var bannerId = ""
 var nativeId = ""
 var nativeId2 = ""

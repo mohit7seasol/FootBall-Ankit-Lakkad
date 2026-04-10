@@ -10,83 +10,87 @@ import UIKit
 class CompletedVC: UIViewController {
     
     @IBOutlet weak var viewForNative: UIView!
+    @IBOutlet weak var completedCollection: UICollectionView!
+    @IBOutlet weak var noDataView: UIView!
     
     var googleNativeAds = GoogleNativeAds()
-    
+    var completedMatches: [Match] = []
+    var selectedDate = Date()
     var index = -1
-    var matcheslive: [MatchLiveAll] = []
-    var matchesUpcoming: [MatchUpcomingAll] = []
-    var matches: [MatchResultAll] = []
-    var isAscending: Bool = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        setupCollectionView()
         showLoader()
+        fetchCompletedMatches()
         showAd()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        removeLoader()
-    }
-    
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            coordinator.animate(alongsideTransition: { _ in
-                if UIDevice.current.orientation.isLandscape {
-                    print("Landscape orientation")
-                } else if UIDevice.current.orientation.isPortrait {
-                    print("Portrait orientation")
-                }
-            })
+    private func setupCollectionView() {
+        completedCollection.register(UINib(nibName: "MatchListCell", bundle: nil), forCellWithReuseIdentifier: "MatchListCell")
+        completedCollection.delegate = self
+        completedCollection.dataSource = self
+        
+        if let layout = completedCollection.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.scrollDirection = .vertical
+            layout.minimumLineSpacing = 12
         }
     }
-
+    
+    private func fetchCompletedMatches() {
+        FootballAPIService.shared.fetchMatches(for: selectedDate) { [weak self] matches in
+            guard let self = self else { return }
+            self.completedMatches = matches.filter { $0.isFinished }
+                .sorted { $0.timestamp > $1.timestamp }
+            
+            DispatchQueue.main.async {
+                removeLoader()
+                if self.completedMatches.isEmpty {
+                    self.completedCollection.isHidden = true
+                    self.noDataView.isHidden = false
+                } else {
+                    self.completedCollection.isHidden = false
+                    self.noDataView.isHidden = true
+                    self.completedCollection.reloadData()
+                }
+            }
+        }
+    }
+    
+    func updateDate(_ date: Date) {
+        selectedDate = date
+        showLoader()
+        fetchCompletedMatches()
+    }
 }
 
 extension CompletedVC: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        switch collectionView {
-
-        default:
-            return 0
-        }
+        return completedMatches.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        switch collectionView {
-
-        default:
-            
-            return UICollectionViewCell()
-        }
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MatchListCell", for: indexPath) as! MatchListCell
+        let match = completedMatches[indexPath.item]
+        cell.configureForCompleted(match: match)
+        return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.showInterAd()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [self] in
-            switch collectionView {
-            default:
-                break
-            }
-        }
+        // Navigate to match details
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        switch collectionView {
-
-        default:
-            return CGSize(width: (collectionView.frame.size.width) / 2, height: 200)
-        }
+        let height: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 180 : 160
+        let width = collectionView.frame.width - 24
+        return CGSize(width: width, height: height)
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
+    }
 }
 
 extension CompletedVC {

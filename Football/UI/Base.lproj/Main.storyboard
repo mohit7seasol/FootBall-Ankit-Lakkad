@@ -112,7 +112,9 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="viewForNative" destination="A2G-0b-A24" id="HU1-6W-wcQ"/>
+                        <outlet property="liveCollection" destination="qMy-Tf-mVV" id="6zg-em-CWn"/>
+                        <outlet property="noDataView" destination="Df4-QU-Rrl" id="4Yx-h9-XWO"/>
+                        <outlet property="viewForNative" destination="A2G-0b-A24" id="ovI-Tv-v6i"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Gka-ls-MId" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -222,6 +224,8 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="completedCollection" destination="wdB-U0-92e" id="5Q1-r9-Yns"/>
+                        <outlet property="noDataView" destination="8Ko-Ez-IXC" id="YoC-DX-cqM"/>
                         <outlet property="viewForNative" destination="V4t-LB-OPo" id="iXr-c5-INt"/>
                     </connections>
                 </viewController>
@@ -499,6 +503,8 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="noDataView" destination="oAC-7C-Pan" id="Ews-oA-TOD"/>
+                        <outlet property="upcomingCollection" destination="b5v-Kq-yJo" id="Qng-Op-9CE"/>
                         <outlet property="viewForNative" destination="Bsd-B7-aCT" id="scM-2N-OVm"/>
                     </connections>
                 </viewController>
@@ -889,7 +895,7 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="48" id="2xy-tP-DnV"/>
                                                 </constraints>
-                                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="ht4-e9-TJg">
+                                                <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="ht4-e9-TJg">
                                                     <size key="itemSize" width="128" height="128"/>
                                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>

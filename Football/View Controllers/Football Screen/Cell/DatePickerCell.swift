@@ -14,7 +14,26 @@ class DatePickerCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        dateButton.titleLabel?.font = UIFont.systemFont(ofSize: UIDevice.current.userInterfaceIdiom == .pad ? 20 : 16, weight: .medium)
+        dayNameLabel.font = UIFont.systemFont(ofSize: UIDevice.current.userInterfaceIdiom == .pad ? 14 : 12, weight: .medium)
     }
-
+    
+    func configure(isSelected: Bool, dayName: String, date: String) {
+        dayNameLabel.text = dayName
+        dateButton.setTitle(date, for: .normal)
+        
+        if isSelected {
+            dateButton.backgroundColor = .white
+            dateButton.setTitleColor(UIColor(named: "#173E75"), for: .normal)
+            dateButton.layer.cornerRadius = dateButton.frame.width / 2
+            dateButton.layer.borderWidth = 0
+            dayNameLabel.textColor = .white
+        } else {
+            dateButton.backgroundColor = .clear
+            dateButton.setTitleColor(.white, for: .normal)
+            dateButton.layer.cornerRadius = dateButton.frame.width / 2
+            dateButton.layer.borderWidth = 0
+            dayNameLabel.textColor = UIColor(white: 1.0, alpha: 0.7)
+        }
+    }
 }
