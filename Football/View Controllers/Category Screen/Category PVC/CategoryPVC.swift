@@ -38,7 +38,7 @@ class CategoryPVC: UIPageViewController {
     
     private func generateArrVc() {
         var index = 0
-        let vc1 = AllVC.instantiate(fromAppStoryboard: .Main)
+        let vc1 = LiveVC.instantiate(fromAppStoryboard: .Main)
         vc1.index = index
         arrVc.append(vc1)
         
