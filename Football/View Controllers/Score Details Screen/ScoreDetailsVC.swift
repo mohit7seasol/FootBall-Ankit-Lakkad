@@ -51,12 +51,12 @@ class ScoreDetailsVC: UIViewController, UIGestureRecognizerDelegate {
     var Bimg:String?
     var googleNativeAds = GoogleNativeAds()
     
-    // MARK: - Match Status Properties (Add these)
+    // MARK: - Match Status Properties
     var isLiveMatch: Bool = false
     var isUpcomingMatch: Bool = false
     var isCompletedMatch: Bool = false
     
-    // MARK: - New Data Properties for API
+    // MARK: - Data Properties for API
     var matchDetails: MatchDetails?
     var matchStats: [MatchStatModel] = []
     var eventsUpdates: [MatchSummaryEvent] = []
@@ -69,18 +69,12 @@ class ScoreDetailsVC: UIViewController, UIGestureRecognizerDelegate {
         logAnalyticAction(title: "", status: AnalyticEvent.MatchDetails)
         self.showAd()
         
-        // Fetch data using new APIs
-        ProgressHUD.show()
-        fetchAllMatchData()
-        
         self.team1Img.layer.cornerRadius = self.team1Img.frame.height/2
         self.team2Img.layer.cornerRadius = self.team2Img.frame.height/2
         
-        if isComeFromUpcoming == true {
-            self.titleArr = ["Squad","Info","Point Table"]
-        } else {
-            self.titleArr = ["Live Update","Overview","Lineups","Stats","Head2Head","Info","Point Table"]
-        }
+        // Fetch data using new APIs
+        ProgressHUD.show()
+        fetchAllMatchData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -119,7 +113,7 @@ class ScoreDetailsVC: UIViewController, UIGestureRecognizerDelegate {
         
         // 1. Fetch Match Details (Info)
         dispatchGroup.enter()
-        fetchMatchDetails { [weak self] success in
+        fetchMatchDetails { success in
             if success {
                 print("Match Details fetched successfully")
             }
@@ -128,7 +122,7 @@ class ScoreDetailsVC: UIViewController, UIGestureRecognizerDelegate {
         
         // 2. Fetch Match Stats
         dispatchGroup.enter()
-        fetchMatchStats { [weak self] success in
+        fetchMatchStats { success in
             if success {
                 print("Match Stats fetched successfully")
             }
@@ -137,7 +131,7 @@ class ScoreDetailsVC: UIViewController, UIGestureRecognizerDelegate {
         
         // 3. Fetch Match Summary (Live Update & Overview)
         dispatchGroup.enter()
-        fetchMatchSummary { [weak self] success in
+        fetchMatchSummary { success in
             if success {
                 print("Match Summary fetched successfully")
             }
@@ -146,7 +140,7 @@ class ScoreDetailsVC: UIViewController, UIGestureRecognizerDelegate {
         
         // 4. Fetch Standings (Point Table)
         dispatchGroup.enter()
-        fetchMatchStandings { [weak self] success in
+        fetchMatchStandings { success in
             if success {
                 print("Standings fetched successfully")
             }
@@ -155,7 +149,7 @@ class ScoreDetailsVC: UIViewController, UIGestureRecognizerDelegate {
         
         // 5. Fetch Head2Head Matches
         dispatchGroup.enter()
-        fetchHead2HeadMatches { [weak self] success in
+        fetchHead2HeadMatches { success in
             if success {
                 print("Head2Head matches fetched successfully")
             }
@@ -164,7 +158,71 @@ class ScoreDetailsVC: UIViewController, UIGestureRecognizerDelegate {
         
         dispatchGroup.notify(queue: .main) { [weak self] in
             ProgressHUD.dismiss()
-            print("All data fetched")
+            self?.updateTitleArrBasedOnAvailableData()
+        }
+    }
+    
+    // MARK: - Update Title Array Based on Available Data
+    func updateTitleArrBasedOnAvailableData() {
+        titleArr.removeAll()
+        
+        // Add tabs only if data is available
+        if !eventsUpdates.isEmpty {
+            titleArr.append("Live Update")
+            titleArr.append("Overview")
+        }
+        
+        // Lineups - check if lineup data is available
+        // You may need to add a flag for lineups availability
+        titleArr.append("Lineups")
+        
+        if !matchStats.isEmpty {
+            titleArr.append("Stats")
+        }
+        
+        if !h2hMatches.isEmpty {
+            titleArr.append("Head2Head")
+        }
+        
+        if matchDetails != nil {
+            titleArr.append("Info")
+        }
+        
+        if !standings.isEmpty {
+            titleArr.append("Point Table")
+        }
+        
+        // If no data at all, show default tabs
+        if titleArr.isEmpty {
+            titleArr = ["Live Update", "Overview", "Lineups", "Stats", "Head2Head", "Info", "Point Table"]
+        }
+        
+        // Reload collection view
+        DispatchQueue.main.async { [weak self] in
+            self?.clcView.reloadData()
+            self?.selectedIndex = 0
+            
+            // Move to first page
+            if let firstTab = self?.titleArr.first {
+                switch firstTab {
+                case "Live Update":
+                    self?.pagerVc?.moveToPage(index: 0, animated: true)
+                case "Overview":
+                    self?.pagerVc?.moveToPage(index: 1, animated: true)
+                case "Lineups":
+                    self?.pagerVc?.moveToPage(index: 2, animated: true)
+                case "Stats":
+                    self?.pagerVc?.moveToPage(index: 3, animated: true)
+                case "Head2Head":
+                    self?.pagerVc?.moveToPage(index: 4, animated: true)
+                case "Info":
+                    self?.pagerVc?.moveToPage(index: 5, animated: true)
+                case "Point Table":
+                    self?.pagerVc?.moveToPage(index: 6, animated: true)
+                default:
+                    break
+                }
+            }
         }
     }
     
@@ -392,17 +450,13 @@ class ScoreDetailsVC: UIViewController, UIGestureRecognizerDelegate {
                 let filtered = allMatches.filter {
                     let home = $0.home_team?.name?.lowercased() ?? ""
                     let away = $0.away_team?.name?.lowercased() ?? ""
-                    
                     let team1 = self?.Aname?.lowercased() ?? ""
                     let team2 = self?.Bname?.lowercased() ?? ""
-                    
                     return (home.contains(team1) && away.contains(team2)) ||
                            (home.contains(team2) && away.contains(team1))
                 }
                 
-                let sorted = filtered.sorted {
-                    ($0.timestamp ?? 0) > ($1.timestamp ?? 0)
-                }
+                let sorted = filtered.sorted { ($0.timestamp ?? 0) > ($1.timestamp ?? 0) }
                 
                 DispatchQueue.main.async {
                     self?.h2hMatches = sorted
@@ -502,17 +556,9 @@ extension ScoreDetailsVC: UICollectionViewDelegate, UICollectionViewDataSource, 
         } else if self.titleArr[indexPath.row] == "Head2Head" {
             pagerVc?.moveToPage(index: 4, animated: true)
         } else if self.titleArr[indexPath.row] == "Info" {
-            if isComeFromUpcoming == true {
-                pagerVc?.moveToPage(index: 1, animated: true)
-            } else {
-                pagerVc?.moveToPage(index: 5, animated: true)
-            }
+            pagerVc?.moveToPage(index: 5, animated: true)
         } else if self.titleArr[indexPath.row] == "Point Table" {
-            if isComeFromUpcoming == true {
-                pagerVc?.moveToPage(index: 2, animated: true)
-            } else {
-                pagerVc?.moveToPage(index: 6, animated: true)
-            }
+            pagerVc?.moveToPage(index: 6, animated: true)
         }
     }
     
@@ -534,11 +580,7 @@ extension ScoreDetailsVC: UICollectionViewDelegate, UICollectionViewDataSource, 
                 let padding = (contentWidth - totalCellWidth) / 2.0
                 return UIEdgeInsets(top: 0, left: padding, bottom: 0, right: padding)
             } else {
-                if isComeFromUpcoming == true {
-                    return UIEdgeInsets(top: 0, left: 90, bottom: 0, right: 90)
-                } else {
-                    return UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
-                }
+                return UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
             }
         }
         return UIEdgeInsets.zero
@@ -573,23 +615,11 @@ extension ScoreDetailsVC: ScoreDelegate {
         } else if currentItem == 3 {
             pagerVc?.moveToPage(index: 3, animated: true)
         } else if currentItem == 4 {
-            if isComeFromUpcoming == true {
-                pagerVc?.moveToPage(index: 0, animated: true)
-            } else {
-                pagerVc?.moveToPage(index: 4, animated: true)
-            }
+            pagerVc?.moveToPage(index: 4, animated: true)
         } else if currentItem == 5 {
-            if isComeFromUpcoming == true {
-                pagerVc?.moveToPage(index: 1, animated: true)
-            } else {
-                pagerVc?.moveToPage(index: 5, animated: true)
-            }
+            pagerVc?.moveToPage(index: 5, animated: true)
         } else if currentItem == 6 {
-            if isComeFromUpcoming == true {
-                pagerVc?.moveToPage(index: 2, animated: true)
-            } else {
-                pagerVc?.moveToPage(index: 6, animated: true)
-            }
+            pagerVc?.moveToPage(index: 6, animated: true)
         }
     }
 }

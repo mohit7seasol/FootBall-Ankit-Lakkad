@@ -13,7 +13,7 @@ protocol ScoreDelegate {
 
 class ScoreDetailsPVC: UIPageViewController {
 
-    var tabDelegate: ScoreDelegate?
+    var tabDelegate: ScoreDelegate?  // This matches the protocol name
     var arrVc = [UIViewController]()
     var currentPageIndex = 0
     var m_idMain: String?
