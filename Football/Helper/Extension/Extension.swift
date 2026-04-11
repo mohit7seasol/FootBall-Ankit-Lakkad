@@ -93,6 +93,35 @@ extension UIView {
         self.layer.shadowRadius = radius
         self.layer.masksToBounds = false
     }
+    
+    // MARK: - ClickListener
+    class ClickListener: UITapGestureRecognizer {
+        var onClick : (() -> Void)? = nil
+    }
+    
+    func setOnClickListener(action :@escaping () -> Void){
+        let tapRecogniser = ClickListener(target: self, action: #selector(onViewClicked(sender:)))
+        tapRecogniser.onClick = action
+        self.addGestureRecognizer(tapRecogniser)
+    }
+    @objc func onViewClicked(sender: ClickListener) {
+        if let onClick = sender.onClick {
+            onClick()
+        }
+    }
+    func roundCorners(corners: UIRectCorner, radius: CGFloat) {
+        let maskPath = UIBezierPath(
+            roundedRect: bounds,
+            byRoundingCorners: corners,
+            cornerRadii: CGSize(width: radius, height: radius)
+        )
+
+        let maskLayer = CAShapeLayer()
+        maskLayer.frame = bounds
+        maskLayer.path = maskPath.cgPath
+
+        layer.mask = maskLayer
+    }
 }
 
 extension Date {

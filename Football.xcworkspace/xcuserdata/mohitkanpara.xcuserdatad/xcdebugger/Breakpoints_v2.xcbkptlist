@@ -18,36 +18,6 @@
             endingLineNumber = "34"
             landmarkName = "fetchMatches(for:completion:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "83ED69B1-3EEB-4F24-8D4E-24E028C7A513 - e87786c3cd5a93a0"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Football.FootballAPIService.fetchMatches(for: Foundation.Date, completion: (Swift.Array&lt;Football.Match&gt;) -&gt; ()) -&gt; ()"
-                  moduleName = "Football.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mohitkanpara/Desktop/Mohit/FootBall-Ankit-Lakkad/Football/Model/FootballAPIService.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "34"
-                  endingLineNumber = "34">
-               </Location>
-               <Location
-                  uuid = "83ED69B1-3EEB-4F24-8D4E-24E028C7A513 - 79c4ac1ea69e2ed"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 @Sendable (Swift.Optional&lt;Foundation.Data&gt;, Swift.Optional&lt;__C.NSURLResponse&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in Football.FootballAPIService.fetchMatches(for: Foundation.Date, completion: (Swift.Array&lt;Football.Match&gt;) -&gt; ()) -&gt; ()"
-                  moduleName = "Football.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mohitkanpara/Desktop/Mohit/FootBall-Ankit-Lakkad/Football/Model/FootballAPIService.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "35"
-                  endingLineNumber = "35">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

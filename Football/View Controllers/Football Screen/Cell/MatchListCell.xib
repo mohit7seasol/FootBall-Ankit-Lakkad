@@ -60,6 +60,7 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="yv3-Is-rnu">
                                 <rect key="frame" x="251" y="55" width="50" height="50"/>
                                 <constraints>
+                                    <constraint firstAttribute="width" secondItem="yv3-Is-rnu" secondAttribute="height" multiplier="1:1" id="G3F-lg-5ww"/>
                                     <constraint firstAttribute="width" secondItem="yv3-Is-rnu" secondAttribute="height" multiplier="1:1" id="c2c-v8-3LN"/>
                                     <constraint firstAttribute="width" constant="50" id="ju9-hJ-sax"/>
                                 </constraints>
@@ -86,13 +87,13 @@
                                     </label>
                                 </subviews>
                             </stackView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Romania" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sgc-9m-YYY">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Romania" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sgc-9m-YYY" customClass="MarqueeLabel" customModule="MarqueeLabel">
                                 <rect key="frame" x="36.999999999999993" y="110" width="64.333333333333314" height="19.333333333333343"/>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ukraine" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6mX-cH-e3w">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ukraine" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6mX-cH-e3w" customClass="MarqueeLabel" customModule="MarqueeLabel">
                                 <rect key="frame" x="247.33333333333334" y="110" width="57.333333333333343" height="19.333333333333343"/>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
                                 <nil key="textColor"/>
@@ -112,7 +113,6 @@
                             <constraint firstItem="yv3-Is-rnu" firstAttribute="centerX" secondItem="mhI-CK-ger" secondAttribute="centerX" multiplier="1.6" id="AGq-1d-2qx"/>
                             <constraint firstItem="6mX-cH-e3w" firstAttribute="centerX" secondItem="yv3-Is-rnu" secondAttribute="centerX" id="Ct1-OG-PuE"/>
                             <constraint firstItem="TLp-O3-VoB" firstAttribute="centerY" secondItem="mhI-CK-ger" secondAttribute="centerY" id="Dbl-i6-8oi"/>
-                            <constraint firstItem="yv3-Is-rnu" firstAttribute="width" secondItem="yv3-Is-rnu" secondAttribute="height" multiplier="1:1" id="G3F-lg-5ww"/>
                             <constraint firstItem="TLp-O3-VoB" firstAttribute="centerX" secondItem="mhI-CK-ger" secondAttribute="centerX" id="Iwj-Oc-qZq"/>
                             <constraint firstItem="Sgc-9m-YYY" firstAttribute="width" relation="lessThanOrEqual" secondItem="mhI-CK-ger" secondAttribute="width" multiplier="0.35" id="J0x-Kw-SJa"/>
                             <constraint firstItem="6mX-cH-e3w" firstAttribute="top" secondItem="yv3-Is-rnu" secondAttribute="bottom" constant="5" id="J9P-JW-EMS"/>
@@ -140,6 +140,7 @@
                 <outlet property="dateLabel" destination="5NP-NG-0GE" id="Mhj-7k-qbg"/>
                 <outlet property="dateView" destination="yhT-7P-xpH" id="B7s-94-dnJ"/>
                 <outlet property="dateViewWidthConstant" destination="2rz-Oe-hvm" id="QIl-v5-1h3"/>
+                <outlet property="mainView" destination="mhI-CK-ger" id="eXn-un-yWQ"/>
                 <outlet property="scorLabel" destination="JQI-ys-zk0" id="QVC-e5-DeR"/>
                 <outlet property="statusLabel" destination="9DM-18-RJ3" id="VTE-4D-Rer"/>
                 <outlet property="teamAFlagImageView" destination="clO-Ow-6s0" id="lTO-aR-Q6G"/>

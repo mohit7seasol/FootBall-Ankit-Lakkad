@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import MarqueeLabel
 
 class MatchListCell: UICollectionViewCell {
 
@@ -15,21 +16,28 @@ class MatchListCell: UICollectionViewCell {
     @IBOutlet weak var teamAFlagImageView: UIImageView!
     @IBOutlet weak var teamBFlagImageView: UIImageView!
     @IBOutlet weak var vsImageView: UIImageView!
-    @IBOutlet weak var teamANameLabel: UILabel!
-    @IBOutlet weak var teamBNameLabel: UILabel!
+    @IBOutlet weak var teamANameLabel: MarqueeLabel!
+    @IBOutlet weak var teamBNameLabel: MarqueeLabel!
     @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var scorLabel: UILabel!
+    @IBOutlet weak var mainView: UIView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         setupUI()
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        // Update corner radius for status label
+        statusLabel.layer.cornerRadius = statusLabel.frame.height / 2
+    }
+    
     private func setupUI() {
-        contentView.layer.cornerRadius = 12
-        contentView.layer.borderWidth = 1
-        contentView.layer.borderColor = UIColor(white: 0.9, alpha: 1.0).cgColor
-        contentView.backgroundColor = .white
+        mainView.layer.cornerRadius = 16
+        mainView.layer.borderWidth = 1
+        mainView.layer.borderColor = #colorLiteral(red: 0.09019607843, green: 0.2431372549, blue: 0.4588235294, alpha: 1)
+        mainView.backgroundColor = .white
         
         teamAFlagImageView.layer.cornerRadius = teamAFlagImageView.frame.height / 2
         teamAFlagImageView.clipsToBounds = true
@@ -37,27 +45,31 @@ class MatchListCell: UICollectionViewCell {
         teamBFlagImageView.clipsToBounds = true
         
         vsImageView.tintColor = UIColor(white: 0.7, alpha: 1.0)
+        vsImageView.image = UIImage(systemName: "vs")
+        
+        statusLabel.clipsToBounds = true
+        statusLabel.textAlignment = .center
+        statusLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
     }
     
     func configureForLive(match: Match) {
         // Configure date view for live
         dateView.layer.cornerRadius = dateView.frame.height / 2
         dateView.layer.borderWidth = 1
-        dateView.layer.borderColor = UIColor(named: "#83ACDB")?.cgColor
+        dateView.layer.borderColor = UIColor(red: 0.514, green: 0.675, blue: 0.859, alpha: 1.0).cgColor // #83ACDB
         dateView.backgroundColor = .clear
         
         dateLabel.text = match.formattedDateTime
         dateLabel.sizeToFit()
-        dateViewWidthConstant.constant = dateLabel.frame.width + 24
+        let dateWidth = dateLabel.frame.width + 24
+        dateViewWidthConstant.constant = dateWidth
         
-        // Configure status
+        // Configure status for LIVE
         statusLabel.text = "  ● LIVE  "
-        statusLabel.textColor = UIColor(named: "#FF171B")
-        statusLabel.backgroundColor = UIColor(named: "#FF171B")?.withAlphaComponent(0.1)
-        statusLabel.layer.cornerRadius = statusLabel.frame.height / 2
+        statusLabel.textColor = UIColor(red: 1.0, green: 0.09, blue: 0.106, alpha: 1.0) // #FF171B
+        statusLabel.backgroundColor = UIColor(red: 1.0, green: 0.09, blue: 0.106, alpha: 0.1)
         statusLabel.layer.borderWidth = 1
-        statusLabel.layer.borderColor = UIColor(named: "#FFD0D1")?.cgColor
-        statusLabel.clipsToBounds = true
+        statusLabel.layer.borderColor = UIColor(red: 1.0, green: 0.816, blue: 0.82, alpha: 1.0).cgColor // #FFD0D1
         
         // Hide score label for live
         scorLabel.isHidden = true
@@ -69,27 +81,29 @@ class MatchListCell: UICollectionViewCell {
         
         // Load images
         loadTeamImages(homeLogo: match.homeLogo, awayLogo: match.awayLogo)
+        
+        // Force layout update
+        self.layoutIfNeeded()
     }
     
     func configureForUpcoming(match: Match) {
         // Configure date view for upcoming
         dateView.layer.cornerRadius = dateView.frame.height / 2
         dateView.layer.borderWidth = 1
-        dateView.layer.borderColor = UIColor(named: "#83ACDB")?.cgColor
+        dateView.layer.borderColor = UIColor(red: 0.514, green: 0.675, blue: 0.859, alpha: 1.0).cgColor // #83ACDB
         dateView.backgroundColor = .clear
         
         dateLabel.text = match.formattedTime
         dateLabel.sizeToFit()
-        dateViewWidthConstant.constant = dateLabel.frame.width + 24
+        let dateWidth = dateLabel.frame.width + 24
+        dateViewWidthConstant.constant = dateWidth
         
-        // Configure status
+        // Configure status for UPCOMING
         statusLabel.text = "  ● UPCOMING  "
-        statusLabel.textColor = UIColor(named: "#F77F00")
-        statusLabel.backgroundColor = UIColor(named: "#F77F00")?.withAlphaComponent(0.1)
-        statusLabel.layer.cornerRadius = statusLabel.frame.height / 2
+        statusLabel.textColor = UIColor(red: 0.969, green: 0.498, blue: 0.0, alpha: 1.0) // #F77F00
+        statusLabel.backgroundColor = UIColor(red: 0.969, green: 0.498, blue: 0.0, alpha: 0.1)
         statusLabel.layer.borderWidth = 1
-        statusLabel.layer.borderColor = UIColor(named: "#FEDAB3")?.cgColor
-        statusLabel.clipsToBounds = true
+        statusLabel.layer.borderColor = UIColor(red: 0.996, green: 0.855, blue: 0.702, alpha: 1.0).cgColor // #FEDAB3
         
         // Hide score label for upcoming
         scorLabel.isHidden = true
@@ -101,27 +115,29 @@ class MatchListCell: UICollectionViewCell {
         
         // Load images
         loadTeamImages(homeLogo: match.homeLogo, awayLogo: match.awayLogo)
+        
+        // Force layout update
+        self.layoutIfNeeded()
     }
     
     func configureForCompleted(match: Match) {
         // Configure date view for completed
         dateView.layer.cornerRadius = dateView.frame.height / 2
         dateView.layer.borderWidth = 1
-        dateView.layer.borderColor = UIColor(named: "#83ACDB")?.cgColor
+        dateView.layer.borderColor = UIColor(red: 0.514, green: 0.675, blue: 0.859, alpha: 1.0).cgColor // #83ACDB
         dateView.backgroundColor = .clear
         
         dateLabel.text = match.formattedTime
         dateLabel.sizeToFit()
-        dateViewWidthConstant.constant = dateLabel.frame.width + 24
+        let dateWidth = dateLabel.frame.width + 24
+        dateViewWidthConstant.constant = dateWidth
         
-        // Configure status
+        // Configure status for COMPLETED
         statusLabel.text = "  ● COMPLETED  "
-        statusLabel.textColor = UIColor(named: "#39B007")
-        statusLabel.backgroundColor = UIColor(named: "#39B007")?.withAlphaComponent(0.1)
-        statusLabel.layer.cornerRadius = statusLabel.frame.height / 2
+        statusLabel.textColor = UIColor(red: 0.224, green: 0.69, blue: 0.027, alpha: 1.0) // #39B007
+        statusLabel.backgroundColor = UIColor(red: 0.224, green: 0.69, blue: 0.027, alpha: 0.1)
         statusLabel.layer.borderWidth = 1
-        statusLabel.layer.borderColor = UIColor(named: "#B0FF8F")?.cgColor
-        statusLabel.clipsToBounds = true
+        statusLabel.layer.borderColor = UIColor(red: 0.69, green: 1.0, blue: 0.561, alpha: 1.0).cgColor // #B0FF8F
         
         // Show score label for completed
         scorLabel.isHidden = false
@@ -136,16 +152,19 @@ class MatchListCell: UICollectionViewCell {
         
         // Load images
         loadTeamImages(homeLogo: match.homeLogo, awayLogo: match.awayLogo)
+        
+        // Force layout update
+        self.layoutIfNeeded()
     }
     
     private func loadTeamImages(homeLogo: String, awayLogo: String) {
-        if let url = URL(string: homeLogo) {
+        if let url = URL(string: homeLogo), !homeLogo.isEmpty {
             teamAFlagImageView.sd_setImage(with: url, placeholderImage: UIImage(named: "placeholder_flag"))
         } else {
             teamAFlagImageView.image = UIImage(named: "placeholder_flag")
         }
         
-        if let url = URL(string: awayLogo) {
+        if let url = URL(string: awayLogo), !awayLogo.isEmpty {
             teamBFlagImageView.sd_setImage(with: url, placeholderImage: UIImage(named: "placeholder_flag"))
         } else {
             teamBFlagImageView.image = UIImage(named: "placeholder_flag")

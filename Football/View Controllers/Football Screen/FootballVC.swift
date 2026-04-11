@@ -10,21 +10,27 @@ import ProgressHUD
 
 class FootballVC: UIViewController, UIGestureRecognizerDelegate {
 
-    @IBOutlet weak var liveView: View!
+    // MARK: - IBOutlets
+    @IBOutlet weak var liveView: UIView!
     @IBOutlet weak var liveLbl: UILabel!
-    @IBOutlet weak var upcomingView: View!
+    @IBOutlet weak var upcomingView: UIView!
     @IBOutlet weak var upcomingLbl: UILabel!
-    @IBOutlet weak var completedView: View!
+    @IBOutlet weak var completedView: UIView!
     @IBOutlet weak var completedLbl: UILabel!
-    @IBOutlet weak var nativeAdView: View!
     @IBOutlet weak var footballLbl: UILabel!
     @IBOutlet weak var dateCollectionView: UICollectionView!
     
     @IBOutlet weak var monthLabel: UILabel!
     @IBOutlet weak var toDayButton: UIButton!
+    @IBOutlet weak var nativeAdView: UIView!
+    @IBOutlet weak var noDataView: UIView!
+    @IBOutlet weak var noDataLabel: UILabel!
+    @IBOutlet weak var matchCollection: UICollectionView!
+    @IBOutlet weak var matchCollectionHeightConstant: NSLayoutConstraint!
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var buttonStackHeightConstant: NSLayoutConstraint!
+    @IBOutlet weak var buttonStackView: UIStackView!
     
-    private weak var pagerVc: CategoryPVC?
-    var matchNameArr = ["Live Matches", "Upcoming Matches", "Finished Matches"]
     var googleNativeAds = GoogleNativeAds()
     
     // Calendar Properties
@@ -36,43 +42,65 @@ class FootballVC: UIViewController, UIGestureRecognizerDelegate {
     
     // Match Properties
     var allMatches: [Match] = []
+    var currentFilter: MatchFilter = .live
+    var matchesFiltered: [Match] = []
     
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupUI()
         setupCalendar()
-        setupDateCollectionView()
-        setupInitialSelection()
-        updateMonthLabel()
+        setupCollectionViews()
+        setupButtons()
+        subscribe()
         logAnalyticAction(title: "", status: AnalyticEvent.Match)
-        fetchMatchesForSelectedDate()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        self.footballLbl.text = "Football".localized()
-        self.liveLbl.text = "Live".localized()
-        self.upcomingLbl.text = "Upcoming".localized()
-        self.completedLbl.text = "Completed".localized()
+        fetchMatches(for: selectedDate)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
         navigationController?.interactivePopGestureRecognizer?.delegate = self
         navigationController?.interactivePopGestureRecognizer?.isEnabled = true
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let destination = segue.destination
-        if let pageViewController = destination as? CategoryPVC {
-            pagerVc = pageViewController
-            pagerVc?.tabDelegate = self
-            pagerVc?.parentVC = self
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        // Update collection view height after layout
+        if matchesFiltered.count > 0 {
+            matchCollectionHeightConstant.constant = matchCollection.contentSize.height
         }
     }
     
-    private func setupDateCollectionView() {
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            coordinator.animate(alongsideTransition: { _ in
+                self.matchCollection.collectionViewLayout.invalidateLayout()
+                self.matchCollection.reloadData()
+            })
+        }
+    }
+    
+    // MARK: - Setup Methods
+    private func setupUI() {
+        footballLbl.text = "Football".localized()
+        liveLbl.text = "Live".localized()
+        upcomingLbl.text = "Upcoming".localized()
+        completedLbl.text = "Completed".localized()
+        noDataLabel.text = "No matches found".localized()
+        
+        toDayButton.layer.cornerRadius = toDayButton.frame.height / 2
+        
+        // Disable collection view scrolling since it's inside scroll view
+        matchCollection.isScrollEnabled = false
+    }
+    
+    private func setupCollectionViews() {
+        // Date Collection View
         dateCollectionView.register(UINib(nibName: "DatePickerCell", bundle: nil), forCellWithReuseIdentifier: "DatePickerCell")
         dateCollectionView.delegate = self
         dateCollectionView.dataSource = self
@@ -84,70 +112,88 @@ class FootballVC: UIViewController, UIGestureRecognizerDelegate {
         }
         dateCollectionView.showsHorizontalScrollIndicator = false
         dateCollectionView.backgroundColor = .clear
+        
+        // Match Collection View
+        matchCollection.register(UINib(nibName: "MatchListCell", bundle: nil), forCellWithReuseIdentifier: "MatchListCell")
+        matchCollection.delegate = self
+        matchCollection.dataSource = self
+        
+        if let layout = matchCollection.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.scrollDirection = .vertical
+            layout.minimumLineSpacing = 12
+            layout.estimatedItemSize = .zero
+        }
     }
     
-    private func setupInitialSelection() {
-        pagerVc?.moveToPage(index: 0, animated: false)
-        updateButtonStates(selected: 0)
-        updateMatchTypeVisibility()
+    private func setupButtons() {
+        liveView.layer.cornerRadius = liveView.frame.height / 2
+        upcomingView.layer.cornerRadius = upcomingView.frame.height / 2
+        completedView.layer.cornerRadius = completedView.frame.height / 2
+        
+        updateButtonStates(selected: .live)
     }
     
-    private func updateButtonStates(selected index: Int) {
-        let selectedColor = UIColor.white
-        let selectedTextColor = UIColor(red: 0.09, green: 0.24, blue: 0.46, alpha: 1.00)
+    private func updateButtonStates(selected: MatchFilter) {
+        let selectedColor = UIColor(red: 0.09, green: 0.24, blue: 0.46, alpha: 1.00)
+        let selectedTextColor = UIColor.white
         let unselectedColor = UIColor.clear
-        let unselectedTextColor = UIColor(red: 0.73, green: 0.77, blue: 0.84, alpha: 1.00)
+        let unselectedTextColor = #colorLiteral(red: 0.5293739438, green: 0.5293739438, blue: 0.5293739438, alpha: 1)
         
-        if index == 0 {
+        switch selected {
+        case .live:
             liveView.backgroundColor = selectedColor
-            liveLbl.textColor = selectedTextColor
-            liveView.borderWidth = 0
-        } else {
-            liveView.backgroundColor = unselectedColor
-            liveLbl.textColor = unselectedTextColor
-            liveView.borderWidth = 1
-            liveView.borderColor = unselectedTextColor
-        }
-        
-        if index == 1 {
-            upcomingView.backgroundColor = selectedColor
-            upcomingLbl.textColor = selectedTextColor
-            upcomingView.borderWidth = 0
-        } else {
             upcomingView.backgroundColor = unselectedColor
-            upcomingLbl.textColor = unselectedTextColor
-            upcomingView.borderWidth = 1
-            upcomingView.borderColor = unselectedTextColor
-        }
-        
-        if index == 2 {
-            completedView.backgroundColor = selectedColor
-            completedLbl.textColor = selectedTextColor
-            completedView.borderWidth = 0
-        } else {
             completedView.backgroundColor = unselectedColor
+            liveLbl.textColor = selectedTextColor
+            upcomingLbl.textColor = unselectedTextColor
             completedLbl.textColor = unselectedTextColor
-            completedView.borderWidth = 1
-            completedView.borderColor = unselectedTextColor
+            liveView.layer.borderWidth = 0
+            upcomingView.layer.borderWidth = 1
+            completedView.layer.borderWidth = 1
+            upcomingView.layer.borderColor = unselectedTextColor.cgColor
+            completedView.layer.borderColor = unselectedTextColor.cgColor
+            
+        case .scheduled:
+            liveView.backgroundColor = unselectedColor
+            upcomingView.backgroundColor = selectedColor
+            completedView.backgroundColor = unselectedColor
+            liveLbl.textColor = unselectedTextColor
+            upcomingLbl.textColor = selectedTextColor
+            completedLbl.textColor = unselectedTextColor
+            liveView.layer.borderWidth = 1
+            upcomingView.layer.borderWidth = 0
+            completedView.layer.borderWidth = 1
+            liveView.layer.borderColor = unselectedTextColor.cgColor
+            completedView.layer.borderColor = unselectedTextColor.cgColor
+            
+        case .completed:
+            liveView.backgroundColor = unselectedColor
+            upcomingView.backgroundColor = unselectedColor
+            completedView.backgroundColor = selectedColor
+            liveLbl.textColor = unselectedTextColor
+            upcomingLbl.textColor = unselectedTextColor
+            completedLbl.textColor = selectedTextColor
+            liveView.layer.borderWidth = 1
+            upcomingView.layer.borderWidth = 1
+            completedView.layer.borderWidth = 0
+            liveView.layer.borderColor = unselectedTextColor.cgColor
+            upcomingView.layer.borderColor = unselectedTextColor.cgColor
         }
     }
     
     private func updateMatchTypeVisibility() {
         if calendar.isDateInToday(selectedDate) {
-            liveView.isHidden = false
-            upcomingView.isHidden = false
-            completedView.isHidden = false
-        } else {
-            liveView.isHidden = true
-            upcomingView.isHidden = false
-            completedView.isHidden = false
-            
-            if let pager = pagerVc, pager.currentPageIndex == 0 {
-                pagerVc?.moveToPage(index: 1, animated: true)
-                updateButtonStates(selected: 1)
+            buttonStackView.isHidden = false
+            buttonStackHeightConstant.constant = 35
+            if currentFilter != .live {
+                currentFilter = .live
+                updateButtonStates(selected: .live)
+                applyFilter()
             }
+        } else {
+            buttonStackView.isHidden = true
+            buttonStackHeightConstant.constant = 0
         }
-        
         UIView.animate(withDuration: 0.3) {
             self.view.layoutIfNeeded()
         }
@@ -169,18 +215,11 @@ class FootballVC: UIViewController, UIGestureRecognizerDelegate {
             selectedDateIndex = 0
             selectedDate = dates[0]
         }
-        
+        updateMatchTypeVisibility()
         DispatchQueue.main.async {
             self.dateCollectionView.reloadData()
-            self.scrollToSelectedDate(animated: false)
-            self.updateMatchTypeVisibility()
+            self.dateCollectionView.scrollToItem(at: IndexPath(item: self.selectedDateIndex, section: 0), at: .centeredHorizontally, animated: true)
         }
-    }
-    
-    private func scrollToSelectedDate(animated: Bool) {
-        guard selectedDateIndex >= 0 && selectedDateIndex < dates.count else { return }
-        let indexPath = IndexPath(item: selectedDateIndex, section: 0)
-        dateCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: animated)
     }
     
     private func generateDatesForRange() {
@@ -194,11 +233,41 @@ class FootballVC: UIViewController, UIGestureRecognizerDelegate {
         }
     }
     
-    // MARK: - Match Fetching using FootballAPIService
-    private func fetchMatchesForSelectedDate() {
+    private func setToday() {
+        currentDate = Date()
+        selectedDate = Date()
+        setupCalendar()
+        fetchMatches(for: selectedDate)
+        updateMatchTypeVisibility()
+    }
+    
+    private func apiDateString(from date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        return formatter.string(from: date)
+    }
+    
+    private func convertTimestamp(_ timestamp: Int) -> (formattedDate: String, formattedTime: String) {
+        let date = Date(timeIntervalSince1970: TimeInterval(timestamp))
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "EEEE, dd MMM"
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "hh:mm a"
+        return (dateFormatter.string(from: date), timeFormatter.string(from: date))
+    }
+    
+    // MARK: - Match Fetching
+    private func fetchMatches(for date: Date) {
         ProgressHUD.show()
         
-        FootballAPIService.shared.fetchMatches(for: selectedDate) { [weak self] matches in
+        // Show placeholder while loading
+        DispatchQueue.main.async { [weak self] in
+            self?.matchCollection.isHidden = true
+            self?.noDataView.isHidden = false
+            self?.matchCollectionHeightConstant.constant = 0
+        }
+        
+        FootballAPIService.shared.fetchMatches(for: date) { [weak self] matches in
             guard let self = self else {
                 ProgressHUD.dismiss()
                 return
@@ -207,56 +276,150 @@ class FootballVC: UIViewController, UIGestureRecognizerDelegate {
             DispatchQueue.main.async {
                 ProgressHUD.dismiss()
                 self.allMatches = matches
-                self.distributeMatchesToChildVCs()
+                self.applyFilter()
             }
         }
     }
     
-    private func distributeMatchesToChildVCs() {
-        if let pager = pagerVc {
-            for vc in pager.arrVc {
-                if let liveVC = vc as? LiveVC {
-                    liveVC.updateMatches(allMatches, selectedDate: selectedDate)
-                } else if let upcomingVC = vc as? UpcomingVC {
-                    upcomingVC.updateMatches(allMatches, selectedDate: selectedDate)
-                } else if let completedVC = vc as? CompletedVC {
-                    completedVC.updateMatches(allMatches, selectedDate: selectedDate)
+    private func applyFilter() {
+        if calendar.isDateInToday(selectedDate) {
+            switch currentFilter {
+            case .live:
+                matchesFiltered = allMatches.filter { $0.isInProgress }
+                    .sorted { $0.timestamp < $1.timestamp }
+                print("Live matches count: \(matchesFiltered.count)")
+            case .scheduled:
+                matchesFiltered = allMatches.filter { !$0.isStarted && !$0.isInProgress && !$0.isFinished }
+                    .sorted { $0.timestamp < $1.timestamp }
+                print("Upcoming matches count: \(matchesFiltered.count)")
+            case .completed:
+                matchesFiltered = allMatches.filter { $0.isFinished }
+                    .sorted { $0.timestamp > $1.timestamp }
+                print("Finished matches count: \(matchesFiltered.count)")
+            }
+        } else {
+            matchesFiltered = allMatches
+            if selectedDate < Date() {
+                matchesFiltered.sort { $0.timestamp > $1.timestamp }
+                print("Past matches count: \(matchesFiltered.count)")
+            } else {
+                matchesFiltered.sort { $0.timestamp < $1.timestamp }
+                print("Future matches count: \(matchesFiltered.count)")
+            }
+        }
+        
+        // Update UI on main thread
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.matchCollection.reloadData()
+            self.updatePlaceholderVisibility()
+            
+            if self.matchesFiltered.count > 0 {
+                self.matchCollection.setContentOffset(.zero, animated: false)
+            }
+            
+            // Update collection view height constraint based on content size
+            DispatchQueue.main.async {
+                self.matchCollectionHeightConstant.constant = self.matchCollection.contentSize.height
+                self.view.layoutIfNeeded()
+            }
+        }
+    }
+    
+    private func updatePlaceholderVisibility() {
+        if matchesFiltered.isEmpty {
+            matchCollection.isHidden = true
+            noDataView.isHidden = false
+            matchCollectionHeightConstant.constant = 0
+        } else {
+            noDataView.isHidden = true
+            matchCollection.isHidden = false
+        }
+    }
+    
+    // MARK: - Ads
+    func subscribe() {
+        showSkeletonView()
+        if isUserSubscribe() == false {
+            self.googleNativeAds.loadAds(vc: self) { nativeAdsTemp in
+                self.nativeAdView.isHidden = false
+                DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
+                    self.hideSkeletonView()
+                    self.googleNativeAds.showAdsView4(nativeAd: nativeAdsTemp, view: self.nativeAdView)
                 }
             }
+            self.googleNativeAds.failAds(vc: self) { fail in
+                print("Native ad failed to load")
+                self.nativeAdView.isHidden = true
+            }
+        } else {
+            self.hideSkeletonView()
+            nativeAdView.isHidden = true
         }
     }
     
-    private func updateDateForAllVCs(_ date: Date) {
-        selectedDate = date
-        fetchMatchesForSelectedDate()
+    func showSkeletonView() {
+        if let adView = Bundle.main.loadNibNamed("SkeletonCustomView4", owner: self, options: nil)?.first as? SkeletonCustomView4 {
+            self.nativeAdView.addSubview(adView)
+            adView.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                adView.topAnchor.constraint(equalTo: self.nativeAdView.topAnchor),
+                adView.leadingAnchor.constraint(equalTo: self.nativeAdView.leadingAnchor),
+                adView.trailingAnchor.constraint(equalTo: self.nativeAdView.trailingAnchor),
+                adView.bottomAnchor.constraint(equalTo: self.nativeAdView.bottomAnchor)
+            ])
+            adView.view1.showAnimatedGradientSkeleton()
+            adView.view2.showAnimatedGradientSkeleton()
+            adView.view3.showAnimatedGradientSkeleton()
+            adView.view4.showAnimatedGradientSkeleton()
+            adView.view5.showAnimatedGradientSkeleton()
+            adView.view6.showAnimatedGradientSkeleton()
+        }
     }
     
-    private func setToday() {
-        currentDate = Date()
-        selectedDate = Date()
-        setupCalendar()
-        fetchMatchesForSelectedDate()
-        updateMatchTypeVisibility()
+    func hideSkeletonView() {
+        for subview in self.nativeAdView.subviews {
+            if let adView = subview as? SkeletonCustomView4 {
+                adView.removeFromSuperview()
+            }
+        }
     }
-    
+    private func handleDateSelection(at index: Int) {
+        guard selectedDateIndex != index else { return }
+        
+//        self.showInterAds()
+        self.selectedDateIndex = index
+        self.selectedDate = dates[index]
+        self.fetchMatches(for: selectedDate)
+        self.updateMatchTypeVisibility()
+        
+        DispatchQueue.main.async {
+            self.dateCollectionView.reloadData()
+            self.dateCollectionView.scrollToItem(at: IndexPath(item: self.selectedDateIndex, section: 0), at: .centeredHorizontally, animated: true)
+            self.matchCollection.setContentOffset(.zero, animated: false)
+        }
+    }
     // MARK: - Actions
     @IBAction func clickONBack(_ sender: Any) {
         self.navigationController?.popViewController(animated: true)
     }
     
-    @IBAction func clickOnAll(_ sender: Any) {
-        pagerVc?.moveToPage(index: 0, animated: true)
-        updateButtonStates(selected: 0)
+    @IBAction func liveButtonTap(_ sender: Any) {
+        currentFilter = .live
+        updateButtonStates(selected: .live)
+        applyFilter()
     }
     
-    @IBAction func clickOnDomestic(_ sender: Any) {
-        pagerVc?.moveToPage(index: 1, animated: true)
-        updateButtonStates(selected: 1)
+    @IBAction func upcomingButtonAction(_ sender: Any) {
+        currentFilter = .scheduled
+        updateButtonStates(selected: .scheduled)
+        applyFilter()
     }
     
-    @IBAction func clickOnInternational(_ sender: Any) {
-        pagerVc?.moveToPage(index: 2, animated: true)
-        updateButtonStates(selected: 2)
+    @IBAction func completedButtonAction(_ sender: Any) {
+        currentFilter = .completed
+        updateButtonStates(selected: .completed)
+        applyFilter()
     }
     
     @IBAction func todayButtonTap(_ sender: UIButton) {
@@ -264,68 +427,106 @@ class FootballVC: UIViewController, UIGestureRecognizerDelegate {
     }
 }
 
-extension FootballVC: CategoryDelegate {
-    func didPickItem(currentItem: Int) {
-        pagerVc?.moveToPage(index: currentItem, animated: true)
-        updateButtonStates(selected: currentItem)
-    }
-}
-
-// MARK: - UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout
+// MARK: - UICollectionView DataSource & Delegate
 extension FootballVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dates.count
+        if collectionView == dateCollectionView {
+            return dates.count
+        } else {
+            return matchesFiltered.count
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DatePickerCell", for: indexPath) as! DatePickerCell
-        let date = dates[indexPath.item]
-        
-        let dayFormatter = DateFormatter()
-        dayFormatter.dateFormat = "EEE"
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd"
-        
-        let isSelected = (indexPath.item == selectedDateIndex)
-        cell.configure(isSelected: isSelected, dayName: dayFormatter.string(from: date).uppercased(), date: dateFormatter.string(from: date))
-        
-        return cell
+        if collectionView == dateCollectionView {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DatePickerCell", for: indexPath) as! DatePickerCell
+            let date = dates[indexPath.item]
+            
+            let dayFormatter = DateFormatter()
+            dayFormatter.dateFormat = "EEE"
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd"
+            
+            let isSelected = (indexPath.item == selectedDateIndex)
+            cell.configure(isSelected: isSelected, dayName: dayFormatter.string(from: date).uppercased(), date: dateFormatter.string(from: date))
+            
+            // Set click listener for date cell
+            cell.setOnClickListener { [weak self] in
+                self?.handleDateSelection(at: indexPath.item)
+            }
+            
+            return cell
+        } else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MatchListCell", for: indexPath) as! MatchListCell
+            let match = matchesFiltered[indexPath.item]
+            
+            // Configure cell based on current filter and date
+            if calendar.isDateInToday(selectedDate) {
+                switch currentFilter {
+                case .live:
+                    cell.configureForLive(match: match)
+                case .scheduled:
+                    cell.configureForUpcoming(match: match)
+                case .completed:
+                    cell.configureForCompleted(match: match)
+                }
+            } else {
+                // For non-today dates, show as completed or upcoming based on date
+                if selectedDate < Date() {
+                    cell.configureForCompleted(match: match)
+                } else {
+                    cell.configureForUpcoming(match: match)
+                }
+            }
+            
+            return cell
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if selectedDateIndex != indexPath.item {
-            selectedDateIndex = indexPath.item
-            selectedDate = dates[indexPath.item]
-            dateCollectionView.reloadData()
-            scrollToSelectedDate(animated: true)
-            updateDateForAllVCs(selectedDate)
-            updateMatchTypeVisibility()
+        if collectionView != dateCollectionView {
+            // Handle match selection
+            let match = matchesFiltered[indexPath.item]
+            // Navigate to match details
+            // let vc = self.storyboard?.instantiateViewController(withIdentifier: "MatchDetailVC") as! MatchDetailVC
+            // vc.matchId = match.matchId
+            // self.navigationController?.pushViewController(vc, animated: true)
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 34, height: 48)
+        if collectionView == dateCollectionView {
+            return CGSize(width: 34, height: 48)
+        } else {
+            let height: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 180 : 160
+            let width = collectionView.frame.width - 24
+            return CGSize(width: width, height: height)
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 8
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 8
+        if collectionView == dateCollectionView {
+            return 8
+        } else {
+            return 12
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        let totalCellWidth = 34 * CGFloat(dates.count)
-        let totalSpacingWidth = 8 * CGFloat(dates.count - 1)
-        let totalWidth = totalCellWidth + totalSpacingWidth
-        let horizontalInset = (collectionView.frame.width - totalWidth) / 2
-        
-        if horizontalInset > 0 {
-            return UIEdgeInsets(top: 0, left: horizontalInset, bottom: 0, right: horizontalInset)
+        if collectionView == dateCollectionView {
+            let totalCellWidth = 34 * CGFloat(dates.count)
+            let totalSpacingWidth = 8 * CGFloat(dates.count - 1)
+            let totalWidth = totalCellWidth + totalSpacingWidth
+            let horizontalInset = (collectionView.frame.width - totalWidth) / 2
+            
+            if horizontalInset > 0 {
+                return UIEdgeInsets(top: 0, left: horizontalInset, bottom: 0, right: horizontalInset)
+            } else {
+                return UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+            }
         } else {
-            return UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+            return UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
         }
     }
 }
