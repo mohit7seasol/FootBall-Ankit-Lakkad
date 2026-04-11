@@ -29,8 +29,8 @@ class MatchListCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        // Update corner radius for status label
         statusLabel.layer.cornerRadius = statusLabel.frame.height / 2
+        dateView.layer.cornerRadius = dateView.frame.height / 2
     }
     
     private func setupUI() {
@@ -50,18 +50,31 @@ class MatchListCell: UICollectionViewCell {
         statusLabel.clipsToBounds = true
         statusLabel.textAlignment = .center
         statusLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        
+        // Setup marquee labels
+        teamANameLabel.type = .continuous
+        teamANameLabel.speed = .duration(8)
+        teamANameLabel.fadeLength = 10
+        teamANameLabel.leadingBuffer = 0
+        teamANameLabel.trailingBuffer = 20
+        
+        teamBNameLabel.type = .continuous
+        teamBNameLabel.speed = .duration(8)
+        teamBNameLabel.fadeLength = 10
+        teamBNameLabel.leadingBuffer = 0
+        teamBNameLabel.trailingBuffer = 20
     }
     
     func configureForLive(match: Match) {
         // Configure date view for live
-        dateView.layer.cornerRadius = dateView.frame.height / 2
         dateView.layer.borderWidth = 1
         dateView.layer.borderColor = UIColor(red: 0.514, green: 0.675, blue: 0.859, alpha: 1.0).cgColor // #83ACDB
         dateView.backgroundColor = .clear
         
         dateLabel.text = match.formattedDateTime
         dateLabel.sizeToFit()
-        let dateWidth = dateLabel.frame.width + 24
+        // Calculate width with proper padding
+        let dateWidth = dateLabel.intrinsicContentSize.width + 40
         dateViewWidthConstant.constant = dateWidth
         
         // Configure status for LIVE
@@ -75,27 +88,30 @@ class MatchListCell: UICollectionViewCell {
         scorLabel.isHidden = true
         vsImageView.isHidden = false
         
-        // Set team info
+        // Set team info with marquee
         teamANameLabel.text = match.homeName
         teamBNameLabel.text = match.awayName
+        teamANameLabel.restartLabel()
+        teamBNameLabel.restartLabel()
         
         // Load images
         loadTeamImages(homeLogo: match.homeLogo, awayLogo: match.awayLogo)
         
         // Force layout update
+        self.setNeedsLayout()
         self.layoutIfNeeded()
     }
     
     func configureForUpcoming(match: Match) {
         // Configure date view for upcoming
-        dateView.layer.cornerRadius = dateView.frame.height / 2
         dateView.layer.borderWidth = 1
         dateView.layer.borderColor = UIColor(red: 0.514, green: 0.675, blue: 0.859, alpha: 1.0).cgColor // #83ACDB
         dateView.backgroundColor = .clear
         
         dateLabel.text = match.formattedTime
         dateLabel.sizeToFit()
-        let dateWidth = dateLabel.frame.width + 24
+        // Calculate width with proper padding
+        let dateWidth = dateLabel.intrinsicContentSize.width + 24
         dateViewWidthConstant.constant = dateWidth
         
         // Configure status for UPCOMING
@@ -109,27 +125,30 @@ class MatchListCell: UICollectionViewCell {
         scorLabel.isHidden = true
         vsImageView.isHidden = false
         
-        // Set team info
+        // Set team info with marquee
         teamANameLabel.text = match.homeName
         teamBNameLabel.text = match.awayName
+        teamANameLabel.restartLabel()
+        teamBNameLabel.restartLabel()
         
         // Load images
         loadTeamImages(homeLogo: match.homeLogo, awayLogo: match.awayLogo)
         
         // Force layout update
+        self.setNeedsLayout()
         self.layoutIfNeeded()
     }
     
     func configureForCompleted(match: Match) {
         // Configure date view for completed
-        dateView.layer.cornerRadius = dateView.frame.height / 2
         dateView.layer.borderWidth = 1
         dateView.layer.borderColor = UIColor(red: 0.514, green: 0.675, blue: 0.859, alpha: 1.0).cgColor // #83ACDB
         dateView.backgroundColor = .clear
         
         dateLabel.text = match.formattedTime
         dateLabel.sizeToFit()
-        let dateWidth = dateLabel.frame.width + 24
+        // Calculate width with proper padding
+        let dateWidth = dateLabel.intrinsicContentSize.width + 24
         dateViewWidthConstant.constant = dateWidth
         
         // Configure status for COMPLETED
@@ -146,14 +165,17 @@ class MatchListCell: UICollectionViewCell {
         }
         vsImageView.isHidden = true
         
-        // Set team info
+        // Set team info with marquee
         teamANameLabel.text = match.homeName
         teamBNameLabel.text = match.awayName
+        teamANameLabel.restartLabel()
+        teamBNameLabel.restartLabel()
         
         // Load images
         loadTeamImages(homeLogo: match.homeLogo, awayLogo: match.awayLogo)
         
         // Force layout update
+        self.setNeedsLayout()
         self.layoutIfNeeded()
     }
     

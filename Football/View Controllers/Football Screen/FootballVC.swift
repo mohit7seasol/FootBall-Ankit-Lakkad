@@ -319,9 +319,12 @@ class FootballVC: UIViewController, UIGestureRecognizerDelegate {
             }
             
             // Update collection view height constraint based on content size
-            DispatchQueue.main.async {
+            // Use asyncAfter to ensure content size is calculated
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 self.matchCollectionHeightConstant.constant = self.matchCollection.contentSize.height
-                self.view.layoutIfNeeded()
+                UIView.animate(withDuration: 0.3) {
+                    self.view.layoutIfNeeded()
+                }
             }
         }
     }
@@ -407,19 +410,37 @@ class FootballVC: UIViewController, UIGestureRecognizerDelegate {
     @IBAction func liveButtonTap(_ sender: Any) {
         currentFilter = .live
         updateButtonStates(selected: .live)
-        applyFilter()
+        
+        // Show loading indicator
+        ProgressHUD.show()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            self?.applyFilter()
+            ProgressHUD.dismiss()
+        }
     }
     
     @IBAction func upcomingButtonAction(_ sender: Any) {
         currentFilter = .scheduled
         updateButtonStates(selected: .scheduled)
-        applyFilter()
+        
+        // Show loading indicator
+        ProgressHUD.show()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            self?.applyFilter()
+            ProgressHUD.dismiss()
+        }
     }
     
     @IBAction func completedButtonAction(_ sender: Any) {
         currentFilter = .completed
         updateButtonStates(selected: .completed)
-        applyFilter()
+        
+        // Show loading indicator
+        ProgressHUD.show()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            self?.applyFilter()
+            ProgressHUD.dismiss()
+        }
     }
     
     @IBAction func todayButtonTap(_ sender: UIButton) {

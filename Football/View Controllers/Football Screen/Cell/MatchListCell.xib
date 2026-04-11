@@ -50,14 +50,14 @@
                                     <constraint firstItem="5NP-NG-0GE" firstAttribute="leading" secondItem="Bp0-es-5p3" secondAttribute="trailing" constant="8" id="moE-uk-Zw5"/>
                                 </constraints>
                             </view>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="clO-Ow-6s0">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="placeholder_flag" translatesAutoresizingMaskIntoConstraints="NO" id="clO-Ow-6s0">
                                 <rect key="frame" x="44" y="55" width="50" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="50" id="ZTK-eT-qti"/>
                                     <constraint firstAttribute="width" secondItem="clO-Ow-6s0" secondAttribute="height" multiplier="1:1" id="ghP-Md-uiY"/>
                                 </constraints>
                             </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="yv3-Is-rnu">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="placeholder_flag" translatesAutoresizingMaskIntoConstraints="NO" id="yv3-Is-rnu">
                                 <rect key="frame" x="251" y="55" width="50" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="yv3-Is-rnu" secondAttribute="height" multiplier="1:1" id="G3F-lg-5ww"/>
@@ -154,6 +154,7 @@
     </objects>
     <resources>
         <image name="calender_ic" width="30" height="30"/>
+        <image name="placeholder_flag" width="150" height="150"/>
         <image name="vs_ic" width="120" height="120"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
