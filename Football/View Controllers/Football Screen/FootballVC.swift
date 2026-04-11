@@ -505,17 +505,6 @@ extension FootballVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
         }
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if collectionView != dateCollectionView {
-            // Handle match selection
-            let match = matchesFiltered[indexPath.item]
-            // Navigate to match details
-            // let vc = self.storyboard?.instantiateViewController(withIdentifier: "MatchDetailVC") as! MatchDetailVC
-            // vc.matchId = match.matchId
-            // self.navigationController?.pushViewController(vc, animated: true)
-        }
-    }
-    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == dateCollectionView {
             return CGSize(width: 34, height: 48)
