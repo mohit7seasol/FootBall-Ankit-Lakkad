@@ -473,7 +473,7 @@ extension FootballVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
             cell.configure(isSelected: isSelected, dayName: dayFormatter.string(from: date).uppercased(), date: dateFormatter.string(from: date))
             
             // Set click listener for date cell
-            cell.setOnClickListener { [weak self] in
+            cell.dateSelectButton.setOnClickListener { [weak self] in
                 self?.handleDateSelection(at: indexPath.item)
             }
             

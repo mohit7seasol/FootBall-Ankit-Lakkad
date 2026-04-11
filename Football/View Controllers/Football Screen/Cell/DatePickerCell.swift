@@ -11,6 +11,7 @@ class DatePickerCell: UICollectionViewCell {
 
     @IBOutlet weak var dayNameLabel: UILabel!
     @IBOutlet weak var dateButton: UIButton!
+    @IBOutlet weak var dateSelectButton: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()

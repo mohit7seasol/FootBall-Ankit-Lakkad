@@ -943,23 +943,23 @@
                                 <rect key="frame" x="0.0" y="263" width="393" height="589"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Kc1-JV-VyP">
-                                        <rect key="frame" x="0.0" y="0.0" width="393" height="584"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="653"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="uMq-7U-XTy">
-                                                <rect key="frame" x="0.0" y="0.0" width="393" height="85"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="393" height="154"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gWN-Cv-6NO">
-                                                        <rect key="frame" x="0.0" y="0.0" width="393" height="85"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="393" height="154"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="height" constant="85" id="74f-J3-mwF"/>
+                                                            <constraint firstAttribute="height" constant="154" id="74f-J3-mwF"/>
                                                         </constraints>
                                                     </view>
                                                 </subviews>
                                                 <color key="backgroundColor" systemColor="systemGray4Color"/>
                                             </stackView>
                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="e4W-dv-DuU">
-                                                <rect key="frame" x="0.0" y="85" width="393" height="499"/>
+                                                <rect key="frame" x="0.0" y="154" width="393" height="499"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="499" id="4k7-kl-87x"/>

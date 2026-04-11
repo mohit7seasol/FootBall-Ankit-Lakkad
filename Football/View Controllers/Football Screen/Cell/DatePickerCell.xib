@@ -36,11 +36,19 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e8U-ej-c3W">
+                                <rect key="frame" x="0.0" y="0.0" width="34" height="50"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="e8U-ej-c3W" firstAttribute="leading" secondItem="RzZ-U4-upR" secondAttribute="leading" id="21n-IN-5uo"/>
+                            <constraint firstAttribute="trailing" secondItem="e8U-ej-c3W" secondAttribute="trailing" id="Edn-yL-t8S"/>
                             <constraint firstAttribute="bottom" secondItem="Nzm-1n-Hv9" secondAttribute="bottom" id="Q3e-Jb-Zwp"/>
+                            <constraint firstAttribute="bottom" secondItem="e8U-ej-c3W" secondAttribute="bottom" id="SpF-oo-Gyd"/>
                             <constraint firstAttribute="trailing" secondItem="5NJ-UT-3Hk" secondAttribute="trailing" id="asD-L2-FJY"/>
+                            <constraint firstItem="e8U-ej-c3W" firstAttribute="top" secondItem="RzZ-U4-upR" secondAttribute="top" id="lm2-lG-ljg"/>
                             <constraint firstItem="Nzm-1n-Hv9" firstAttribute="centerX" secondItem="RzZ-U4-upR" secondAttribute="centerX" id="nKA-Jo-1nN"/>
                             <constraint firstItem="5NJ-UT-3Hk" firstAttribute="leading" secondItem="RzZ-U4-upR" secondAttribute="leading" id="so8-jP-fx7"/>
                             <constraint firstItem="5NJ-UT-3Hk" firstAttribute="top" secondItem="RzZ-U4-upR" secondAttribute="top" constant="4" id="yZR-Y3-O5d"/>
@@ -58,6 +66,7 @@
             <size key="customSize" width="40" height="48"/>
             <connections>
                 <outlet property="dateButton" destination="Nzm-1n-Hv9" id="Gax-pI-lUC"/>
+                <outlet property="dateSelectButton" destination="e8U-ej-c3W" id="Fbr-O5-QbY"/>
                 <outlet property="dayNameLabel" destination="5NJ-UT-3Hk" id="FNB-eU-DwF"/>
             </connections>
             <point key="canvasLocation" x="35.114503816793892" y="131.69014084507043"/>
