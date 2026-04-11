@@ -25,12 +25,27 @@ class MatchListCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         setupUI()
+        setupConstraints()
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         statusLabel.layer.cornerRadius = statusLabel.frame.height / 2
         dateView.layer.cornerRadius = dateView.frame.height / 2
+        teamAFlagImageView.layer.cornerRadius = teamAFlagImageView.frame.height / 2
+        teamBFlagImageView.layer.cornerRadius = teamBFlagImageView.frame.height / 2
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        // Reset constraints to avoid conflicts
+        dateViewWidthConstant.constant = 80
+        teamANameLabel.text = ""
+        teamBNameLabel.text = ""
+        teamAFlagImageView.image = nil
+        teamBFlagImageView.image = nil
+        statusLabel.text = ""
+        scorLabel.text = ""
     }
     
     private func setupUI() {
@@ -39,10 +54,9 @@ class MatchListCell: UICollectionViewCell {
         mainView.layer.borderColor = #colorLiteral(red: 0.09019607843, green: 0.2431372549, blue: 0.4588235294, alpha: 1)
         mainView.backgroundColor = .white
         
-        teamAFlagImageView.layer.cornerRadius = teamAFlagImageView.frame.height / 2
-        teamAFlagImageView.clipsToBounds = true
-        teamBFlagImageView.layer.cornerRadius = teamBFlagImageView.frame.height / 2
-        teamBFlagImageView.clipsToBounds = true
+        // Remove any existing constraints that might cause conflicts
+        teamAFlagImageView.translatesAutoresizingMaskIntoConstraints = false
+        teamBFlagImageView.translatesAutoresizingMaskIntoConstraints = false
         
         vsImageView.tintColor = UIColor(white: 0.7, alpha: 1.0)
         vsImageView.image = UIImage(systemName: "vs")
@@ -63,6 +77,23 @@ class MatchListCell: UICollectionViewCell {
         teamBNameLabel.fadeLength = 10
         teamBNameLabel.leadingBuffer = 0
         teamBNameLabel.trailingBuffer = 20
+        
+        // Set content compression resistance priorities
+        dateLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
+        teamANameLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        teamBNameLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+    }
+    
+    private func setupConstraints() {
+        // Set fixed size for flag images to avoid constraint conflicts
+        let flagSize: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 50 : 40
+        
+        NSLayoutConstraint.activate([
+            teamAFlagImageView.widthAnchor.constraint(equalToConstant: flagSize),
+            teamAFlagImageView.heightAnchor.constraint(equalToConstant: flagSize),
+            teamBFlagImageView.widthAnchor.constraint(equalToConstant: flagSize),
+            teamBFlagImageView.heightAnchor.constraint(equalToConstant: flagSize)
+        ])
     }
     
     func configureForLive(match: Match) {
@@ -111,7 +142,7 @@ class MatchListCell: UICollectionViewCell {
         dateLabel.text = match.formattedTime
         dateLabel.sizeToFit()
         // Calculate width with proper padding
-        let dateWidth = dateLabel.intrinsicContentSize.width + 24
+        let dateWidth = dateLabel.intrinsicContentSize.width + 32
         dateViewWidthConstant.constant = dateWidth
         
         // Configure status for UPCOMING
@@ -148,7 +179,7 @@ class MatchListCell: UICollectionViewCell {
         dateLabel.text = match.formattedTime
         dateLabel.sizeToFit()
         // Calculate width with proper padding
-        let dateWidth = dateLabel.intrinsicContentSize.width + 24
+        let dateWidth = dateLabel.intrinsicContentSize.width + 32
         dateViewWidthConstant.constant = dateWidth
         
         // Configure status for COMPLETED
@@ -180,16 +211,18 @@ class MatchListCell: UICollectionViewCell {
     }
     
     private func loadTeamImages(homeLogo: String, awayLogo: String) {
+        let placeholderImage = UIImage(named: "placeholder_flag")
+        
         if let url = URL(string: homeLogo), !homeLogo.isEmpty {
-            teamAFlagImageView.sd_setImage(with: url, placeholderImage: UIImage(named: "placeholder_flag"))
+            teamAFlagImageView.sd_setImage(with: url, placeholderImage: placeholderImage)
         } else {
-            teamAFlagImageView.image = UIImage(named: "placeholder_flag")
+            teamAFlagImageView.image = placeholderImage
         }
         
         if let url = URL(string: awayLogo), !awayLogo.isEmpty {
-            teamBFlagImageView.sd_setImage(with: url, placeholderImage: UIImage(named: "placeholder_flag"))
+            teamBFlagImageView.sd_setImage(with: url, placeholderImage: placeholderImage)
         } else {
-            teamBFlagImageView.image = UIImage(named: "placeholder_flag")
+            teamBFlagImageView.image = placeholderImage
         }
     }
 }
