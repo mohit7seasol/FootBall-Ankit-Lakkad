@@ -14,6 +14,14 @@ struct Commentary {
     let cardType: String
     let teamName: String
     
+    init(time: String, text: String, player1Name: String, cardType: String, teamName: String) {
+        self.time = time
+        self.text = text
+        self.player1Name = player1Name
+        self.cardType = cardType
+        self.teamName = teamName
+    }
+    
     init(dictionary: [String: Any]) {
         self.time = dictionary["time"] as? String ?? ""
         self.text = dictionary["text"] as? String ?? ""
@@ -22,3 +30,4 @@ struct Commentary {
         self.teamName = dictionary["teamName"] as? String ?? ""
     }
 }
+

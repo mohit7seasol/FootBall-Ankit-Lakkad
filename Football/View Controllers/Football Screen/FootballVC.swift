@@ -33,6 +33,11 @@ class FootballVC: UIViewController, UIGestureRecognizerDelegate {
     
     var googleNativeAds = GoogleNativeAds()
     
+    // MARK: - Match Status Properties (Add these)
+    var isLiveMatch: Bool = false
+    var isUpcomingMatch: Bool = false
+    var isCompletedMatch: Bool = false
+    
     // Calendar Properties
     private var selectedDateIndex = -1
     private var calendar = Calendar.current
@@ -502,6 +507,34 @@ extension FootballVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
             }
             
             return cell
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if collectionView != dateCollectionView {
+            // Handle match selection
+            let match = matchesFiltered[indexPath.item]
+            
+            // Navigate to ScoreDetailsVC
+            let vc = self.storyboard?.instantiateViewController(withIdentifier: "ScoreDetailsVC") as! ScoreDetailsVC
+            vc.m_idMain = match.matchId
+            vc.l_idMain = match.tournamentId
+            vc.m_name = match.leagueName
+            vc.Aname = match.homeName
+            vc.Bname = match.awayName
+            vc.Aimg = match.homeLogo
+            vc.Bimg = match.awayLogo
+            
+            // Set based on match status
+            if match.isInProgress {
+                vc.isLiveMatch = true
+            } else if match.isFinished {
+                vc.isCompletedMatch = true
+            } else {
+                vc.isUpcomingMatch = true
+            }
+            
+            self.navigationController?.pushViewController(vc, animated: true)
         }
     }
     

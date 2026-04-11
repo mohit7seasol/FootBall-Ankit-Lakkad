@@ -21,109 +21,111 @@ class InfoVC: UIViewController {
     @IBOutlet weak var noDataLbl: UILabel!
     
     var index = -1
-    var m_id:String?
-    var l_id:String?
-    var titleArr : [String] = []
-    var infoArr : [String] = []
+    var m_id: String?
+    var l_id: String?
+    var matchDetails: MatchDetails?
+    var titleArr: [String] = []
+    var infoArr: [String] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         self.tblView.layer.cornerRadius = 8
-        self.fetchMatchInfo()
+        self.noDataLbl.text = "No data Available".localized()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.noDataLbl.text = "No data Available".localized()
+        if let details = matchDetails {
+            updateUI(with: details)
+        } else {
+            fetchMatchDetails()
+        }
     }
     
-    func fetchMatchInfo() {
-           // Define the API URL
-        let url = URL(string: MatchInfoAPI)!
-           
-           // Create the request
-           var request = URLRequest(url: url)
-           request.httpMethod = "POST"
-           request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-           
-           // Define the parameters
-           let parameters: [String: Any] = [
-               "spt_typ": 2,
-               "l_id": l_id!,
-               "m_id": m_id!
-           ]
-           
-           // Set the HTTP body
-           request.httpBody = try? JSONSerialization.data(withJSONObject: parameters, options: [])
-           
-           // Create the URL session
-           let session = URLSession.shared
-           
-           // Create the data task
-           let task = session.dataTask(with: request) { (data, response, error) in
-               if let error = error {
-                   print("Error: \(error)")
-                   return
-               }
-               
-               guard let data = data else {
-                   print("No data received")
-                   return
-               }
-               
-               do {
-                   // Parse the JSON response
-                   if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-                      let statusCode = json["statusCode"] as? Int, statusCode == 200,
-                      let result = json["result"] as? [String: Any] {
-                       
-                       // Extract the values
-                       let mName = result["m_name"] as? String ?? "N/A"
-                       let lName = result["l_name"] as? String ?? "N/A"
-                       let venue = result["venue"] as? String ?? "N/A"
-                       let startTimeTimestamp = result["strt_time_ts"] as? TimeInterval ?? 0
-                       
-                       // Convert timestamp to date
-                       let startTime = Date(timeIntervalSince1970: startTimeTimestamp)
-                       let dateFormatter = DateFormatter()
-                       dateFormatter.dateStyle = .medium
-                       dateFormatter.timeStyle = .short
-                       let startTimeString = dateFormatter.string(from: startTime)
-                       
-                       let result = convertTimestamp(Int(startTimeTimestamp))
-                       let date =  result.formattedDate
-                       let time  = result.formattedTime
-                       
-                       // Update UI on the main thread
-                       self.titleArr = ["Match","Series","Date","Time","Venue"]
-                       self.infoArr = [mName, lName, lName, date, time]
-                       DispatchQueue.main.async {
-                           if self.infoArr.isEmpty == true {
-                               self.tblView.isHidden = true
-                               self.topView.isHidden = true
-                               self.noDataView.isHidden = false
-                           } else {
-                               self.tblView.isHidden = false
-                               self.topView.isHidden = false
-                               self.noDataView.isHidden = true
-                           }
-                           self.tblView.reloadData()
-                       }
-                   } else {
-                       print("Invalid response")
-                   }
-               } catch {
-                   print("Error parsing JSON: \(error)")
-               }
-           }
-           
-           // Start the task
-           task.resume()
-       }
+    func updateUI(with details: MatchDetails) {
+        titleArr = ["Match", "Series", "Date", "Time", "Venue"]
         
-
+        let result = convertTimestamp(details.timestamp)
+        infoArr = [details.leagueName, details.homeName, result.formattedDate, result.formattedTime, "\(details.venueName), \(details.venueCity)"]
+        
+        DispatchQueue.main.async {
+            if self.infoArr.isEmpty {
+                self.tblView.isHidden = true
+                self.topView.isHidden = true
+                self.noDataView.isHidden = false
+            } else {
+                self.tblView.isHidden = false
+                self.topView.isHidden = false
+                self.noDataView.isHidden = true
+                self.tblView.reloadData()
+            }
+        }
+    }
+    
+    // MARK: - Reference Code API
+    func fetchMatchDetails() {
+        let urlString = "https://flashscore4.p.rapidapi.com/api/flashscore/v2/matches/details?match_id=\(m_id ?? "")"
+        
+        guard let url = URL(string: urlString) else { return }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("flashscore4.p.rapidapi.com", forHTTPHeaderField: "X-RapidAPI-Host")
+        request.setValue(APITOKEN, forHTTPHeaderField: "X-RapidAPI-Key")
+        
+        URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+            guard let data = data else { return }
+            
+            do {
+                if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
+                    let tournament = json["tournament"] as? [String: Any]
+                    let venue = json["venue"] as? [String: Any]
+                    let timestamp = json["timestamp"] as? Int ?? 0
+                    
+                    let leagueName = tournament?["name"] as? String ?? ""
+                    let venueName = venue?["name"] as? String ?? ""
+                    let cityName = venue?["city"] as? String ?? ""
+                    
+                    let details = MatchDetails(
+                        leagueName: leagueName,
+                        homeName: "",
+                        homeShortName: "",
+                        awayName: "",
+                        awayShortName: "",
+                        homeLogo: "",
+                        awayLogo: "",
+                        homeScore: 0,
+                        awayScore: 0,
+                        status: "",
+                        liveTime: "",
+                        referee: "",
+                        venueName: venueName,
+                        venueCity: cityName,
+                        attendance: "",
+                        capacity: "",
+                        timestamp: timestamp
+                    )
+                    
+                    DispatchQueue.main.async {
+                        self?.updateUI(with: details)
+                    }
+                }
+            } catch {
+                print(error)
+            }
+        }.resume()
+    }
+    
+    func convertTimestamp(_ timestamp: Int) -> (formattedDate: String, formattedTime: String) {
+        let date = Date(timeIntervalSince1970: TimeInterval(timestamp))
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "EEEE, dd MMM"
+        let formattedDate = dateFormatter.string(from: date)
+        dateFormatter.dateFormat = "hh:mm a"
+        let formattedTime = dateFormatter.string(from: date)
+        return (formattedDate, formattedTime)
+    }
 }
 
 extension InfoVC: UITableViewDelegate, UITableViewDataSource {
@@ -157,5 +159,4 @@ extension InfoVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 65
     }
-    
 }

@@ -21,79 +21,127 @@ class LiveUpdateVC: UIViewController {
     @IBOutlet weak var noDataView: UIView!
     @IBOutlet weak var noDataLbl: UILabel!
     
-    
     var index = -1
-    var m_id:String?
-    var l_id:String?
-    var commentaryArr: [Commentary] = []
+    var m_id: String?
+    var l_id: String?
+    var eventsUpdates: [MatchSummaryEvent] = []
+    var commentaryData: [Commentary] = []
+    var refreshTimer: Timer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        self.fetchData()
+        self.noDataLbl.text = "No data Available".localized()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.noDataLbl.text = "No data Available".localized()
+        if !eventsUpdates.isEmpty {
+            updateUIWithEvents()
+        } else {
+            fetchMatchSummary()
+        }
+        startAutoRefresh()
     }
     
-    func fetchData() {
-        let url = URL(string: MatchLiveUpdateAPI)!
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        let body: [String: Any] = ["m_id": m_id!, "min": 0, "refid": 0]
-        request.httpBody = try? JSONSerialization.data(withJSONObject: body, options: [])
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        refreshTimer?.invalidate()
+        refreshTimer = nil
+    }
+    
+    func updateUIWithEvents() {
+        commentaryData.removeAll()
         
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+        for event in eventsUpdates {
+            let minutes = event.minutes ?? ""
+            let description = event.description ?? ""
+            let players = event.players ?? []
+            
+            let playerName = players.first?.name ?? ""
+            let eventType = players.first?.type ?? ""
+            
+            var cardType = ""
+            if eventType.contains("Yellow") {
+                cardType = "Yellow card"
+            } else if eventType.contains("Red") {
+                cardType = "Red card"
+            }
+            
+            let commentary = Commentary(
+                time: minutes,
+                text: description,
+                player1Name: playerName,
+                cardType: cardType,
+                teamName: event.team ?? ""
+            )
+            commentaryData.append(commentary)
+        }
+        
+        DispatchQueue.main.async {
+            if self.commentaryData.isEmpty {
+                self.tblView.isHidden = true
+                self.noDataView.isHidden = false
+            } else {
+                self.tblView.isHidden = false
+                self.noDataView.isHidden = true
+                self.tblView.reloadData()
+            }
+        }
+    }
+    
+    func startAutoRefresh() {
+        refreshTimer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { [weak self] _ in
+            guard let self = self else { return }
+            self.fetchMatchSummary()
+        }
+    }
+    
+    // MARK: - Reference Code API
+    func fetchMatchSummary() {
+        let urlString = "https://flashscore4.p.rapidapi.com/api/flashscore/v2/matches/match/summary?match_id=\(m_id ?? "")"
+        
+        guard let url = URL(string: urlString) else { return }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("flashscore4.p.rapidapi.com", forHTTPHeaderField: "x-rapidapi-host")
+        request.setValue(APITOKEN, forHTTPHeaderField: "x-rapidapi-key")
+        
+        URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
             guard let data = data, error == nil else {
-                print("Error: \(error?.localizedDescription ?? "Unknown error")")
+                print("API Error:", error?.localizedDescription ?? "")
                 return
             }
             
             do {
-                let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
-                if let result = json?["result"] as? [String: Any],
-                   let dataArray = result["data"] as? [[String: Any]] {
-                    self.commentaryArr = dataArray.map { Commentary(dictionary: $0) }
-                    DispatchQueue.main.async {
-                        if self.commentaryArr.isEmpty == true {
-                            self.tblView.isHidden = true
-                            self.noDataView.isHidden = false
-                        } else {
-                            self.tblView.isHidden = false
-                            self.noDataView.isHidden = true
-                        }
-                        self.tblView.reloadData()
-                    }
+                let result = try JSONDecoder().decode([MatchSummaryEvent].self, from: data)
+                
+                DispatchQueue.main.async {
+                    self?.eventsUpdates = result
+                    self?.updateUIWithEvents()
                 }
             } catch {
-                print("JSON error: \(error.localizedDescription)")
+                print("Decode error:", error)
             }
-        }
-        task.resume()
+        }.resume()
     }
-    
 }
 
 extension LiveUpdateVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.commentaryArr.count
+        return self.commentaryData.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let temp = self.commentaryArr[indexPath.row]
+        let temp = self.commentaryData[indexPath.row]
         
         if temp.time == "0'" {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SingleLiveUpdateCell", for: indexPath) as? SingleLiveUpdateCell else {
                 return UITableViewCell()
             }
             cell.scoreLbl.text = temp.text
-            
             return cell
-            
         } else {
             if temp.player1Name == "" {
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "ScoreLiveUpdateCell", for: indexPath) as? ScoreLiveUpdateCell else {
@@ -102,7 +150,6 @@ extension LiveUpdateVC: UITableViewDelegate, UITableViewDataSource {
                 cell.timeLbl.text = " \(temp.time) "
                 cell.scoreLbl.text = temp.text
                 cell.cardTypeLbl.text = temp.cardType
-                
                 return cell
             } else {
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "PlayerLiveUpdateCell", for: indexPath) as? PlayerLiveUpdateCell else {
@@ -113,15 +160,13 @@ extension LiveUpdateVC: UITableViewDelegate, UITableViewDataSource {
                 cell.cardTypeLbl.text = temp.cardType
                 cell.playerNameLbl.text = temp.player1Name
                 cell.countryLbl.text = temp.teamName
-                
                 return cell
             }
         }
-        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let temp = self.commentaryArr[indexPath.row]
+        let temp = self.commentaryData[indexPath.row]
         
         if temp.time == "0'" {
             return 40
@@ -132,6 +177,5 @@ extension LiveUpdateVC: UITableViewDelegate, UITableViewDataSource {
                 return 100
             }
         }
-        
     }
 }

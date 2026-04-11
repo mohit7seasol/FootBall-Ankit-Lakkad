@@ -21,72 +21,80 @@ class PointTableVC: UIViewController {
     @IBOutlet weak var noDataLbl: UILabel!
     
     var index = -1
+    var m_id: String?
+    var l_id: String?
+    var standings: [Standing] = []
     var teams: [Team] = []
-    var l_id:String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         self.tblView.layer.cornerRadius = 8
-        self.fetchTeamStandings()
+        self.noDataLbl.text = "No data Available".localized()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.noDataLbl.text = "No data Available".localized()
+        if !standings.isEmpty {
+            updateUIWithStandings()
+        } else {
+            fetchMatchStandings()
+        }
     }
     
-    func fetchTeamStandings() {
-        guard let url = URL(string: MatchPointTableAPI) else { return }
+    func updateUIWithStandings() {
+        teams = standings.map { standing in
+            Team(
+                tname: standing.name ?? "",
+                P: standing.matches_played ?? 0,
+                W: standing.wins ?? 0,
+                L: standing.losses ?? 0,
+                D: standing.draws ?? 0,
+                PTS: standing.points ?? 0
+            )
+        }
+        teams.sort { $0.PTS > $1.PTS }
         
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        let parameters: [String: Any] = [
-            "spt_typ": 2,
-            "l_id": l_id!,
-            "is_latest": true
-        ]
-        
-        request.httpBody = try? JSONSerialization.data(withJSONObject: parameters, options: [])
-        
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data, error == nil else {
-                print("Error: \(error?.localizedDescription ?? "Unknown error")")
-                return
-            }
-            
-            do {
-                let response = try JSONDecoder().decode(TeamStandingsResponse.self, from: data)
-                guard response.status, let result = response.result, let standings = result.team_standings, !standings.isEmpty else {
-                    print("No data available")
-                    return
-                }
-                
-                self.teams = standings.flatMap { $0.standings }
-                
-                DispatchQueue.main.async {
-                    if self.teams.isEmpty == true {
-                        self.tblView.isHidden = true
-                        self.topView.isHidden = true
-                        self.noDataView.isHidden = false
-                    } else {
-                        self.tblView.isHidden = false
-                        self.topView.isHidden = false
-                        self.noDataView.isHidden = true
-                    }
-                    self.tblView.reloadData()
-                }
-            } catch {
-                print("Failed to decode JSON: \(error)")
+        DispatchQueue.main.async {
+            if self.teams.isEmpty {
+                self.tblView.isHidden = true
+                self.topView.isHidden = true
+                self.noDataView.isHidden = false
+            } else {
+                self.tblView.isHidden = false
+                self.topView.isHidden = false
+                self.noDataView.isHidden = true
+                self.tblView.reloadData()
             }
         }
-        
-        task.resume()
     }
-
+    
+    // MARK: - Reference Code API
+    func fetchMatchStandings() {
+        let urlString = "https://flashscore4.p.rapidapi.com/api/flashscore/v2/matches/standings?type=overall&match_id=\(m_id ?? "")"
+        
+        guard let url = URL(string: urlString) else { return }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("flashscore4.p.rapidapi.com", forHTTPHeaderField: "x-rapidapi-host")
+        request.setValue(APITOKEN, forHTTPHeaderField: "x-rapidapi-key")
+        
+        URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+            guard let data = data, error == nil else { return }
+            
+            do {
+                let result = try JSONDecoder().decode([Standing].self, from: data)
+                
+                DispatchQueue.main.async {
+                    self?.standings = result
+                    self?.updateUIWithStandings()
+                }
+            } catch {
+                print("Decode error:", error)
+            }
+        }.resume()
+    }
 }
 
 extension PointTableVC: UITableViewDelegate, UITableViewDataSource {
@@ -120,5 +128,4 @@ extension PointTableVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 50
     }
-    
 }

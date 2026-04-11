@@ -66,11 +66,11 @@ struct MatchDetails {
     var timestamp: Int = 0
 }
 
-//struct MatchStat {
-//    var name: String = ""
-//    var home: String = ""
-//    var away: String = ""
-//}
+struct MatchStatModel {
+    var name: String = ""
+    var home: String = ""
+    var away: String = ""
+}
 
 struct MatchSummaryEvent: Codable {
     let minutes: String?

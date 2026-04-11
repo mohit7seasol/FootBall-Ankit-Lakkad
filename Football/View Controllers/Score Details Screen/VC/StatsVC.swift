@@ -21,99 +21,117 @@ class StatsVC: UIViewController {
     @IBOutlet weak var noDataLbl: UILabel!
     
     var index = -1
-    var m_id:String?
-    var l_id:String?
-    var matchStatsArr: [MatchStat] = []
+    var m_id: String?
+    var l_id: String?
+    var stats: [MatchStatModel] = []
+    var refreshTimer: Timer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         self.tblView.layer.cornerRadius = 8
-        self.fetchMatchStats()
+        self.noDataLbl.text = "No data Available".localized()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        self.noDataLbl.text = "No data Available".localized()
+        fetchMatchStats()
+        startAutoRefresh()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        refreshTimer?.invalidate()
+        refreshTimer = nil
+    }
+    
+    func startAutoRefresh() {
+        refreshTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { [weak self] _ in
+            guard let self = self else { return }
+            self.fetchMatchStats()
+        }
+    }
+    
+    // MARK: - Reference Code API
     func fetchMatchStats() {
-        let url = URL(string: MatchStatsAPI)!
+        let urlString = "https://flashscore4.p.rapidapi.com/api/flashscore/v2/matches/match/stats?match_id=\(m_id ?? "")"
+        
+        guard let url = URL(string: urlString) else { return }
+        
         var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpMethod = "GET"
+        request.setValue("flashscore4.p.rapidapi.com", forHTTPHeaderField: "X-RapidAPI-Host")
+        request.setValue(APITOKEN, forHTTPHeaderField: "X-RapidAPI-Key")
         
-        let parameters: [String: Any] = ["m_id": m_id!]
-        request.httpBody = try? JSONSerialization.data(withJSONObject: parameters, options: [])
-        
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data, error == nil else {
-                print("Failed to fetch data")
-                return
-            }
+        URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+            guard let data = data else { return }
             
             do {
-                let matchStatsResponse = try JSONDecoder().decode(MatchStatsResponse.self, from: data)
-                
-                if let matchStats = matchStatsResponse.result?.matchStats, !matchStats.isEmpty {
-                    self.matchStatsArr = matchStats
-                    DispatchQueue.main.async {
-                        if self.matchStatsArr.isEmpty == true {
-                            self.tblView.isHidden = true
-                            self.statsLbl.isHidden = true
-                            self.noDataView.isHidden = false
-                        } else {
-                            self.tblView.isHidden = false
-                            self.statsLbl.isHidden = false
-                            self.noDataView.isHidden = true
-                        }
-                        self.tblView.reloadData()
+                if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+                   let statsArray = json["match"] as? [[String: Any]] {
+                    
+                    var temp: [MatchStatModel] = []
+                    for s in statsArray {
+                        let stat = MatchStatModel(
+                            name: s["name"] as? String ?? "",
+                            home: "\(s["home_team"] ?? "")",
+                            away: "\(s["away_team"] ?? "")"
+                        )
+                        temp.append(stat)
                     }
-                } else {
-                    print("Result is empty")
+                    
+                    DispatchQueue.main.async {
+                        self?.stats = temp
+                        
+                        if self?.stats.isEmpty == true {
+                            self?.tblView.isHidden = true
+                            self?.statsLbl.isHidden = true
+                            self?.noDataView.isHidden = false
+                        } else {
+                            self?.tblView.isHidden = false
+                            self?.statsLbl.isHidden = false
+                            self?.noDataView.isHidden = true
+                            self?.tblView.reloadData()
+                        }
+                    }
                 }
             } catch {
-                print("Failed to decode JSON: \(error.localizedDescription)")
+                print(error)
             }
-        }
-        
-        task.resume()
+        }.resume()
     }
     
     func normalizeValue(_ value: Double, minValue: Double = 0, maxValue: Double) -> Double {
-        guard maxValue > minValue else { return 0 } // Avoid division by zero
+        guard maxValue > minValue else { return 0 }
         return (value - minValue) / (maxValue - minValue)
     }
-
-
 }
 
 extension StatsVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.matchStatsArr.count
+        return self.stats.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = self.tblView.dequeueReusableCell(withIdentifier: "StatCell", for: indexPath) as! StatCell
         
-        let temp = self.matchStatsArr[indexPath.row]
-        cell.actionLbl?.text = temp.type
-        cell.team1Lbl.text = "\(temp.t1Stats)"
-        cell.team2Lbl.text = "\(temp.t2Stats)"
+        let temp = self.stats[indexPath.row]
+//        cell.actionLbl?.text = temp.name
+//        cell.team1Lbl.text = temp.home
+//        cell.team2Lbl.text = temp.away
         
-        print("\nt1Stats --------------- \(temp.t1Stats)")
-        print("\nt2Stats --------------- \(temp.t2Stats)")
+//        let homeValue = Float(temp.home) ?? 0
+//        let awayValue = Float(temp.away) ?? 0
+//        let total = homeValue + awayValue
         
-        let bigValue1 = 100.0
-        let bigValue2 = 100.0
+//        if total > 0 {
+//            cell.team1Progress.progress = homeValue / total
+//            cell.team2Progress.progress = awayValue / total
+//        } else {
+//            cell.team1Progress.progress = 0.5
+//            cell.team2Progress.progress = 0.5
+//        }
         
-        cell.team1Progress.progress = Float(self.normalizeValue(Double(temp.t1Stats), maxValue: bigValue1))
-//        print("\nteam 1 ---------------", Float(self.normalizeValue(Double(temp.t1Stats), maxValue: bigValue1)), temp.t1Stats, bigValue1)
-//        print("\nteam 2 ---------------", Float(self.normalizeValue(Double(temp.t2Stats), maxValue: bigValue2)), temp.t2Stats, bigValue2)
-        cell.team2Progress.progress = Float(self.normalizeValue(Double(temp.t2Stats), maxValue: bigValue2))
-        
-        if indexPath.row == self.matchStatsArr.count - 1 {
+        if indexPath.row == self.stats.count - 1 {
             cell.mainView.layer.cornerRadius = 8
             cell.mainView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
             cell.sepView.isHidden = true

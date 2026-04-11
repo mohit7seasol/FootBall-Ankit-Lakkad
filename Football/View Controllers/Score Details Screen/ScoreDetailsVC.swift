@@ -7,6 +7,7 @@
 
 import UIKit
 import MarqueeLabel
+import ProgressHUD
 
 class ScoreDetailsVC: UIViewController, UIGestureRecognizerDelegate {
 
@@ -50,27 +51,40 @@ class ScoreDetailsVC: UIViewController, UIGestureRecognizerDelegate {
     var Bimg:String?
     var googleNativeAds = GoogleNativeAds()
     
+    // MARK: - Match Status Properties (Add these)
+    var isLiveMatch: Bool = false
+    var isUpcomingMatch: Bool = false
+    var isCompletedMatch: Bool = false
+    
+    // MARK: - New Data Properties for API
+    var matchDetails: MatchDetails?
+    var matchStats: [MatchStatModel] = []
+    var eventsUpdates: [MatchSummaryEvent] = []
+    var standings: [Standing] = []
+    var h2hMatches: [H2HMatch] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         logAnalyticAction(title: "", status: AnalyticEvent.MatchDetails)
         self.showAd()
-        DispatchQueue.main.async {
-            self.fetchMatchData()
-        }
+        
+        // Fetch data using new APIs
+        ProgressHUD.show()
+        fetchAllMatchData()
+        
         self.team1Img.layer.cornerRadius = self.team1Img.frame.height/2
         self.team2Img.layer.cornerRadius = self.team2Img.frame.height/2
         
         if isComeFromUpcoming == true {
             self.titleArr = ["Squad","Info","Point Table"]
         } else {
-            self.titleArr = ["Live Update","Overview","Lineups","Stats","Squad","Info","Point Table"]
+            self.titleArr = ["Live Update","Overview","Lineups","Stats","Head2Head","Info","Point Table"]
         }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         self.footballLbl.text = "Football".localized()
     }
     
@@ -82,98 +96,326 @@ class ScoreDetailsVC: UIViewController, UIGestureRecognizerDelegate {
             pagerVc?.l_idMain = self.l_idMain
             pagerVc?.Aname = self.Aname
             pagerVc?.Bname = self.Bname
+            pagerVc?.Aimg = self.Aimg
+            pagerVc?.Bimg = self.Bimg
+            pagerVc?.matchDetails = self.matchDetails
+            pagerVc?.stats = self.matchStats
+            pagerVc?.eventsUpdates = self.eventsUpdates
+            pagerVc?.standings = self.standings
+            pagerVc?.h2hMatches = self.h2hMatches
             pagerVc?.tabDelegate = self
         }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
         navigationController?.interactivePopGestureRecognizer?.delegate = self
         navigationController?.interactivePopGestureRecognizer?.isEnabled = true
     }
     
-    func fetchMatchData() {
-        fetchMatchTabs { [weak self] result in
-            guard let self = self, let result = result else { return }
-            DispatchQueue.main.async {
-                self.team1GoalLbl.text = "\(result.t1_cornerKicks ?? 0)"
-                self.team1RLbl.text = "\(result.t1_redCards ?? 0)"
-                self.team1YLbl.text = "\(result.t1_yellowCards ?? 0)"
-                self.team1KickLbl.text = "\(result.t1_penalties ?? 0)"
-                
-                self.scoreLbl.text = "\(result.t1_scr ?? 0) - \(result.t2_scr ?? 0)"
-                self.completedLbl.text = "\(result.time ?? "") Completed"
-                
-                self.team2GoalLbl.text = "\(result.t2_cornerKicks ?? 0)"
-                self.team2RLbl.text = "\(result.t2_redCards ?? 0)"
-                self.team2YLbl.text = "\(result.t2_yellowCards ?? 0)"
-                self.team2KickLbl.text = "\(result.t2_penalties ?? 0)"
-                self.titleNameLbl.text = self.m_name
+    // MARK: - Fetch All Match Data
+    func fetchAllMatchData() {
+        let dispatchGroup = DispatchGroup()
+        
+        // 1. Fetch Match Details (Info)
+        dispatchGroup.enter()
+        fetchMatchDetails { [weak self] success in
+            if success {
+                print("Match Details fetched successfully")
             }
+            dispatchGroup.leave()
         }
         
-        DispatchQueue.main.async {
-            if self.m_name?.isEmpty == false {
-                self.navigationItem.title = self.m_name
-            } else {
-                self.navigationItem.title = ""
+        // 2. Fetch Match Stats
+        dispatchGroup.enter()
+        fetchMatchStats { [weak self] success in
+            if success {
+                print("Match Stats fetched successfully")
             }
-            
-            if self.Aname?.isEmpty == false {
-                self.team1Lbl.text = self.Aname
-            } else {
-                self.team1Lbl.text = "TeamA"
+            dispatchGroup.leave()
+        }
+        
+        // 3. Fetch Match Summary (Live Update & Overview)
+        dispatchGroup.enter()
+        fetchMatchSummary { [weak self] success in
+            if success {
+                print("Match Summary fetched successfully")
             }
-            
-            if self.Bname?.isEmpty == false {
-                self.team2Lbl.text = self.Bname
-            } else {
-                self.team2Lbl.text = "TeamB"
+            dispatchGroup.leave()
+        }
+        
+        // 4. Fetch Standings (Point Table)
+        dispatchGroup.enter()
+        fetchMatchStandings { [weak self] success in
+            if success {
+                print("Standings fetched successfully")
             }
-            
-            if self.Aimg?.isEmpty == false {
-                let urlA = URL(string: self.Aimg!)
-                self.team1Img.sd_setImage(with: urlA, placeholderImage: UIImage(named: "splash"))
-            } else {
-                self.team1Img.image = UIImage(named: "ic_replace")!
+            dispatchGroup.leave()
+        }
+        
+        // 5. Fetch Head2Head Matches
+        dispatchGroup.enter()
+        fetchHead2HeadMatches { [weak self] success in
+            if success {
+                print("Head2Head matches fetched successfully")
             }
-            
-            if self.Bimg?.isEmpty == false {
-                let urlA = URL(string: self.Bimg!)
-                self.team2Img.sd_setImage(with: urlA, placeholderImage: UIImage(named: "splash"))
-            } else {
-                self.team2Img.image = UIImage(named: "ic_replace")!
-            }
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.notify(queue: .main) { [weak self] in
+            ProgressHUD.dismiss()
+            print("All data fetched")
         }
     }
     
-    func fetchMatchTabs(completion: @escaping (ResultDataLive?) -> Void) {
-        let url = URL(string: MatchTabAPI)!
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        let parameters = ["spt_typ": 2, "l_id": l_idMain!, "m_id": m_idMain!] as [String : Any]
-        request.httpBody = try? JSONSerialization.data(withJSONObject: parameters)
+    // MARK: - API Methods
+    
+    func fetchMatchDetails(completion: @escaping (Bool) -> Void) {
+        let urlString = "https://flashscore4.p.rapidapi.com/api/flashscore/v2/matches/details?match_id=\(m_idMain ?? "")"
         
-        URLSession.shared.dataTask(with: request) { data, response, error in
+        guard let url = URL(string: urlString) else {
+            completion(false)
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("flashscore4.p.rapidapi.com", forHTTPHeaderField: "X-RapidAPI-Host")
+        request.setValue(APITOKEN, forHTTPHeaderField: "X-RapidAPI-Key")
+        
+        URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
             guard let data = data, error == nil else {
-                print("Network error:", error ?? "Unknown error")
+                completion(false)
                 return
             }
             
             do {
-                let response = try JSONDecoder().decode(MatchTabsResponse.self, from: data)
-                if response.status, let result = response.result {
-                    completion(result)
+                if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
+                    
+                    let home = json["home_team"] as? [String: Any]
+                    let away = json["away_team"] as? [String: Any]
+                    let tournament = json["tournament"] as? [String: Any]
+                    let scores = json["scores"] as? [String: Any]
+                    let status = json["match_status"] as? [String: Any]
+                    let venue = json["venue"] as? [String: Any]
+                    
+                    let details = MatchDetails(
+                        leagueName: tournament?["name"] as? String ?? "",
+                        homeName: home?["name"] as? String ?? self?.Aname ?? "",
+                        homeShortName: home?["short_name"] as? String ?? "",
+                        awayName: away?["name"] as? String ?? self?.Bname ?? "",
+                        awayShortName: away?["short_name"] as? String ?? "",
+                        homeLogo: home?["image_path"] as? String ?? self?.Aimg ?? "",
+                        awayLogo: away?["image_path"] as? String ?? self?.Bimg ?? "",
+                        homeScore: scores?["home"] as? Int ?? 0,
+                        awayScore: scores?["away"] as? Int ?? 0,
+                        status: status?["stage"] as? String ?? "",
+                        liveTime: status?["live_time"] as? String ?? "",
+                        referee: json["referee"] as? String ?? "",
+                        venueName: venue?["name"] as? String ?? "",
+                        venueCity: venue?["city"] as? String ?? "",
+                        attendance: venue?["attendance"] as? String ?? "",
+                        capacity: venue?["capacity"] as? String ?? "",
+                        timestamp: json["timestamp"] as? Int ?? 0
+                    )
+                    
+                    DispatchQueue.main.async {
+                        self?.matchDetails = details
+                        
+                        // Update UI with fetched data
+                        self?.team1Lbl.text = details.homeName
+                        self?.team2Lbl.text = details.awayName
+                        self?.scoreLbl.text = "\(details.homeScore) - \(details.awayScore)"
+                        self?.titleNameLbl.text = details.leagueName
+                        
+                        if !details.liveTime.isEmpty {
+                            self?.completedLbl.text = "\(details.liveTime)'"
+                        } else if details.status == "Finished" {
+                            self?.completedLbl.text = "Completed"
+                        } else {
+                            self?.completedLbl.text = details.status
+                        }
+                        
+                        if let url = URL(string: details.homeLogo), !details.homeLogo.isEmpty {
+                            self?.team1Img.sd_setImage(with: url, placeholderImage: UIImage(named: "splash"))
+                        }
+                        if let url = URL(string: details.awayLogo), !details.awayLogo.isEmpty {
+                            self?.team2Img.sd_setImage(with: url, placeholderImage: UIImage(named: "splash"))
+                        }
+                    }
+                    completion(true)
                 } else {
-                    completion(nil)
+                    completion(false)
                 }
             } catch {
-                print("JSON decoding error:", error)
-                completion(nil)
+                print(error)
+                completion(false)
             }
         }.resume()
     }
+    
+    func fetchMatchStats(completion: @escaping (Bool) -> Void) {
+        let urlString = "https://flashscore4.p.rapidapi.com/api/flashscore/v2/matches/match/stats?match_id=\(m_idMain ?? "")"
+        
+        guard let url = URL(string: urlString) else {
+            completion(false)
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("flashscore4.p.rapidapi.com", forHTTPHeaderField: "X-RapidAPI-Host")
+        request.setValue(APITOKEN, forHTTPHeaderField: "X-RapidAPI-Key")
+        
+        URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+            guard let data = data else {
+                completion(false)
+                return
+            }
+            
+            do {
+                if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+                   let statsArray = json["match"] as? [[String: Any]] {
+                    
+                    var temp: [MatchStatModel] = []
+                    for s in statsArray {
+                        let stat = MatchStatModel(
+                            name: s["name"] as? String ?? "",
+                            home: "\(s["home_team"] ?? "")",
+                            away: "\(s["away_team"] ?? "")"
+                        )
+                        temp.append(stat)
+                    }
+                    
+                    DispatchQueue.main.async {
+                        self?.matchStats = temp
+                    }
+                    completion(true)
+                } else {
+                    completion(false)
+                }
+            } catch {
+                print(error)
+                completion(false)
+            }
+        }.resume()
+    }
+    
+    func fetchMatchSummary(completion: @escaping (Bool) -> Void) {
+        let urlString = "https://flashscore4.p.rapidapi.com/api/flashscore/v2/matches/match/summary?match_id=\(m_idMain ?? "")"
+        
+        guard let url = URL(string: urlString) else {
+            completion(false)
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("flashscore4.p.rapidapi.com", forHTTPHeaderField: "x-rapidapi-host")
+        request.setValue(APITOKEN, forHTTPHeaderField: "x-rapidapi-key")
+        
+        URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+            guard let data = data, error == nil else {
+                completion(false)
+                return
+            }
+            
+            do {
+                let result = try JSONDecoder().decode([MatchSummaryEvent].self, from: data)
+                
+                DispatchQueue.main.async {
+                    self?.eventsUpdates = result
+                }
+                completion(!result.isEmpty)
+            } catch {
+                print("Decode error:", error)
+                completion(false)
+            }
+        }.resume()
+    }
+    
+    func fetchMatchStandings(completion: @escaping (Bool) -> Void) {
+        let urlString = "https://flashscore4.p.rapidapi.com/api/flashscore/v2/matches/standings?type=overall&match_id=\(m_idMain ?? "")"
+        
+        guard let url = URL(string: urlString) else {
+            completion(false)
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("flashscore4.p.rapidapi.com", forHTTPHeaderField: "x-rapidapi-host")
+        request.setValue(APITOKEN, forHTTPHeaderField: "x-rapidapi-key")
+        
+        URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+            guard let data = data, error == nil else {
+                completion(false)
+                return
+            }
+            
+            do {
+                let result = try JSONDecoder().decode([Standing].self, from: data)
+                
+                DispatchQueue.main.async {
+                    self?.standings = result
+                }
+                completion(!result.isEmpty)
+            } catch {
+                print("Decode error:", error)
+                completion(false)
+            }
+        }.resume()
+    }
+    
+    func fetchHead2HeadMatches(completion: @escaping (Bool) -> Void) {
+        let urlString = "https://flashscore4.p.rapidapi.com/api/flashscore/v2/matches/h2h?match_id=\(m_idMain ?? "")"
+        
+        guard let url = URL(string: urlString) else {
+            completion(false)
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("flashscore4.p.rapidapi.com", forHTTPHeaderField: "x-rapidapi-host")
+        request.setValue(APITOKEN, forHTTPHeaderField: "x-rapidapi-key")
+        
+        URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+            guard let data = data, error == nil else {
+                completion(false)
+                return
+            }
+            
+            do {
+                let allMatches = try JSONDecoder().decode([H2HMatch].self, from: data)
+                
+                let filtered = allMatches.filter {
+                    let home = $0.home_team?.name?.lowercased() ?? ""
+                    let away = $0.away_team?.name?.lowercased() ?? ""
+                    
+                    let team1 = self?.Aname?.lowercased() ?? ""
+                    let team2 = self?.Bname?.lowercased() ?? ""
+                    
+                    return (home.contains(team1) && away.contains(team2)) ||
+                           (home.contains(team2) && away.contains(team1))
+                }
+                
+                let sorted = filtered.sorted {
+                    ($0.timestamp ?? 0) > ($1.timestamp ?? 0)
+                }
+                
+                DispatchQueue.main.async {
+                    self?.h2hMatches = sorted
+                }
+                completion(!sorted.isEmpty)
+            } catch {
+                print("Decode error:", error)
+                completion(false)
+            }
+        }.resume()
+    }
+    
+    // MARK: - Keep your existing methods (showAd, showSkeleton, hideSkeleton, etc.)
     
     func showAd() {
         self.showSkeleton()
@@ -194,17 +436,12 @@ class ScoreDetailsVC: UIViewController, UIGestureRecognizerDelegate {
         } else {
             self.hideSkeleton()
             self.nativeAdView.isHidden = true
-            
         }
-        
     }
     
     func showSkeleton() {
         if let adView = Bundle.main.loadNibNamed("SkeletonCustomView3", owner: self, options: nil)?.first as? SkeletonCustomView3 {
-            // Add the custom UIView to the adContainerView
             self.nativeAdView.addSubview(adView)
-            
-            // Set constraints to make sure the adView fills the adContainerView
             adView.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
                 adView.topAnchor.constraint(equalTo: self.nativeAdView.topAnchor),
@@ -217,7 +454,6 @@ class ScoreDetailsVC: UIViewController, UIGestureRecognizerDelegate {
             adView.view3.showAnimatedGradientSkeleton()
             adView.view4.showAnimatedGradientSkeleton()
             adView.view5.showAnimatedGradientSkeleton()
-
         }
     }
     
@@ -232,10 +468,9 @@ class ScoreDetailsVC: UIViewController, UIGestureRecognizerDelegate {
     @IBAction func clickOnBack(_ sender: Any) {
         self.navigationController?.popViewController(animated: true)
     }
-    
-
 }
 
+// MARK: - UICollectionView Delegate & DataSource
 extension ScoreDetailsVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.titleArr.count
@@ -245,7 +480,6 @@ extension ScoreDetailsVC: UICollectionViewDelegate, UICollectionViewDataSource, 
         let cell = self.clcView.dequeueReusableCell(withReuseIdentifier: "ScoreTitleCell", for: indexPath) as! ScoreTitleCell
         cell.titleLbl.text = self.titleArr[indexPath.row]
         cell.config(isSelected: indexPath.row == self.selectedIndex)
-        
         return cell
     }
     
@@ -265,12 +499,8 @@ extension ScoreDetailsVC: UICollectionViewDelegate, UICollectionViewDataSource, 
             pagerVc?.moveToPage(index: 2, animated: true)
         } else if self.titleArr[indexPath.row] == "Stats" {
             pagerVc?.moveToPage(index: 3, animated: true)
-        } else if self.titleArr[indexPath.row] == "Squad" {
-            if isComeFromUpcoming == true {
-                pagerVc?.moveToPage(index: 0, animated: true)
-            } else {
-                pagerVc?.moveToPage(index: 4, animated: true)
-            }
+        } else if self.titleArr[indexPath.row] == "Head2Head" {
+            pagerVc?.moveToPage(index: 4, animated: true)
         } else if self.titleArr[indexPath.row] == "Info" {
             if isComeFromUpcoming == true {
                 pagerVc?.moveToPage(index: 1, animated: true)
@@ -284,53 +514,35 @@ extension ScoreDetailsVC: UICollectionViewDelegate, UICollectionViewDataSource, 
                 pagerVc?.moveToPage(index: 6, animated: true)
             }
         }
-        
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        //return CGSize(width: (self.clcView.bounds.width), height: 20)
-        
         let lblWidth = textSize(font: UIFont.systemFont(ofSize: 16, weight: .regular), text: self.titleArr[indexPath.row])
         return CGSize(width: lblWidth+10, height: 40)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        //return UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        
         let cellCount = CGFloat(self.titleArr.count)
 
-        //If the cell count is zero, there is no point in calculating anything.
         if cellCount > 0 {
             let flowLayout = collectionViewLayout as! UICollectionViewFlowLayout
             let cellWidth = flowLayout.itemSize.width + flowLayout.minimumInteritemSpacing
-
-            //20.00 was just extra spacing I wanted to add to my cell.
             let totalCellWidth = cellWidth*cellCount + 20.00 * (cellCount-1)
             let contentWidth = collectionView.frame.size.width - collectionView.contentInset.left - collectionView.contentInset.right
 
             if (totalCellWidth < contentWidth) {
-                //If the number of cells that exists take up less room than the
-                //collection view width... then there is an actual point to centering them.
-
-                //Calculate the right amount of padding to center the cells.
                 let padding = (contentWidth - totalCellWidth) / 2.0
                 return UIEdgeInsets(top: 0, left: padding, bottom: 0, right: padding)
             } else {
-                //Pretty much if the number of cells that exist take up
-                //more room than the actual collectionView width, there is no
-                // point in trying to center them. So we leave the default behavior.
                 if isComeFromUpcoming == true {
                     return UIEdgeInsets(top: 0, left: 90, bottom: 0, right: 90)
                 } else {
                     return UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
                 }
             }
-            
         }
         return UIEdgeInsets.zero
     }
-    
 }
 
 extension ScoreDetailsVC: MICollectionViewBubbleLayoutDelegate {
@@ -342,17 +554,15 @@ extension ScoreDetailsVC: MICollectionViewBubbleLayoutDelegate {
         size.width = CGFloat(ceilf(totalWidth))
         size.height = 20
 
-        //...Checking if item width is greater than collection view width then set item width == collection view width.
         if size.width > collectionView.frame.size.width {
             size.width = collectionView.frame.size.width
         }
-        return CGSize(width: 0, height: 0) //size
+        return CGSize(width: 0, height: 0)
     }
-    
 }
 
+// MARK: - ScoreDelegate
 extension ScoreDetailsVC: ScoreDelegate {
-    
     func didPickItem(currentItem: Int) {
         if currentItem == 0 {
             pagerVc?.moveToPage(index: 0, animated: true)
