@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SVProgressHUD
 
 class SeriesListVC: UIViewController {
 
@@ -14,13 +15,78 @@ class SeriesListVC: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     
     var googleNativeAds = GoogleNativeAds()
+    var countries: [SeriesCountry] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
         logAnalyticAction(title: "", status: AnalyticEvent.Series)
+        setupCollectionView()
+        fetchSeriesCountries()
         self.showAd()
+    }
+    
+    func setupCollectionView() {
+        collectionView.register(UINib(nibName: "SeriesCountryListCell", bundle: nil), forCellWithReuseIdentifier: "SeriesCountryListCell")
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        
+        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.scrollDirection = .vertical
+            layout.minimumLineSpacing = 0
+            layout.minimumInteritemSpacing = 0
+        }
+    }
+    
+    // MARK: - API Call for Series Countries
+    func fetchSeriesCountries() {
+        SVProgressHUD.show()
+        
+        guard let url = URL(string: "https://flashscore4.p.rapidapi.com/api/flashscore/v2/general/countries?sport_id=1") else {
+            SVProgressHUD.dismiss()
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue(APITOKEN, forHTTPHeaderField: "X-RapidAPI-Key")
+        request.addValue("flashscore4.p.rapidapi.com", forHTTPHeaderField: "X-RapidAPI-Host")
+        
+        URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+            guard let data = data else {
+                DispatchQueue.main.async {
+                    SVProgressHUD.dismiss()
+                }
+                return
+            }
+            self?.parseCountryJSON(data: data)
+        }.resume()
+    }
+    
+    func parseCountryJSON(data: Data) {
+        do {
+            if let json = try JSONSerialization.jsonObject(with: data) as? [[String: Any]] {
+                self.countries.removeAll()
+                
+                for item in json {
+                    let name = item["name"] as? String ?? ""
+                    let id = item["country_id"] as? Int ?? 0
+                    let countryUrl = item["country_url"] as? String ?? ""
+                    
+                    let country = SeriesCountry(name: name, countryId: id, country_url: countryUrl)
+                    self.countries.append(country)
+                }
+                
+                DispatchQueue.main.async {
+                    SVProgressHUD.dismiss()
+                    self.collectionView.reloadData()
+                }
+            }
+        } catch {
+            DispatchQueue.main.async {
+                SVProgressHUD.dismiss()
+            }
+            print("Country JSON Error:", error)
+        }
     }
     
     func showAd() {
@@ -42,16 +108,13 @@ class SeriesListVC: UIViewController {
         } else {
             self.hideSkeleton()
             self.nativeAdView.isHidden = true
-            
         }
-        
     }
+    
     func showSkeleton() {
         if let adView = Bundle.main.loadNibNamed("SkeletonCustomView3", owner: self, options: nil)?.first as? SkeletonCustomView3 {
-            // Add the custom UIView to the adContainerView
             self.nativeAdView.addSubview(adView)
             
-            // Set constraints to make sure the adView fills the adContainerView
             adView.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
                 adView.topAnchor.constraint(equalTo: self.nativeAdView.topAnchor),
@@ -64,7 +127,6 @@ class SeriesListVC: UIViewController {
             adView.view3.showAnimatedGradientSkeleton()
             adView.view4.showAnimatedGradientSkeleton()
             adView.view5.showAnimatedGradientSkeleton()
-
         }
     }
     
@@ -76,6 +138,54 @@ class SeriesListVC: UIViewController {
         }
     }
 }
+
+// MARK: - CollectionView Delegate & DataSource
+extension SeriesListVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return countries.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SeriesCountryListCell", for: indexPath) as! SeriesCountryListCell
+        
+        let country = countries[indexPath.row]
+        cell.countryNameLabel.text = country.name
+        
+        // Set country flag
+        if let url = URL(string: country.country_url), !country.country_url.isEmpty {
+            cell.countryFlagImageView.sd_setImage(with: url, placeholderImage: UIImage(named: "series_default"))
+        } else {
+            cell.countryFlagImageView.image = UIImage(named: "series_default")
+        }
+        
+        // Apply border color
+        cell.mainView.layer.borderColor = UIColor(named: "#C1D5EA")?.cgColor
+        cell.mainView.layer.borderWidth = 1
+        cell.mainView.layer.cornerRadius = 8
+        
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let selectedCountry = countries[indexPath.row]
+        let vc = storyboard?.instantiateViewController(withIdentifier: "TournamentsListVC") as! TournamentsListVC
+        vc.currentCountryId = selectedCountry.countryId
+        vc.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = collectionView.frame.width - 30 // 15 left + 15 right
+        let height: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 70 : 56
+        return CGSize(width: width, height: height)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
+    }
+}
+
 // MARK: - Button Actions
 extension SeriesListVC {
     @IBAction func clickOnBack(_ sender: Any) {

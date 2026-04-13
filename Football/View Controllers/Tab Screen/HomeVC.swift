@@ -203,7 +203,7 @@ class HomeVC: UIViewController {
     @IBAction func clickOnSeries(_ sender: Any) {
         showInterAd()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            let vc = StoryBoard.instantiateViewController(withIdentifier: "SeriesVC") as! SeriesVC
+            let vc = StoryBoard.instantiateViewController(withIdentifier: "SeriesListVC") as! SeriesListVC
             self.navigationController?.pushViewController(vc, animated: true)
         }
     }
