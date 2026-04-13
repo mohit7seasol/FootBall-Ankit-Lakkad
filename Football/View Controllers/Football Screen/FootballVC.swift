@@ -487,6 +487,8 @@ extension FootballVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MatchListCell", for: indexPath) as! MatchListCell
             let match = matchesFiltered[indexPath.item]
             
+            cell.dateView.layer.borderColor = #colorLiteral(red: 0.5137838125, green: 0.6742060781, blue: 0.8591089845, alpha: 1)
+            
             // Configure cell based on current filter and date
             if calendar.isDateInToday(selectedDate) {
                 switch currentFilter {

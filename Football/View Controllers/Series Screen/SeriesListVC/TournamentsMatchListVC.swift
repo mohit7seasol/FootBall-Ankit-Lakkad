@@ -280,7 +280,7 @@ extension TournamentsMatchListVC: UICollectionViewDelegate, UICollectionViewData
         }
         
         // Configure date view with border and corner radius
-        cell.dateView.layer.borderColor = UIColor(named: "#83ACDB")?.cgColor
+        cell.dateView.layer.borderColor = #colorLiteral(red: 0.5137838125, green: 0.6742060781, blue: 0.8591089845, alpha: 1)
         cell.dateView.layer.borderWidth = 1
         cell.dateView.layer.cornerRadius = cell.dateView.frame.height / 2
         

@@ -32,7 +32,7 @@ class SeriesListVC: UIViewController {
         
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.scrollDirection = .vertical
-            layout.minimumLineSpacing = 0
+            layout.minimumLineSpacing = 10
             layout.minimumInteritemSpacing = 0
         }
     }
@@ -151,19 +151,6 @@ extension SeriesListVC: UICollectionViewDelegate, UICollectionViewDataSource, UI
         
         let country = countries[indexPath.row]
         cell.countryNameLabel.text = country.name
-        
-        // Set country flag
-        if let url = URL(string: country.country_url), !country.country_url.isEmpty {
-            cell.countryFlagImageView.sd_setImage(with: url, placeholderImage: UIImage(named: "series_default"))
-        } else {
-            cell.countryFlagImageView.image = UIImage(named: "series_default")
-        }
-        
-        // Apply border color
-        cell.mainView.layer.borderColor = UIColor(named: "#C1D5EA")?.cgColor
-        cell.mainView.layer.borderWidth = 1
-        cell.mainView.layer.cornerRadius = 8
-        
         return cell
     }
     

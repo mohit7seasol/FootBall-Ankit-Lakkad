@@ -38,7 +38,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="backgroundColor" red="0.89488929510000004" green="0.93180084230000004" blue="0.99372750519999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="wC7-u0-cAq" secondAttribute="bottom" constant="4" id="2Xg-yM-D2Q"/>
                                     <constraint firstItem="EcD-Yb-lQn" firstAttribute="leading" secondItem="hQf-5u-EM4" secondAttribute="leading" constant="5" id="LpK-hm-54z"/>
@@ -132,6 +132,7 @@
             <connections>
                 <outlet property="dateLabel" destination="wC7-u0-cAq" id="OIL-as-72c"/>
                 <outlet property="dateView" destination="hQf-5u-EM4" id="CH9-S3-arq"/>
+                <outlet property="mainView" destination="hQf-5u-EM4" id="Ag3-U6-eGg"/>
                 <outlet property="scoreLabel" destination="gVg-kc-qmJ" id="9Av-hf-X0w"/>
                 <outlet property="teamANameLabel" destination="V8R-Be-4J1" id="D7n-KK-fp1"/>
                 <outlet property="teamAflagImageView" destination="7EG-dM-NdN" id="BLf-aL-Ozv"/>

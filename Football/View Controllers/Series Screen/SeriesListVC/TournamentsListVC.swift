@@ -178,15 +178,20 @@ extension TournamentsListVC: UICollectionViewDelegate, UICollectionViewDataSourc
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
         let isPad = UIDevice.current.userInterfaceIdiom == .pad
         
-        if isPad {
-            let width = (collectionView.frame.width - 36) / 2 // 2 cells per row with spacing
-            return CGSize(width: width, height: 140)
-        } else {
-            let width = (collectionView.frame.width - 36) / 2 // 2 cells per row
-            return CGSize(width: width, height: 120)
-        }
+        let spacing: CGFloat = 12
+        let inset = collectionView.contentInset.left + collectionView.contentInset.right
+        
+        let itemsPerRow: CGFloat = isPad ? 4 : 2
+        
+        let totalSpacing = (itemsPerRow - 1) * spacing
+        let availableWidth = collectionView.bounds.width - inset - totalSpacing
+        
+        let width = floor(availableWidth / itemsPerRow)
+        
+        return CGSize(width: width, height: isPad ? 140 : 120)
     }
 }
 
