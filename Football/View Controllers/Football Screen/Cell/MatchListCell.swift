@@ -51,15 +51,13 @@ class MatchListCell: UICollectionViewCell {
     private func setupUI() {
         mainView.layer.cornerRadius = 16
         mainView.layer.borderWidth = 1
-        mainView.layer.borderColor = #colorLiteral(red: 0.09019607843, green: 0.2431372549, blue: 0.4588235294, alpha: 1)
-        mainView.backgroundColor = .white
+        mainView.layer.borderColor = #colorLiteral(red: 0.7568627451, green: 0.8352941176, blue: 0.9176470588, alpha: 1)
         
         // Remove any existing constraints that might cause conflicts
         teamAFlagImageView.translatesAutoresizingMaskIntoConstraints = false
         teamBFlagImageView.translatesAutoresizingMaskIntoConstraints = false
         
         vsImageView.tintColor = UIColor(white: 0.7, alpha: 1.0)
-        vsImageView.image = UIImage(systemName: "vs")
         
         statusLabel.clipsToBounds = true
         statusLabel.textAlignment = .center
@@ -109,7 +107,7 @@ class MatchListCell: UICollectionViewCell {
         dateViewWidthConstant.constant = dateWidth
         
         // Configure status for LIVE
-        statusLabel.text = "  ● LIVE  "
+        statusLabel.text = " ● LIVE   "
         statusLabel.textColor = UIColor(red: 1.0, green: 0.09, blue: 0.106, alpha: 1.0) // #FF171B
         statusLabel.backgroundColor = UIColor(red: 1.0, green: 0.09, blue: 0.106, alpha: 0.1)
         statusLabel.layer.borderWidth = 1
@@ -146,7 +144,7 @@ class MatchListCell: UICollectionViewCell {
         dateViewWidthConstant.constant = dateWidth
         
         // Configure status for UPCOMING
-        statusLabel.text = "  ● UPCOMING  "
+        statusLabel.text = " ● UPCOMING   "
         statusLabel.textColor = UIColor(red: 0.969, green: 0.498, blue: 0.0, alpha: 1.0) // #F77F00
         statusLabel.backgroundColor = UIColor(red: 0.969, green: 0.498, blue: 0.0, alpha: 0.1)
         statusLabel.layer.borderWidth = 1
@@ -182,7 +180,7 @@ class MatchListCell: UICollectionViewCell {
         dateViewWidthConstant.constant = dateWidth
         
         // Configure status for COMPLETED
-        statusLabel.text = "  ● COMPLETED  "
+        statusLabel.text = " ● COMPLETED   "
         statusLabel.textColor = UIColor(red: 0.224, green: 0.69, blue: 0.027, alpha: 1.0) // #39B007
         statusLabel.backgroundColor = UIColor(red: 0.224, green: 0.69, blue: 0.027, alpha: 0.1)
         statusLabel.layer.borderWidth = 1
