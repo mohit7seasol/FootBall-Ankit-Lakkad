@@ -165,6 +165,10 @@ extension TournamentsListVC: UICollectionViewDelegate, UICollectionViewDataSourc
         let gradientIndex = indexPath.row % gradientColorSets.count
         cell.applyGradient(colors: gradientColorSets[gradientIndex])
         
+        // Apply random gradient color without repeating sequence
+//        let randomIndex = Int.random(in: 0..<gradientColorSets.count)
+//        cell.applyGradient(colors: gradientColorSets[randomIndex])
+        
         return cell
     }
     

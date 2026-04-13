@@ -29,7 +29,7 @@ class TournamentsMatchListCell: UICollectionViewCell {
         // Configure cell appearance
         contentView.layer.cornerRadius = 16
         contentView.layer.masksToBounds = true
-        contentView.layer.borderColor = #colorLiteral(red: 0.09019607843, green: 0.2431372549, blue: 0.4588235294, alpha: 1)
+        contentView.layer.borderColor = #colorLiteral(red: 0.937254902, green: 0.9490196078, blue: 0.9607843137, alpha: 1)
         contentView.layer.borderWidth = 1
     }
     

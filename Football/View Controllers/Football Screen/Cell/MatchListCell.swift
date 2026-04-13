@@ -174,7 +174,6 @@ class MatchListCell: UICollectionViewCell {
         // Configure date view for completed
         dateView.layer.borderWidth = 1
         dateView.layer.borderColor = UIColor(red: 0.514, green: 0.675, blue: 0.859, alpha: 1.0).cgColor // #83ACDB
-        dateView.backgroundColor = .clear
         
         dateLabel.text = match.formattedTime
         dateLabel.sizeToFit()

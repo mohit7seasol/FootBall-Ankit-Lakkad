@@ -109,7 +109,7 @@
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" red="0.88627450980392153" green="0.92549019607843142" blue="0.96470588235294119" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="bu5-pv-fD0" secondAttribute="trailing" id="130-wI-g5N"/>
                             <constraint firstItem="hQf-5u-EM4" firstAttribute="top" secondItem="mPF-qe-ahU" secondAttribute="top" constant="15" id="AoS-pj-Hss"/>

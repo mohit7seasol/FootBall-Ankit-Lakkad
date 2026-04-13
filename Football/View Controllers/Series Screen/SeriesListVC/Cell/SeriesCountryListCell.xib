@@ -5,7 +5,6 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24743"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -35,7 +34,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" red="0.93725490196078431" green="0.94901960784313721" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="c35-E6-75U" firstAttribute="top" secondItem="b01-e5-soi" secondAttribute="top" constant="5" id="9dy-HU-mQS"/>
                             <constraint firstAttribute="trailing" secondItem="c35-E6-75U" secondAttribute="trailing" constant="12" id="Ai8-1h-ipY"/>
@@ -65,8 +64,5 @@
     </objects>
     <resources>
         <image name="country_ic" width="90" height="90"/>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
     </resources>
 </document>
