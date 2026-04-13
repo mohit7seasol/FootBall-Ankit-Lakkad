@@ -105,22 +105,35 @@ class HomeVC: UIViewController {
     }
     
     func showRateScreen() {
+        // Check if already shown or rated
+        if hasUserRespondedToRatePopup() {
+            return
+        }
+        
         let alert = UIAlertController.init(title: "Do you like our App?".localized(), message: "Help us improve the app by answering this quick poll".localized(), preferredStyle: .alert)
-        alert.addAction(UIAlertAction.init(title: "No ❌".localized(), style: .default, handler: nil))
-        alert.addAction(UIAlertAction.init(title: "Yes 👍".localized(), style: .default, handler: { ACTION in
+        
+        alert.addAction(UIAlertAction.init(title: "No ❌".localized(), style: .default, handler: { _ in
+            self.markRatePopupAsShown()
+        }))
+        
+        alert.addAction(UIAlertAction.init(title: "Yes 👍".localized(), style: .default, handler: { _ in
+            self.markRatePopupAsShown()
             self.rateApp()
         }))
+        
         self.present(alert, animated: true, completion: nil)
     }
-    
+
     func rateApp() {
         if #available(iOS 10.3, *) {
             SKStoreReviewController.requestReview()
+            // Mark that user has been prompted to rate
+            setRateDone(status: true)
         } else {
             if let appStoreURL = URL(string: AppStoreLink) {
                 UIApplication.shared.open(appStoreURL, options: [:], completionHandler: { success in
                     if success {
-                        setRateDone(status: true)
+                        self.setRateDone(status: true)
                     }
                 })
             } else {
@@ -128,6 +141,30 @@ class HomeVC: UIViewController {
                 UIApplication.shared.openURL(appStoreURL!)
             }
         }
+    }
+
+    // MARK: - UserDefaults Helper Methods
+
+    func hasUserRespondedToRatePopup() -> Bool {
+        return UserDefaults.standard.bool(forKey: "RatePopupResponded")
+    }
+
+    func markRatePopupAsShown() {
+        UserDefaults.standard.set(true, forKey: "RatePopupResponded")
+        UserDefaults.standard.synchronize()
+    }
+
+    func setRateDone(status: Bool) {
+        UserDefaults.standard.set(status, forKey: "RateDone")
+        UserDefaults.standard.synchronize()
+    }
+
+    func shouldShowRatePopup() -> Bool {
+        // Check if user has already rated or responded to popup
+        let hasRated = UserDefaults.standard.bool(forKey: "RateDone")
+        let hasResponded = UserDefaults.standard.bool(forKey: "RatePopupResponded")
+        
+        return !hasRated && !hasResponded
     }
     
     func showAd() {

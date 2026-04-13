@@ -6,6 +6,7 @@
 //  skype : bhavin.bhadani
 //
 import UIKit
+import ImageIO
 
 open class Common {
 
@@ -363,6 +364,43 @@ extension UIImage {
   var jpegRepresentationData: Data? {
     return self.jpegData(compressionQuality: 0.8)
   }
+    static func gif(data: Data) -> UIImage? {
+        let source = CGImageSourceCreateWithData(data as CFData, nil)
+        return UIImage.animatedImageWithSource(source!)
+    }
+    
+    private static func animatedImageWithSource(_ source: CGImageSource) -> UIImage? {
+        let count = CGImageSourceGetCount(source)
+        
+        var images = [UIImage]()
+        var duration: Double = 0
+        
+        for i in 0..<count {
+            if let cgImage = CGImageSourceCreateImageAtIndex(source, i, nil) {
+                let frameDuration = UIImage.frameDuration(from: source, at: i)
+                duration += frameDuration
+                images.append(UIImage(cgImage: cgImage))
+            }
+        }
+        
+        return UIImage.animatedImage(with: images, duration: duration)
+    }
+    
+    private static func frameDuration(from source: CGImageSource, at index: Int) -> Double {
+        var frameDuration = 0.1
+        
+        let cfProperties = CGImageSourceCopyPropertiesAtIndex(source, index, nil)
+        let gifProperties = (cfProperties as NSDictionary?)?[kCGImagePropertyGIFDictionary] as? NSDictionary
+        
+        let delayTime = gifProperties?[kCGImagePropertyGIFUnclampedDelayTime] as? Double
+        frameDuration = delayTime ?? 0.1
+        
+        if frameDuration < 0.011 {
+            frameDuration = 0.1
+        }
+        
+        return frameDuration
+    }
 }
 
 class CustomUITextField: UITextField {

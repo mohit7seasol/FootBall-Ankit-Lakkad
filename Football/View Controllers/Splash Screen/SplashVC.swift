@@ -31,16 +31,13 @@ class SplashVC: UIViewController {
     }
     
     func designSetUP() {
-        let jsonName = "Football.json"
-        let animationVal = LottieAnimation.named(jsonName)
-        let animationView = LottieAnimationView(animation: animationVal)
-        animationView.frame = self.animationImgView.bounds
-        self.animationImgView.contentMode = .center
-        self.animationImgView.addSubview(animationView)
-        
-        // Play the animation
-        animationView.play()
-        animationView.loopMode = .loop
+        if let gifURL = Bundle.main.url(forResource: "Football", withExtension: "gif"),
+           let gifData = try? Data(contentsOf: gifURL) {
+            
+            let image = UIImage.gif(data: gifData)
+            animationImgView.image = image
+            animationImgView.contentMode = .scaleAspectFit
+        }
     }
     
     func naviToGetStart() {

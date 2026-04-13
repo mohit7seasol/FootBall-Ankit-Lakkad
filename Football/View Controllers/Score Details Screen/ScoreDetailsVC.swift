@@ -347,10 +347,10 @@ class ScoreDetailsVC: UIViewController, UIGestureRecognizerDelegate {
                         }
                         
                         if let url = URL(string: details.homeLogo), !details.homeLogo.isEmpty {
-                            self?.team1Img.sd_setImage(with: url, placeholderImage: UIImage(named: "splash"))
+                            self?.team1Img.sd_setImage(with: url, placeholderImage: UIImage(named: "placeholder_flag"))
                         }
                         if let url = URL(string: details.awayLogo), !details.awayLogo.isEmpty {
-                            self?.team2Img.sd_setImage(with: url, placeholderImage: UIImage(named: "splash"))
+                            self?.team2Img.sd_setImage(with: url, placeholderImage: UIImage(named: "placeholder_flag"))
                         }
                     }
                     completion(true)
