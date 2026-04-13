@@ -115,21 +115,21 @@ extension StatsVC: UITableViewDelegate, UITableViewDataSource {
         let cell = self.tblView.dequeueReusableCell(withIdentifier: "StatCell", for: indexPath) as! StatCell
         
         let temp = self.stats[indexPath.row]
-//        cell.actionLbl?.text = temp.name
-//        cell.team1Lbl.text = temp.home
-//        cell.team2Lbl.text = temp.away
+        cell.actionLbl?.text = temp.name
+        cell.team1Lbl.text = temp.home
+        cell.team2Lbl.text = temp.away
         
-//        let homeValue = Float(temp.home) ?? 0
-//        let awayValue = Float(temp.away) ?? 0
-//        let total = homeValue + awayValue
+        let homeValue = Float(temp.home) ?? 0
+        let awayValue = Float(temp.away) ?? 0
+        let total = homeValue + awayValue
         
-//        if total > 0 {
-//            cell.team1Progress.progress = homeValue / total
-//            cell.team2Progress.progress = awayValue / total
-//        } else {
-//            cell.team1Progress.progress = 0.5
-//            cell.team2Progress.progress = 0.5
-//        }
+        if total > 0 {
+            cell.team1Progress.progress = homeValue / total
+            cell.team2Progress.progress = awayValue / total
+        } else {
+            cell.team1Progress.progress = 0.5
+            cell.team2Progress.progress = 0.5
+        }
         
         if indexPath.row == self.stats.count - 1 {
             cell.mainView.layer.cornerRadius = 8

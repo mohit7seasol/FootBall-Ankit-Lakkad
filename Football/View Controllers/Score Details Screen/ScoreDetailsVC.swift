@@ -62,6 +62,7 @@ class ScoreDetailsVC: UIViewController, UIGestureRecognizerDelegate {
     var eventsUpdates: [MatchSummaryEvent] = []
     var standings: [Standing] = []
     var h2hMatches: [H2HMatch] = []
+    var lineupData: [[String: Any]] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -97,6 +98,7 @@ class ScoreDetailsVC: UIViewController, UIGestureRecognizerDelegate {
             pagerVc?.eventsUpdates = self.eventsUpdates
             pagerVc?.standings = self.standings
             pagerVc?.h2hMatches = self.h2hMatches
+            pagerVc?.lineupData = self.lineupData 
             pagerVc?.tabDelegate = self
         }
     }
@@ -161,7 +163,50 @@ class ScoreDetailsVC: UIViewController, UIGestureRecognizerDelegate {
             self?.updateTitleArrBasedOnAvailableData()
         }
     }
-    
+    func fetchLineupData(completion: @escaping (Bool) -> Void) {
+        let urlString = "https://flashscore4.p.rapidapi.com/api/flashscore/v2/matches/match/lineups?match_id=\(m_idMain ?? "")"
+        
+        guard let url = URL(string: urlString) else {
+            completion(false)
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("flashscore4.p.rapidapi.com", forHTTPHeaderField: "x-rapidapi-host")
+        request.setValue(APITOKEN, forHTTPHeaderField: "x-rapidapi-key")
+        
+        URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+            guard let data = data, error == nil else {
+                print("Lineup API Error:", error?.localizedDescription ?? "")
+                completion(false)
+                return
+            }
+            
+            do {
+                if let result = try JSONSerialization.jsonObject(with: data) as? [[String: Any]] {
+                    // Store the actual lineup data
+                    self?.lineupData = result
+                    
+                    // Check if we have valid lineup data
+                    let hasValidData = result.count >= 2 &&
+                        (((result[0]["startingLineups"] as? [[String: Any]]) != nil ||
+                          (result[0]["predictedLineups"] as? [[String: Any]]) != nil) &&
+                         ((result[1]["startingLineups"] as? [[String: Any]]) != nil ||
+                          (result[1]["predictedLineups"] as? [[String: Any]]) != nil))
+                    
+                    completion(hasValidData)
+                } else {
+                    self?.lineupData = []
+                    completion(false)
+                }
+            } catch {
+                print("Lineup JSON Error:", error)
+                self?.lineupData = []
+                completion(false)
+            }
+        }.resume()
+    }
     // MARK: - Update Title Array Based on Available Data
     func updateTitleArrBasedOnAvailableData() {
         titleArr.removeAll()
@@ -172,9 +217,16 @@ class ScoreDetailsVC: UIViewController, UIGestureRecognizerDelegate {
             titleArr.append("Overview")
         }
         
-        // Lineups - check if lineup data is available
-        // You may need to add a flag for lineups availability
-        titleArr.append("Lineups")
+        // Lineups - check if we have valid lineup data
+        let hasValidLineupData = lineupData.count >= 2 &&
+            (((lineupData[0]["startingLineups"] as? [[String: Any]]) != nil ||
+              (lineupData[0]["predictedLineups"] as? [[String: Any]]) != nil) &&
+             ((lineupData[1]["startingLineups"] as? [[String: Any]]) != nil ||
+              (lineupData[1]["predictedLineups"] as? [[String: Any]]) != nil))
+        
+        if hasValidLineupData {
+            titleArr.append("Lineups")
+        }
         
         if !matchStats.isEmpty {
             titleArr.append("Stats")
