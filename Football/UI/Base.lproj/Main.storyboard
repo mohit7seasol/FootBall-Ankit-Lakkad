@@ -959,6 +959,9 @@
                                                     </view>
                                                 </subviews>
                                                 <color key="backgroundColor" systemColor="systemGray4Color"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="154" id="UPy-zW-GHT"/>
+                                                </constraints>
                                             </stackView>
                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="e4W-dv-DuU">
                                                 <rect key="frame" x="0.0" y="154" width="393" height="499"/>
@@ -1044,6 +1047,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="olX-3f-Qzy"/>
                     <connections>
+                        <outlet property="addViewHeightConstant" destination="74f-J3-mwF" id="bJ8-rH-dpq"/>
                         <outlet property="buttonStackHeightConstant" destination="ESL-xY-0Lt" id="JHX-8q-4rw"/>
                         <outlet property="buttonStackView" destination="6Cx-as-dCy" id="Wgu-O5-b9C"/>
                         <outlet property="completedLbl" destination="FE0-gB-42c" id="jdi-SZ-0Ky"/>
@@ -1059,6 +1063,7 @@
                         <outlet property="noDataLabel" destination="hKG-z1-nJ7" id="cnI-kH-kZU"/>
                         <outlet property="noDataView" destination="rtH-Tt-lXB" id="Zw9-1H-NLb"/>
                         <outlet property="scrollView" destination="rAQ-tZ-GNr" id="xP3-Gu-jEy"/>
+                        <outlet property="stackHeightViewConstant" destination="UPy-zW-GHT" id="fbg-Zf-qxu"/>
                         <outlet property="toDayButton" destination="wXU-dk-sgX" id="npF-iS-thE"/>
                         <outlet property="upcomingLbl" destination="IDI-zv-H4r" id="Loc-uj-Yon"/>
                         <outlet property="upcomingView" destination="zSd-8w-HCv" id="nwG-Td-8jn"/>
@@ -2845,7 +2850,7 @@
                                                             </userDefinedRuntimeAttribute>
                                                         </userDefinedRuntimeAttributes>
                                                     </view>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Cqu-IP-F65" userLabel="2">
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="VYK-oU-07d">
                                                         <rect key="frame" x="5" y="368" width="383" height="150"/>
                                                         <subviews>
                                                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NKD-qV-QrV" customClass="View" customModule="Football" customModuleProvider="target">
@@ -2858,8 +2863,11 @@
                                                                 </constraints>
                                                             </view>
                                                         </subviews>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="150" id="Mhx-Ao-bFC"/>
+                                                        </constraints>
                                                     </stackView>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="y98-Sc-S1C">
+                                                    <stackView clipsSubviews="YES" contentMode="scaleToFill" axis="vertical" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="y98-Sc-S1C">
                                                         <rect key="frame" x="16" y="524" width="361" height="505"/>
                                                         <subviews>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rqp-fJ-Qew" userLabel="3" customClass="View" customModule="Football" customModuleProvider="target">
@@ -3144,15 +3152,15 @@
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstItem="qGC-a6-xcT" firstAttribute="leading" secondItem="8wA-6O-eyE" secondAttribute="leading" constant="16" id="0ZZ-BJ-5t7"/>
+                                                    <constraint firstAttribute="trailing" secondItem="VYK-oU-07d" secondAttribute="trailing" constant="5" id="0dP-Dd-edz"/>
                                                     <constraint firstAttribute="trailing" secondItem="y98-Sc-S1C" secondAttribute="trailing" constant="16" id="2RS-PZ-Mwa"/>
                                                     <constraint firstAttribute="bottom" secondItem="y98-Sc-S1C" secondAttribute="bottom" constant="12" id="72M-c2-0vm"/>
+                                                    <constraint firstItem="VYK-oU-07d" firstAttribute="top" secondItem="qGC-a6-xcT" secondAttribute="bottom" constant="12" id="8ex-fY-FW9"/>
                                                     <constraint firstItem="y98-Sc-S1C" firstAttribute="leading" secondItem="8wA-6O-eyE" secondAttribute="leading" constant="16" id="FME-JB-ASy"/>
-                                                    <constraint firstAttribute="trailing" secondItem="Cqu-IP-F65" secondAttribute="trailing" constant="5" id="KC0-vX-gAY"/>
-                                                    <constraint firstItem="Cqu-IP-F65" firstAttribute="leading" secondItem="8wA-6O-eyE" secondAttribute="leading" constant="5" id="bBU-hh-rDy"/>
+                                                    <constraint firstItem="VYK-oU-07d" firstAttribute="leading" secondItem="8wA-6O-eyE" secondAttribute="leading" constant="5" id="P4H-Nr-JTR"/>
                                                     <constraint firstItem="qGC-a6-xcT" firstAttribute="top" secondItem="8wA-6O-eyE" secondAttribute="top" constant="6" id="pCE-hS-Vts"/>
                                                     <constraint firstAttribute="trailing" secondItem="qGC-a6-xcT" secondAttribute="trailing" constant="16" id="rnr-Wy-4zS"/>
-                                                    <constraint firstItem="Cqu-IP-F65" firstAttribute="top" secondItem="qGC-a6-xcT" secondAttribute="bottom" constant="12" id="uyU-LC-ttt"/>
-                                                    <constraint firstItem="y98-Sc-S1C" firstAttribute="top" secondItem="Cqu-IP-F65" secondAttribute="bottom" constant="6" id="ztp-7f-8ge"/>
+                                                    <constraint firstItem="y98-Sc-S1C" firstAttribute="top" secondItem="VYK-oU-07d" secondAttribute="bottom" constant="6" id="v48-l3-NMr"/>
                                                 </constraints>
                                             </view>
                                         </subviews>
@@ -3189,11 +3197,12 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="adsViewHeightConstant" destination="d9W-7y-5iX" id="b1r-K3-hiS"/>
                         <outlet property="footballDEscLbl" destination="Ihu-FL-Vba" id="Q5r-xY-Xbc"/>
                         <outlet property="footballTitleLbl" destination="rfR-Ne-UnX" id="3fJ-Fi-dZZ"/>
                         <outlet property="moreDetailLbl" destination="VON-t2-pUA" id="pGn-g8-srY"/>
                         <outlet property="moreDetailView" destination="ZgM-Ob-bOi" id="Oql-E2-rKw"/>
-                        <outlet property="nativeAdView" destination="NKD-qV-QrV" id="mzl-bS-S47"/>
+                        <outlet property="nativeAdView" destination="NKD-qV-QrV" id="w20-u3-A5U"/>
                         <outlet property="news1DescLbl" destination="Meo-2v-hwO" id="QlT-kJ-htg"/>
                         <outlet property="news1TitleLbl" destination="fw9-0i-hAy" id="IqM-5z-17k"/>
                         <outlet property="news2DescLbl" destination="CvQ-nf-6mC" id="TD5-iQ-d8F"/>
@@ -3206,6 +3215,7 @@
                         <outlet property="newsView" destination="RfH-m2-vYz" id="1o2-cL-hxa"/>
                         <outlet property="seriesDescLbl" destination="agw-Vm-plA" id="wGc-5l-fyb"/>
                         <outlet property="seriesTitleLbl" destination="vSB-bw-Gc9" id="dfD-Ig-Dfg"/>
+                        <outlet property="stakcHeightConstant" destination="Mhx-Ao-bFC" id="iqX-4r-FCK"/>
                         <outlet property="titleLbl" destination="Y9P-96-zBv" id="NZD-Qt-qYb"/>
                         <outlet property="viewAllLbl" destination="FuR-ri-SHp" id="dZy-em-W6e"/>
                         <outlet property="viewAllView" destination="Q9R-41-JG6" id="rnH-zd-FU8"/>
@@ -5988,7 +5998,7 @@
                                 </subviews>
                             </stackView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="SVd-co-Eo0">
-                                <rect key="frame" x="0.0" y="188" width="393" height="664"/>
+                                <rect key="frame" x="0.0" y="193" width="393" height="659"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="6oI-MO-DOr">
                                     <size key="itemSize" width="128" height="128"/>
@@ -6010,7 +6020,7 @@
                             <constraint firstItem="FOf-Ym-dWP" firstAttribute="trailing" secondItem="oXb-ir-ewG" secondAttribute="trailing" id="aTe-4a-1PV"/>
                             <constraint firstItem="1HS-mS-yWb" firstAttribute="top" secondItem="FOf-Ym-dWP" secondAttribute="bottom" id="e3h-yV-FlZ"/>
                             <constraint firstAttribute="bottom" secondItem="SVd-co-Eo0" secondAttribute="bottom" id="klL-5Q-ahz"/>
-                            <constraint firstItem="SVd-co-Eo0" firstAttribute="top" secondItem="1HS-mS-yWb" secondAttribute="bottom" id="mdb-Fi-6Oj"/>
+                            <constraint firstItem="SVd-co-Eo0" firstAttribute="top" secondItem="1HS-mS-yWb" secondAttribute="bottom" constant="5" id="mdb-Fi-6Oj"/>
                             <constraint firstItem="SVd-co-Eo0" firstAttribute="leading" secondItem="oXb-ir-ewG" secondAttribute="leading" id="pwG-ao-yWL"/>
                         </constraints>
                     </view>

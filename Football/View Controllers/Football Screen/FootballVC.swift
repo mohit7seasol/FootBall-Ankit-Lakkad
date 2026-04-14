@@ -31,6 +31,9 @@ class FootballVC: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet weak var buttonStackHeightConstant: NSLayoutConstraint!
     @IBOutlet weak var buttonStackView: UIStackView!
     
+    @IBOutlet weak var addViewHeightConstant: NSLayoutConstraint!
+    @IBOutlet weak var stackHeightViewConstant: NSLayoutConstraint!
+    
     var googleNativeAds = GoogleNativeAds()
     
     // MARK: - Match Status Properties (Add these)
@@ -350,6 +353,8 @@ class FootballVC: UIViewController, UIGestureRecognizerDelegate {
     func subscribe() {
         showSkeletonView()
         if isUserSubscribe() == false {
+            self.addViewHeightConstant.constant = 154
+            self.stackHeightViewConstant.constant = 154
             self.googleNativeAds.loadAds(vc: self) { nativeAdsTemp in
                 self.nativeAdView.isHidden = false
                 DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
@@ -360,10 +365,14 @@ class FootballVC: UIViewController, UIGestureRecognizerDelegate {
             self.googleNativeAds.failAds(vc: self) { fail in
                 print("Native ad failed to load")
                 self.nativeAdView.isHidden = true
+                self.addViewHeightConstant.constant = 0
+                self.stackHeightViewConstant.constant = 0
             }
         } else {
             self.hideSkeletonView()
             nativeAdView.isHidden = true
+            self.addViewHeightConstant.constant = 0
+            self.stackHeightViewConstant.constant = 0
         }
     }
     

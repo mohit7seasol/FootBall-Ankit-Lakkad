@@ -20,8 +20,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FullScreenContentDelegate
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         isAppStart = true
-        self.initView()
+//        self.initView()
         delay(1.5) {
+            if isUserSubscribe() {
+                return
+            }
             Task {
                 await AppOpenAdManager.shared.loadAd()
             }
@@ -40,6 +43,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FullScreenContentDelegate
     
 
     func initView() {
+        if isUserSubscribe() {
+            return
+        }
         Task {
             await AppOpenAdManager.shared.loadAd()
         }

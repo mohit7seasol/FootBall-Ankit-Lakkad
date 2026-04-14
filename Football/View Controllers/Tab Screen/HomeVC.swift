@@ -13,9 +13,6 @@ import Alamofire
 class HomeVC: UIViewController {
 
     @IBOutlet weak var titleLbl: UILabel!
-    
-    @IBOutlet weak var nativeAdView: View!
-    
     @IBOutlet weak var moreDetailView: View!
     @IBOutlet weak var moreDetailLbl: UILabel!
     @IBOutlet weak var footballTitleLbl: UILabel!
@@ -38,7 +35,10 @@ class HomeVC: UIViewController {
     @IBOutlet weak var newsThumb3Img: ImageView!
     @IBOutlet weak var news3TitleLbl: UILabel!
     @IBOutlet weak var news3DescLbl: UILabel!
-
+    @IBOutlet weak var nativeAdView: UIView!
+    @IBOutlet weak var adsViewHeightConstant: NSLayoutConstraint!
+    @IBOutlet weak var stakcHeightConstant: NSLayoutConstraint!
+    
     var allNews: [NewsModel] = []
     var googleNativeAds = GoogleNativeAds()
     
@@ -170,6 +170,8 @@ class HomeVC: UIViewController {
     func showAd() {
         self.showSkeleton()
         if isUserSubscribe() == false {
+            self.adsViewHeightConstant.constant = 150
+            self.stakcHeightConstant.constant = 150
             self.nativeAdView.showAnimatedSkeleton()
             self.googleNativeAds.loadAds(vc: self) { nativeAdsTemp in
                 self.nativeAdView.isHidden = false
@@ -182,11 +184,14 @@ class HomeVC: UIViewController {
             self.googleNativeAds.failAds(vc: self) { fail in
                 print(" Home...Native fail....")
                 self.nativeAdView.isHidden = true
+                self.adsViewHeightConstant.constant = 0
+                self.stakcHeightConstant.constant = 0
             }
         } else {
             self.hideSkeleton()
             self.nativeAdView.isHidden = true
-            
+            self.adsViewHeightConstant.constant = 0
+            self.stakcHeightConstant.constant = 0
         }
         
     }
