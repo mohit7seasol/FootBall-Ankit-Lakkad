@@ -178,7 +178,7 @@ class HomeVC: UIViewController {
                 
                 DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
                     self.hideSkeleton()
-                    self.googleNativeAds.showAdsView6(nativeAd: nativeAdsTemp, view: self.nativeAdView)
+                    self.googleNativeAds.showAdsView4(nativeAd: nativeAdsTemp, view: self.nativeAdView)
                 }
             }
             self.googleNativeAds.failAds(vc: self) { fail in

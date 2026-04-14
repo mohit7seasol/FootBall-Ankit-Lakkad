@@ -2851,10 +2851,10 @@
                                                         </userDefinedRuntimeAttributes>
                                                     </view>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="VYK-oU-07d">
-                                                        <rect key="frame" x="5" y="368" width="383" height="150"/>
+                                                        <rect key="frame" x="0.0" y="368" width="393" height="150"/>
                                                         <subviews>
                                                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NKD-qV-QrV" customClass="View" customModule="Football" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="0.0" width="383" height="150"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="393" height="150"/>
                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="170" id="d9W-7y-5iX">
@@ -2863,6 +2863,7 @@
                                                                 </constraints>
                                                             </view>
                                                         </subviews>
+                                                        <color key="backgroundColor" systemColor="systemGray4Color"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="150" id="Mhx-Ao-bFC"/>
                                                         </constraints>
@@ -3152,12 +3153,12 @@
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstItem="qGC-a6-xcT" firstAttribute="leading" secondItem="8wA-6O-eyE" secondAttribute="leading" constant="16" id="0ZZ-BJ-5t7"/>
-                                                    <constraint firstAttribute="trailing" secondItem="VYK-oU-07d" secondAttribute="trailing" constant="5" id="0dP-Dd-edz"/>
+                                                    <constraint firstAttribute="trailing" secondItem="VYK-oU-07d" secondAttribute="trailing" id="0dP-Dd-edz"/>
                                                     <constraint firstAttribute="trailing" secondItem="y98-Sc-S1C" secondAttribute="trailing" constant="16" id="2RS-PZ-Mwa"/>
                                                     <constraint firstAttribute="bottom" secondItem="y98-Sc-S1C" secondAttribute="bottom" constant="12" id="72M-c2-0vm"/>
                                                     <constraint firstItem="VYK-oU-07d" firstAttribute="top" secondItem="qGC-a6-xcT" secondAttribute="bottom" constant="12" id="8ex-fY-FW9"/>
                                                     <constraint firstItem="y98-Sc-S1C" firstAttribute="leading" secondItem="8wA-6O-eyE" secondAttribute="leading" constant="16" id="FME-JB-ASy"/>
-                                                    <constraint firstItem="VYK-oU-07d" firstAttribute="leading" secondItem="8wA-6O-eyE" secondAttribute="leading" constant="5" id="P4H-Nr-JTR"/>
+                                                    <constraint firstItem="VYK-oU-07d" firstAttribute="leading" secondItem="8wA-6O-eyE" secondAttribute="leading" id="P4H-Nr-JTR"/>
                                                     <constraint firstItem="qGC-a6-xcT" firstAttribute="top" secondItem="8wA-6O-eyE" secondAttribute="top" constant="6" id="pCE-hS-Vts"/>
                                                     <constraint firstAttribute="trailing" secondItem="qGC-a6-xcT" secondAttribute="trailing" constant="16" id="rnr-Wy-4zS"/>
                                                     <constraint firstItem="y98-Sc-S1C" firstAttribute="top" secondItem="VYK-oU-07d" secondAttribute="bottom" constant="6" id="v48-l3-NMr"/>
