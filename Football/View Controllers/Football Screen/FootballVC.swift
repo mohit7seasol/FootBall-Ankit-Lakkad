@@ -515,6 +515,7 @@ extension FootballVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView != dateCollectionView {
+            showInterAd()
             // Handle match selection
             let match = matchesFiltered[indexPath.item]
             

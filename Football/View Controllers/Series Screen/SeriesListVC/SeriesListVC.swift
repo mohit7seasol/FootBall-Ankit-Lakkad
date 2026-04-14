@@ -155,6 +155,7 @@ extension SeriesListVC: UICollectionViewDelegate, UICollectionViewDataSource, UI
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        showInterAd()
         let selectedCountry = countries[indexPath.row]
         let vc = storyboard?.instantiateViewController(withIdentifier: "TournamentsListVC") as! TournamentsListVC
         vc.currentCountryId = selectedCountry.countryId

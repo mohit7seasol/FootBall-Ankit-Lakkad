@@ -173,6 +173,7 @@ extension TournamentsListVC: UICollectionViewDelegate, UICollectionViewDataSourc
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        showInterAd()
         let tournament = tournaments[indexPath.row]
         let vc = storyboard?.instantiateViewController(withIdentifier: "TournamentsMatchListVC") as! TournamentsMatchListVC
         vc.tournamentURL = tournament.url
