@@ -97,6 +97,7 @@ class FootballVC: UIViewController, UIGestureRecognizerDelegate {
         upcomingLbl.text = "Upcoming".localized()
         completedLbl.text = "Completed".localized()
         noDataLabel.text = "No matches found".localized()
+        toDayButton.setTitle("Today".localized(), for: .normal)
         
         toDayButton.layer.cornerRadius = toDayButton.frame.height / 2
         
