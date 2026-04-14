@@ -95,6 +95,7 @@ class FootballVC: UIViewController, UIGestureRecognizerDelegate {
     
     // MARK: - Setup Methods
     private func setupUI() {
+        configureProgressHUD()
         footballLbl.text = "Football".localized()
         liveLbl.text = "Live".localized()
         upcomingLbl.text = "Upcoming".localized()
@@ -106,6 +107,16 @@ class FootballVC: UIViewController, UIGestureRecognizerDelegate {
         
         // Disable collection view scrolling since it's inside scroll view
         matchCollection.isScrollEnabled = false
+    }
+    
+    private func configureProgressHUD() {
+        // Remove background
+        ProgressHUD.colorHUD = .clear
+        ProgressHUD.colorBackground = .clear
+        ProgressHUD.colorAnimation = UIColor(hex: "#173E75")
+        
+        // Optional customizations
+        ProgressHUD.animationType = .lineScaling
     }
     
     private func setupCollectionViews() {

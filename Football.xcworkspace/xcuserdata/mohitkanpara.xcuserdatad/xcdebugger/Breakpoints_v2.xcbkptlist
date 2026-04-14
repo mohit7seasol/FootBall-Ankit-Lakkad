@@ -62,8 +62,8 @@
             filePath = "Football/View Controllers/Football Screen/FootballVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "373"
-            endingLineNumber = "373"
+            startingLineNumber = "384"
+            endingLineNumber = "384"
             landmarkName = "subscribe()"
             landmarkType = "7">
          </BreakpointContent>
@@ -78,8 +78,8 @@
             filePath = "Football/View Controllers/Football Screen/FootballVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "355"
-            endingLineNumber = "355"
+            startingLineNumber = "366"
+            endingLineNumber = "366"
             landmarkName = "subscribe()"
             landmarkType = "7">
          </BreakpointContent>
