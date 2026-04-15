@@ -13,7 +13,10 @@ import MobileCoreServices
 import AVFoundation
 import AVKit
 import MediaPlayer
-
+/*
+ Version : 6.0
+ Bundal id : com.ultras.foot
+ */
 let appDelegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate
 var StoryBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
 let MAIL = "ankitlakkad009@gmail.com"
@@ -35,10 +38,10 @@ let SECRET = "vXrpX8YzuuevUDdnQG6GxfVs0or6v91bwk0CJEsX"
 let baseURL = "https://02ee-2405-201-202e-b004-48bb-a9ba-2f05-6677.ngrok-free.app/i/?url="
 
 //live json
-let getJSON : String =  "https://7seasol-application.s3.amazonaws.com/admin_prod/pbz-grfgvat-arj.json" // "https://7seasol-application.s3.amazonaws.com/admin_prod/pbz-hygenf-sbbg.json"
+let getJSON : String = "https://7seasol-application.s3.amazonaws.com/admin_prod/pbz-hygenf-sbbg.json"
 
 //test json
-//let getJSON : String = "https://7seasol-application.s3.amazonaws.com/admin_prod/grfg.json"
+//let getJSON : String = "https://7seasol-application.s3.amazonaws.com/admin_prod/pbz-grfgvat-arj.json"
 
 
 var APITOKEN = "1831bcfd61mshe49ae7779397e4fp16532cjsncaf029ae4ce0"
